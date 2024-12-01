@@ -1,0 +1,8 @@
+import { FamilyTreePermision } from './FamilyTreePermision';
+import { Person } from './Person';
+export interface FamilyTree {
+    id: string;
+    name: string;
+    familyTreePermision: FamilyTreePermision[];
+    person: Person[];
+}
