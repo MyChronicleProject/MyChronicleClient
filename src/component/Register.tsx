@@ -1,7 +1,8 @@
-import logo from '../logo.svg';
+import logo from '../logo.png';
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import React, { useState } from 'react';
+import '../Styles/buttonMenu.css';
 
 export default function Register() {
 
@@ -16,9 +17,9 @@ export default function Register() {
 
 
     return (
-        <div>
+        <div className="App">
             <img src={logo} className="App-logo" alt="logo"></img>
-            <form >
+            <form  className="inputRegister">
                 <div>
                     <label>Imiê:</label>
                     <input
@@ -28,7 +29,7 @@ export default function Register() {
                     />
                 </div>
                 <div>
-                    <label>Nazwaiko:</label>
+                    <label>Nazwisko:</label>
                     <input
                         type="text"
                         name="lastName"
@@ -59,20 +60,22 @@ export default function Register() {
                         value={formData.password2}
                     />
                 </div>
+            </form>
                 <div>
-                    <label>
+                <p>
                         <input
                             type="checkbox"
                             checked={isChecked} 
                             //onChange={handleCheckboxChange} 
                         />
-                        AKCEPTUJE POLITYKÊ PRYWATNOŒCI <Button as={NavLink} to={`/privacyPolicy`} >POLITYKA PRYWATNOŒCI</Button>
-                    </label>
+                AKCEPTUJE POLITYKÊ PRYWATNOŒCI</p>
+                <Button as={NavLink} to={`/privacyPolicy`} className="link" >POLITYKA PRYWATNOŒCI</Button>
+                   
                 </div>
-            </form>
+            
 
 
-            <Button as={NavLink} to={`/login`} className="button-container" >ZA£Ó¯ KONTO</Button>
+            <Button as={NavLink} to={`/login`} className="buttonMenu2" >ZA£Ó¯ KONTO</Button>
         </div>
     )
 }

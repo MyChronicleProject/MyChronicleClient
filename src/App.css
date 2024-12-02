@@ -1,15 +1,51 @@
+
+
 .App {
-  text-align: center;
+ /*   margin-top: 15px;
+    margin-bottom: 30px;*/
+    text-align: center;
+    display: inline-block; /* Use flexbox */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    height: auto; /* Full viewport height */
+    width: 100%; /* Full width of the container */
+    position: relative; /* Allow pseudo-elements or additional elements */
+    /*overflow: auto;*/ /* Prevent scrollbars for overflowing content */
+    background-image: url('/src/background.png'); /* Replace with your image URL */
+    /*background-repeat: no-repeat ;*/ /* Prevent repeating horizontally or vertically */
+    background-size: 100% auto; /* Maintain the natural dimensions of the image */
+    background-position: top center; /* Start the image from the top and center horizontally */
+    background-attachment: scroll; /* The background scrolls with the content */
+}
+
+.App2 {
+   /* margin-top: 15px;
+    margin-bottom: 30px;*/
+    text-align: center;
+    display: block; /* Use flexbox */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+   
+    height: 100vh; /* Full viewport height */
+    width: 100%; /* Full width of the container */
+    position: relative; /* Allow pseudo-elements or additional elements */
+    /*overflow: auto;*/ /* Prevent scrollbars for overflowing content */
+    background-image: url('/src/background.png'); /* Replace with your image URL */
+    /*background-repeat: no-repeat ;*/ /* Prevent repeating horizontally or vertically */
+    background-size: cover; /* Maintain the natural dimensions of the image */
+    background-position: top center; /* Start the image from the top and center horizontally */
+    background-attachment: scroll; /* The background scrolls with the content */
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 250px;
+    pointer-events: none;
+    align-self: center;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    /*animation: App-logo-spin infinite 20s linear;*/
   }
 }
 
@@ -28,11 +64,11 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
+/*@keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-}
+}*/

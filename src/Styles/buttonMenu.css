@@ -1,0 +1,58 @@
+.buttonMenu {
+    display: inline-block;
+    background-color: #fff; /* White background */
+    color: #000; /* Black text */
+    font-size: 20px; /* Adjust font size */
+    font-family: 'Georgia', serif; /* Elegant serif font */
+    font-weight: bold; /* Make text bold */
+    padding: 10px 20px; /* Adjust padding for spacing */
+    border-radius: 10px; /* Rounded corners */
+    border: 1px solid #ddd; /* Subtle border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hover effects */
+}
+
+    .buttonMenu:hover {
+        transform: scale(1.05); /* Slightly enlarge on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+    }
+
+.link {
+    font-size: 16px; /* Smaller font for the link */
+    font-family: 'Arial', sans-serif; /* Use sans-serif for contrast */
+    text-decoration: none; /* Remove underline */
+    color: #a76436; /* Light brown color for link */
+    margin-top: 10px; /* Add space between elements */
+}
+
+    .link:hover {
+        text-decoration: underline; /* Underline on hover */
+        color: #d08b56; /* Slightly lighter brown on hover */
+    }
+
+
+
+
+.buttonMenu2 {
+    margin-bottom: 30px;
+    display: inline-block;
+    background-color: #fff; /* White background */
+    color: #000; /* Black text */
+    font-size: 20px; /* Adjust font size */
+    font-family: 'Georgia', serif; /* Elegant serif font */
+    font-weight: normal; /* Make text bold */
+    padding: 10px 20px; /* Adjust padding for spacing */
+    border-radius: 10px; /* Rounded corners */
+    border: 1px solid #ddd; /* Subtle border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hover effects */
+}
+
+    .buttonMenu2:hover {
+        transform: scale(1.05); /* Slightly enlarge on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+    }

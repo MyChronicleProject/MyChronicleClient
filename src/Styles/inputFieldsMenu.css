@@ -1,0 +1,40 @@
+.inputRegister {
+    
+    /*padding: 2rem;*/
+  /*  border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 300px;
+    margin: 20px auto;
+    box-sizing: border-box;*/
+  margin-bottom: 20px;
+}
+
+    .inputRegister label {
+        display: block;
+        font-weight: lighter;
+        color: #333;
+       /* margin-bottom: 0.5rem;*/
+        font-family: 'Arial', sans-serif;
+    }
+
+/* Input, select */
+    .inputRegister input, .form-group select {
+        display: block;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        max-width: 300px;
+        margin: auto;
+        margin-bottom: 15px;
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    /* Input:focus, select:focus */
+    .inputRegister input:focus, .form-group select:focus {
+        border-color: #6C2E2E;
+        outline: none;
+    }

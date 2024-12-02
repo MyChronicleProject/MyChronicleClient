@@ -1,7 +1,9 @@
-import logo from '../logo.svg';
+import logo from '../logo.png';
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import React, { useState } from 'react';
+import '../Styles/buttonMenu.css';
+import '../Styles/inputFieldsMenu.css';
 
 export default function LoginPage() {
 
@@ -12,19 +14,21 @@ export default function LoginPage() {
 
 
     return (
-        <div>
+        <div className="App2">
             <img src={logo} className="App-logo" alt="logo"></img>
-            <form >
-                <div>
-                    <label>Login:</label>
+            <form  >
+                <label>Login:</label>
+                <div className= "inputRegister">
+                 
                     <input
                         type="text"
                         name="login"
                         value={formData.login}
                     />
                 </div>
-                <div>
-                    <label>Has³o:</label>
+                <label>Has³o:</label>
+                <div className="inputRegister">
+                   
                     <input
                         type="text"
                         name="password"
@@ -34,7 +38,7 @@ export default function LoginPage() {
             </form>
 
 
-            <Button as={NavLink} to={`/login`} className="button-container" >ZALOGUJ SIÊ</Button>
+            <Button as={NavLink} to={`/login`} className="buttonMenu" >ZALOGUJ SIÊ</Button>
         </div>
     )
 }

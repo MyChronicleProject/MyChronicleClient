@@ -1,0 +1,72 @@
+/* General styles for the policy container */
+.privacy-policy {
+
+    font-family: Arial, sans-serif;
+    color: #333; /* Dark text for good contrast */
+    background-color: #f9f9f9; /* Light background for readability */
+    padding: 20px 50px;
+    margin: 20px auto;
+    margin-bottom: 100px;
+    max-width: 800px; /* Limit width for readability */
+    line-height: 1.6; /* Increase line height for better spacing */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+    /* Headings */
+    .privacy-policy h1 {
+        font-size: 2rem;
+        color: #444;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .privacy-policy h2 {
+        font-size: 1.5rem;
+        color: #555;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #ccc; /* Underline effect */
+        padding-bottom: 5px;
+    }
+
+    /* Paragraphs */
+    .privacy-policy p {
+        margin: 10px 0;
+        text-align: justify; /* Justify text for professional appearance */
+    }
+
+    /* Highlight spans */
+    .privacy-policy span {
+        font-weight: bold;
+        color: #007BFF; /* Highlight with blue color */
+    }
+
+    /* Lists */
+    .privacy-policy ul {
+        margin: 10px 20px;
+        padding: 0;
+        list-style-type: disc; /* Default bullet points */
+        color: #444;
+    }
+
+        .privacy-policy ul li {
+            margin-bottom: 5px;
+        }
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .privacy-policy {
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+
+        .privacy-policy h1 {
+            font-size: 1.5rem;
+        }
+
+        .privacy-policy h2 {
+            font-size: 1.25rem;
+        }
+}

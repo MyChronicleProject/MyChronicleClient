@@ -5,14 +5,14 @@ import  AppBar  from './Component/AppBar';
 
 function App() {
     const appStyles: React.CSSProperties = {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#D9D9D9',
         minHeight: '100vh',
         margin: 0,
     };
     return (
 
         <div style={appStyles}>
-            <AppBar />
+            
             <Outlet />
         </div>
 
