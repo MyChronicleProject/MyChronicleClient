@@ -28,6 +28,7 @@ export const routes: RouteObject[] = [
             { path: 'openTree', element: <OpenTree /> },
             { path: 'treeView', element: <TreeView /> },
             { path: 'treeViewEdition', element: <TreeViewEdition /> },
+            { path: 'treeViewEdition/:id', element: <TreeViewEdition /> },
             { path: '*', element: <Navigate replace to='/not-found' /> }
 
         ]
