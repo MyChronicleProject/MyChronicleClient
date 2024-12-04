@@ -1,13 +1,52 @@
 import logo from '../logo.svg';
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { Gender } from '../Models/Person'
+import axios from 'axios';
+import { Person,getGenderNumber, getGenderName} from '../Models/Person';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddPersonForm() {
-
+    const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>(); 
     const [isChecked, setIsChecked] = useState(false);
+    const [theSameError, setTheSameError] = useState<string>('');
+    const [loading, setLoading] = useState(true);
+    const [formName, setFormName] = useState<string>('');
+    const [buttonSubmitName, setButtonSubmitName] = useState<string>('');
+    const [error, setError] = useState<string | null>(null);
     const [formData, setFormData] = useState({
+        name: '',
+        middleName: '',
+        lastName: '',
+        birthDate: '',
+        deathDate: '',
+        birthPlace: '',
+        deathPlace: '',
+        gender: '',
+        occupation: '',
+        note: '',
+
+    });
+
+    const resetForm = () => {
+        setFormData({
+            name: '',
+            middleName: '',
+            lastName: '',
+            birthDate: '',
+            deathDate: '',
+            birthPlace: '',
+            deathPlace: '',
+            gender: 'male',
+            occupation: '',
+            note: '',
+        });
+    };
+
+    const [formErrors, setFormErrors] = useState({
         name: '',
         middleName: '',
         lastName: '',
@@ -20,11 +59,202 @@ export default function AddPersonForm() {
         note: '',
     });
 
+    useEffect(() => {
+        resetForm();
+        if (id) {
+            setFormName("Edycja osoby");
+            setButtonSubmitName("Edytuj osobê");
+            const fetchCar = async () => {
+                try {
+                    const response = await axios.get<Person>(`https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons/${id}`);
+                    const personData = response.data;
+
+                    console.log('Request Payload:', personData);
+
+                    setFormData({
+                        name: personData.name,
+                        middleName: personData.middleName || '',
+                        lastName: personData.lastName || '',
+                        birthDate: personData.birthDate.slice(0.10),
+                        deathDate: personData.deathDate ? personData.deathDate.slice(0, 10) : '',
+                        birthPlace: personData.birthPlace || '',
+                        deathPlace: personData.deathPlace || '',
+                        gender: getGenderName(parseInt(personData.gender)),
+                        occupation: personData.occupation || '',
+                        note: personData.note || '',
+
+                    });
+                } catch (err) {
+                    setError('Failed to fetch person data');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchCar();
+        } else {
+            setFormName("Dodawanie osoby");
+            setButtonSubmitName("Dodaj osobê");
+            setLoading(false);
+        }
+    }, [id]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const validateField = (name: string, value: string) => {
+        switch (name) {
+            case 'name': { 
+                return value.trim() === '' ? 'This field is required' : '';
+            }
+            case 'middleName':
+                return '';
+            case 'lastName':
+                return value.trim() === '' ? 'This field is required2' : '';
+            case 'birthDate':
+                return value.trim() === '' ? 'This field is required2' : '';
+            case 'deathDate':
+                return '';
+            case 'birthPlace':
+                return value.trim() === '' ? 'This field is required2' : '';
+            case 'deathPlace':
+                return '';
+            case 'gender':
+                return '';
+            case 'occupation':
+                return '';
+            case 'note':
+                return '';
+            default:
+                return '';
+        }
+    };
+
+    const getFormattedDate = (date: string | null | undefined) => {
+        return date ? date.split('T')[0] : '';
+    };
+
+    const ifTheSame = async () => {
+        const response = await axios.get<Person>(`https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons/${id}`);
+        const personData = response.data;
+        if (formData.name != personData.name) {
+            console.log("name");
+            return false;
+        }
+        if (personData.middleName || formData.middleName)
+            if (formData.middleName !== personData.middleName) {
+                console.log("middlename");
+                return false;
+            }
+        if (formData.lastName !== personData.lastName) {
+            console.log("lastname");
+            return false;
+        }
+        if (formData.birthPlace !== personData.birthPlace) {
+            console.log("birthplace");
+            return false;
+        }
+        if (formData.deathPlace || personData.deathPlace ) ///przy pustych polach 
+            if (formData.deathPlace !== personData.deathPlace) {
+                console.log("deathplace");
+                return false;
+        }
+        if (formData.birthDate !== personData.birthDate.split('T')[0]) {
+            console.log("birthdate");
+            return false;
+        }
+        if (personData.deathDate && personData.deathDate.includes('T')) {
+            if (formData.deathDate !== personData.deathDate.split('T')[0]) {
+                console.log("dethdate");
+                return false;
+            }
+        }
+        if (formData.occupation || personData.occupation)
+            if (formData.occupation !== personData.occupation) {
+                console.log("occupation");
+                return false;
+            }
+        if (formData.note || personData.note)
+            if (formData.note !== personData.note) {
+                console.log("note");
+                return false;
+            }
+        if (getGenderNumber(formData.gender).toString() !== personData.gender.toString()) {
+            console.log("gender");
+            return false;
+        }
+        return true;
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        console.log("W handleSubmit");
+        e.preventDefault();
+
+        const newFormErrors: any = {};
+        let hasError = false;
+
+        for (const [key, value] of Object.entries(formData)) {
+            const error = validateField(key, value);
+            if (error) {
+                console.log("Error: ", key, " ", error);
+                newFormErrors[key] = error;
+                hasError = true;
+            }
+        }
+
+        setFormErrors(newFormErrors);
+        if (hasError) {
+            return;
+        }
+
+        try {
+            if (id) {
+                if ((await ifTheSame())) {
+                    setTheSameError("No value changed");
+                    return;
+                }
+                const response = await axios.put(`https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons/${id}`, {
+                    ...formData,
+                    id:id,
+                    birthDate: formData.birthDate.split('T')[0],
+                    deathDate: formData.deathDate ? formData.deathDate.split('T')[0] : null,
+                    gender: getGenderNumber(formData.gender),
+                    familyTreeId: "08dd0676-a7e3-49ab-84dc-0417de93a67e",
+                });
+            } else {
+                const response = await axios.post(`https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons`, {
+                    ...formData,
+                    birthDate: formData.birthDate ? formData.birthDate.split('T')[0] : null,
+                    deathDate: formData.deathDate ? formData.deathDate.split('T')[0] : null,
+                    gender: getGenderNumber(formData.gender),
+                    familyTreeId: "08dd0676-a7e3-49ab-84dc-0417de93a67e",
+                });
+            }
+            navigate('/treeviewedition')
+        }
+
+        catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error("API error:", error.response?.data);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
+    }
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <div>
-            <form >
-                <h1>DODAWANIE OSOBY</h1>
+            <form onSubmit={handleSubmit}>
+                <h1> {formName} </h1>
+                {theSameError && <div className="error-message">{theSameError}</div>}
                 <input type="file" accept=".jpg, .png" />
                 <div>
                     <label>Imiê:</label>
@@ -32,7 +262,9 @@ export default function AddPersonForm() {
                         type="text"
                         name="name"
                         value={formData.name}
+                        onChange={handleChange}
                     />
+                    {formErrors.name && <div className="error-message">{formErrors.name}</div>}
                 </div>
                 <div>
                     <label>Drugie imie:</label>
@@ -40,7 +272,9 @@ export default function AddPersonForm() {
                         type="text"
                         name="middleName"
                         value={formData.middleName}
+                        onChange={handleChange}
                     />
+                    {formErrors.middleName && <div className="error-message">{formErrors.middleName}</div>}
                 </div>
                 <div>
                     <label>Nazwisko:</label>
@@ -48,7 +282,9 @@ export default function AddPersonForm() {
                         type="text"
                         name="lastName"
                         value={formData.lastName}
+                        onChange={handleChange}
                     />
+                    {formErrors.lastName && <div className="error-message">{formErrors.lastName}</div>}
                 </div>
                 <div>
                     <label>Data urodzenia:</label>
@@ -56,7 +292,9 @@ export default function AddPersonForm() {
                         type="date"
                         name="birthDate"
                         value={formData.birthDate.slice(0, 10)}
+                        onChange={handleChange}
                     />
+                    {formErrors.birthDate && <div className="error-message">{formErrors.birthDate}</div>}
                 </div>
                 <div>
                     <label>Data œmierci:</label>
@@ -64,15 +302,19 @@ export default function AddPersonForm() {
                         type="date"
                         name="deathDate"
                         value={formData.deathDate.slice(0, 10)}
+                        onChange={handleChange}
                     />
+                    {formErrors.deathDate && <div className="error-message">{formErrors.deathDate}</div>}
                 </div>
                 <div>
                     <label>Miejsce urodzenia:</label>
                     <input
                         type="text"
                         name="birthPlace"
-                        value={formData.birthDate}
+                        value={formData.birthPlace}
+                        onChange={handleChange}
                     />
+                    {formErrors.birthPlace && <div className="error-message">{formErrors.birthPlace}</div>}
                 </div>
                 <div>
                     <label>Miejsce œmierci:</label>
@@ -80,13 +322,16 @@ export default function AddPersonForm() {
                         type="text"
                         name="deathPlace"
                         value={formData.deathPlace}
+                        onChange={handleChange}
                     />
+                    {formErrors.deathPlace && <div className="error-message">{formErrors.deathPlace}</div>}
                 </div>
                 <div>
                     <label>P³eæ:</label>
                     <select
                         name="gender"
                         value={formData.gender}
+                        onChange={handleChange}
                     >
                         {Object.values(Gender).map(gender => (
                             <option key={gender} value={gender}>
@@ -101,20 +346,22 @@ export default function AddPersonForm() {
                         type="text"
                         name="occupation"
                         value={formData.occupation}
+                        onChange={handleChange}
                     />
+                    {formErrors.occupation && <div className="error-message">{formErrors.occupation}</div>}
                 </div>
                 <div>
                     <label>Notatka:</label>
                     <input
-                        type="note"
-                        name="occupation"
+                        type="text"
+                        name="note"
                         value={formData.note}
+                        onChange={handleChange}
                     />
+                    {formErrors.note && <div className="error-message">{formErrors.note}</div>}
                 </div>
+                <button type="submit"> {buttonSubmitName} </button>
             </form>
-
-
-            <Button as={NavLink} to={`/`} className="button-container" >DODAJ DO DRZEWA</Button>
         </div>
     )
 }
