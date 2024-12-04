@@ -1,15 +1,22 @@
 import logo from '../logo.svg';
-import { Button } from "semantic-ui-react";
+import { Button, Container } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
+import "../Styles/settingsPageStyle.css"
+import AppBar from './AppBar';
 
 export default function SettingsPage() {
     return (
+        <div>
+            <AppBar/>
         <div className='App3'>
-            <h1>USERNAME</h1>
-            <p><Button as={NavLink} to={`/`} >ZMIEŃ HASŁO</Button></p>
-            <p><Button as={NavLink} to={`/privacyPolicy`} >POLITYKA PRYWATNOŚCI</Button></p>
-            <p><Button as={NavLink} to={`/`} >WYLOGUJ</Button></p>
-            <p><Button as={NavLink} to={`/`} >USUŃ KONTO</Button></p>
+            <div className='setting-setup'>
+            <h1 className='setting-item'>USERNAME</h1>
+            <p className='setting-item'><Button as={NavLink} to={`/`} className='setting-header'>ZMIEŃ HASŁO</Button></p>
+            <p className='setting-item'><Button as={NavLink} to={`/privacyPolicy`} className='setting-header'>POLITYKA PRYWATNOŚCI</Button></p>
+            <p className='setting-item'><Button as={NavLink} to={`/`} className='setting-header' >WYLOGUJ</Button></p>
+            <p className='setting-item'><Button as={NavLink} to={`/`} className='setting-header' >USUŃ KONTO</Button></p>
+            </div>
+        </div>
         </div>
     )
 }

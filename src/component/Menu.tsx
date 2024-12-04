@@ -8,14 +8,14 @@ import BottomBar from './BottomBar';
 export default function Menu() {
     return (
         <div>
-         {/* <AppBar /> */}
+         <AppBar />
         <div className="App2" >
            
             <img src={logo} className="App-logo" alt="logo"></img>
             <p>            <Button as={NavLink} to={`/login`} className="buttonMenu" >ZALOGUJ SIĘ</Button>  </p>
 
             <p>
-                NIE MASZ KONTA? <Button as={NavLink} to={`/register`}  className="link">ZAREJESTRUJ SIĘ</Button>
+                NIE MASZ KONTA?<Button as={NavLink} to={`/register`}  className="link">ZAREJESTRUJ SIĘ</Button>
             </p>
             </div>
         <BottomBar/>

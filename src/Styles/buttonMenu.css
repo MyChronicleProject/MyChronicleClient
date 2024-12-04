@@ -2,10 +2,10 @@
     display: inline-block;
     background-color: #fff; /* White background */
     color: #000; /* Black text */
-    font-size: 20px; /* Adjust font size */
+    font-size: 25px!important; /* Adjust font size */
     font-family: 'Georgia', serif; /* Elegant serif font */
     font-weight: lighter; /* Make text bold */
-    padding: 10px 20px; /* Adjust padding for spacing */
+    padding: 10px 20px!important; /* Adjust padding for spacing */
     border-radius: 10px; /* Rounded corners */
     border: 1px solid #ddd; /* Subtle border */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */

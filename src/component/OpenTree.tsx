@@ -33,6 +33,7 @@ export default function OpenTree() {
     if (error) return <p>{error}</p>;
 
     return (
+        <div>
         <div className="App4">
             <AppBar />
             <div className="app-container">
@@ -40,7 +41,7 @@ export default function OpenTree() {
                     <h1 className="header">OTWÓRZ Z PLIK JSON</h1>
                     <div className="file-setup">
                     <input type="file" accept=".json" className="file-input" />
-                    <Button as={NavLink} to={`/`} className="button open-button">
+                    <Button as={NavLink} to={`/treeView`} className="button open-button">
                         OTWÓRZ
                     </Button>
                     </div>
@@ -54,7 +55,7 @@ export default function OpenTree() {
                                 <div className="file-details">
                                     <h2 className="file-name">{familyTree.name}</h2>
                                     <p>
-                                    <Button as={NavLink} to={`/`} className="button open-button">
+                                    <Button as={NavLink} to={`/treeViewEdition`} className="button open-button">
                                         EDYTUJ
                                     </Button>
                                     <Button as={NavLink} to={`/`} className="button open-button">
@@ -66,6 +67,7 @@ export default function OpenTree() {
                         ))}
                     </ul>
                 </div>
+            </div>
             </div>
             <BottomBar />
         </div>

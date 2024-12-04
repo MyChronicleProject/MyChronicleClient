@@ -10,7 +10,7 @@ import AddRelation from "../Component/AddRelation";
 import OpenTree from "../Component/OpenTree";
 import TreeView from "../Component/TreeView";
 import TreeViewEdition from "../Component/TreeViewEdition";
-
+import Tree from "../Component/Tree";
 
 export const routes: RouteObject[] = [
     {
@@ -29,7 +29,8 @@ export const routes: RouteObject[] = [
             { path: 'treeView', element: <TreeView /> },
             { path: 'treeViewEdition', element: <TreeViewEdition /> },
             { path: 'treeViewEdition/:id', element: <TreeViewEdition /> },
-            { path: '*', element: <Navigate replace to='/not-found' /> }
+            { path: '*', element: <Navigate replace to='/not-found' /> },
+            { path: 'tree', element: <Tree /> },
 
         ]
     }
