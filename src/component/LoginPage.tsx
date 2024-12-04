@@ -26,7 +26,7 @@ export default function LoginPage() {
                         value={formData.login}
                     />
                 </div>
-                <label>Has³o:</label>
+                <label>HasÅ‚o:</label>
                 <div className="inputRegister">
                    
                     <input
@@ -38,7 +38,7 @@ export default function LoginPage() {
             </form>
 
 
-            <Button as={NavLink} to={`/login`} className="buttonMenu" >ZALOGUJ SIÊ</Button>
+            <Button as={NavLink} to={`/choiceOfActionPage`} className="buttonMenu" >ZALOGUJ SIÄ˜</Button>
         </div>
     )
 }

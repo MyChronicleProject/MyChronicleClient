@@ -1,104 +1,105 @@
 import '../Styles/privacyPolicy.css';
-import AppBar from '../Component/AppBar';
-import BottomBar from '../Component/BottomBar';
+import AppBar from './AppBar';
+import BottomBar from './BottomBar';
 
 export default function PrivacyPolicy() {
     return (
-        <div  >
-            <AppBar />
-        <div className="    privacy-policy" >
-            <h1>Polityka Prywatnoúci</h1>
+        <div>
+            <AppBar/>
+        <div className="privacy-policy">
+    <h1>Polityka Prywatno≈õci</h1>
 
-            <section>
-                <h2>1. Informacje ogÛlne</h2>
-                <p>
-                    1.1. Niniejsza polityka prywatnoúci okreúla zasady przetwarzania i ochrony danych osobowych uøytkownikÛw korzystajπcych z serwisu internetowego tworzπcego drzewa genealogiczne, dostÍpnego pod adresem <span>[adres strony]</span>.
-                </p>
-                <p>
-                    1.2. Administrator danych osobowych, odpowiedzialny za zapewnienie zgodnoúci z przepisami o ochronie danych osobowych, to <span>[Nazwa firmy, dane kontaktowe, adres]</span>.
-                </p>
-            </section>
+    <section>
+        <h2>1. Informacje og√≥lne</h2>
+        <p>
+            1.1. Niniejsza polityka prywatno≈õci okre≈õla zasady przetwarzania i ochrony danych osobowych u≈ºytkownik√≥w korzystajƒÖcych z serwisu internetowego tworzƒÖcego drzewa genealogiczne, dostƒôpnego pod adresem <span>[adres strony]</span>.
+        </p>
+        <p>
+            1.2. Administrator danych osobowych, odpowiedzialny za zapewnienie zgodno≈õci z przepisami o ochronie danych osobowych, to <span>[Nazwa firmy, dane kontaktowe, adres]</span>.
+        </p>
+    </section>
 
-            <section>
-                <h2>2. Dane osobowe i cele przetwarzania</h2>
-                <p>2.1. Administrator przetwarza dane osobowe uøytkownikÛw w celu:</p>
-                <ul>
-                    <li>Umoøliwienia stworzenia, przechowywania i udostÍpniania drzewa genealogicznego;</li>
-                    <li>Zarzπdzania kontami uøytkownikÛw i obs≥ugi technicznej serwisu;</li>
-                    <li>Wysy≥ania informacji na temat zmian w serwisie, aktualizacji polityki prywatnoúci, itp.;</li>
-                    <li>Zabezpieczenia serwisu i zapobiegania naduøyciom.</li>
-                </ul>
-                <p>2.2. Rodzaje zbieranych danych:</p>
-                <ul>
-                    <li>Dane identyfikacyjne: imiÍ, nazwisko, data urodzenia, dane przodkÛw i krewnych, oraz inne informacje niezbÍdne do stworzenia drzewa genealogicznego;</li>
-                    <li>Dane kontaktowe: adres e-mail;</li>
-                    <li>Dane techniczne: adres IP, identyfikatory sesji, pliki cookies.</li>
-                </ul>
-            </section>
+    <section>
+        <h2>2. Dane osobowe i cele przetwarzania</h2>
+        <p>2.1. Administrator przetwarza dane osobowe u≈ºytkownik√≥w w celu:</p>
+        <ul>
+            <li>Umo≈ºliwienia stworzenia, przechowywania i udostƒôpniania drzewa genealogicznego;</li>
+            <li>ZarzƒÖdzania kontami u≈ºytkownik√≥w i obs≈Çugi technicznej serwisu;</li>
+            <li>Wysy≈Çania informacji na temat zmian w serwisie, aktualizacji polityki prywatno≈õci, itp.;</li>
+            <li>Zabezpieczenia serwisu i zapobiegania nadu≈ºyciom.</li>
+        </ul>
+        <p>2.2. Rodzaje zbieranych danych:</p>
+        <ul>
+            <li>Dane identyfikacyjne: imiƒô, nazwisko, data urodzenia, dane przodk√≥w i krewnych, oraz inne informacje niezbƒôdne do stworzenia drzewa genealogicznego;</li>
+            <li>Dane kontaktowe: adres e-mail;</li>
+            <li>Dane techniczne: adres IP, identyfikatory sesji, pliki cookies.</li>
+        </ul>
+    </section>
 
-            <section>
-                <h2>3. Podstawy prawne przetwarzania danych</h2>
-                <p>3.1. Przetwarzanie danych osobowych odbywa siÍ zgodnie z art. 6 RODO, na podstawie:</p>
-                <ul>
-                    <li>zgody uøytkownika na przetwarzanie danych osobowych;</li>
-                    <li>niezbÍdnoúci do realizacji umowy (utworzenia drzewa genealogicznego);</li>
-                    <li>uzasadnionego interesu administratora (zapewnienie bezpieczeÒstwa serwisu).</li>
-                </ul>
-            </section>
+    <section>
+        <h2>3. Podstawy prawne przetwarzania danych</h2>
+        <p>3.1. Przetwarzanie danych osobowych odbywa siƒô zgodnie z art. 6 RODO, na podstawie:</p>
+        <ul>
+            <li>zgody u≈ºytkownika na przetwarzanie danych osobowych;</li>
+            <li>niezbƒôdno≈õci do realizacji umowy (utworzenia drzewa genealogicznego);</li>
+            <li>uzasadnionego interesu administratora (zapewnienie bezpiecze≈Ñstwa serwisu).</li>
+        </ul>
+    </section>
 
-            <section>
-                <h2>4. UdostÍpnianie i przekazywanie danych</h2>
-                <p>
-                    4.1. Dane osobowe uøytkownikÛw nie bÍdπ udostÍpniane podmiotom trzecim bez zgody uøytkownika, z wyjπtkiem przypadkÛw przewidzianych prawem.
-                </p>
-                <p>
-                    4.2. Administrator moøe powierzyÊ przetwarzanie danych osobowych podmiotom wspÛ≥pracujπcym, takim jak dostawcy us≥ug hostingowych, podmioty zajmujπce siÍ utrzymaniem systemu IT, lub firmy obs≥ugujπce p≥atnoúci, na podstawie odpowiednich umÛw.
-                </p>
-            </section>
+    <section>
+        <h2>4. Udostƒôpnianie i przekazywanie danych</h2>
+        <p>
+            4.1. Dane osobowe u≈ºytkownik√≥w nie bƒôdƒÖ udostƒôpniane podmiotom trzecim bez zgody u≈ºytkownika, z wyjƒÖtkiem przypadk√≥w przewidzianych prawem.
+        </p>
+        <p>
+            4.2. Administrator mo≈ºe powierzyƒá przetwarzanie danych osobowych podmiotom wsp√≥≈ÇpracujƒÖcym, takim jak dostawcy us≈Çug hostingowych, podmioty zajmujƒÖce siƒô utrzymaniem systemu IT, lub firmy obs≈ÇugujƒÖce p≈Çatno≈õci, na podstawie odpowiednich um√≥w.
+        </p>
+    </section>
 
-            <section>
-                <h2>5. Prawa uøytkownikÛw</h2>
-                <p>5.1. Uøytkownik ma prawo do:</p>
-                <ul>
-                    <li>dostÍpu do swoich danych oraz ich poprawiania;</li>
-                    <li>usuniÍcia danych (Ñprawo do bycia zapomnianymî);</li>
-                    <li>ograniczenia przetwarzania danych;</li>
-                    <li>przenoszenia danych;</li>
-                    <li>sprzeciwu wobec przetwarzania danych;</li>
-                    <li>wniesienia skargi do organu nadzorczego w przypadku naruszenia praw.</li>
-                </ul>
-            </section>
+    <section>
+        <h2>5. Prawa u≈ºytkownik√≥w</h2>
+        <p>5.1. U≈ºytkownik ma prawo do:</p>
+        <ul>
+            <li>dostƒôpu do swoich danych oraz ich poprawiania;</li>
+            <li>usuniƒôcia danych (‚Äûprawo do bycia zapomnianym‚Äù);</li>
+            <li>ograniczenia przetwarzania danych;</li>
+            <li>przenoszenia danych;</li>
+            <li>sprzeciwu wobec przetwarzania danych;</li>
+            <li>wniesienia skargi do organu nadzorczego w przypadku naruszenia praw.</li>
+        </ul>
+    </section>
 
-            <section>
-                <h2>6. Okres przechowywania danych</h2>
-                <p>
-                    6.1. Dane osobowe przechowywane sπ przez okres korzystania z us≥ug serwisu oraz przez czas wymagany przepisami prawa lub do momentu wycofania zgody przez uøytkownika.
-                </p>
-            </section>
+    <section>
+        <h2>6. Okres przechowywania danych</h2>
+        <p>
+            6.1. Dane osobowe przechowywane sƒÖ przez okres korzystania z us≈Çug serwisu oraz przez czas wymagany przepisami prawa lub do momentu wycofania zgody przez u≈ºytkownika.
+        </p>
+    </section>
 
-            <section>
-                <h2>7. Pliki cookies</h2>
-                <p>
-                    7.1. Serwis wykorzystuje pliki cookies, ktÛre pozwalajπ na dostosowanie strony do preferencji uøytkownikÛw oraz analizÍ ruchu na stronie.
-                </p>
-                <p>7.2. Uøytkownik moøe zarzπdzaÊ plikami cookies poprzez ustawienia swojej przeglπdarki.</p>
-            </section>
+    <section>
+        <h2>7. Pliki cookies</h2>
+        <p>
+            7.1. Serwis wykorzystuje pliki cookies, kt√≥re pozwalajƒÖ na dostosowanie strony do preferencji u≈ºytkownik√≥w oraz analizƒô ruchu na stronie.
+        </p>
+        <p>7.2. U≈ºytkownik mo≈ºe zarzƒÖdzaƒá plikami cookies poprzez ustawienia swojej przeglƒÖdarki.</p>
+    </section>
 
-            <section>
-                <h2>8. Zmiany w polityce prywatnoúci</h2>
-                <p>
-                    8.1. Administrator zastrzega sobie prawo do wprowadzania zmian w polityce prywatnoúci. Informacje o zmianach bÍdπ publikowane na stronie internetowej.
-                </p>
-                <p>
-                    8.2. ZachÍcamy uøytkownikÛw do regularnego sprawdzania treúci polityki prywatnoúci w celu zapoznania siÍ z ewentualnymi zmianami.
-                </p>
-            </section>
+    <section>
+        <h2>8. Zmiany w polityce prywatno≈õci</h2>
+        <p>
+            8.1. Administrator zastrzega sobie prawo do wprowadzania zmian w polityce prywatno≈õci. Informacje o zmianach bƒôdƒÖ publikowane na stronie internetowej.
+        </p>
+        <p>
+            8.2. Zachƒôcamy u≈ºytkownik√≥w do regularnego sprawdzania tre≈õci polityki prywatno≈õci w celu zapoznania siƒô z ewentualnymi zmianami.
+        </p>
+    </section>
 
-            <footer>
-                <p><em>Niniejsza polityka prywatnoúci obowiπzuje od dnia 14.11.2024r.</em></p>
-            </footer>
-            </div>
-        <BottomBar/>
-        </div>
+    <footer>
+        <p><em>Niniejsza polityka prywatno≈õci obowiƒÖzuje od dnia 14.11.2024r.</em></p>
+    </footer>
+   
+</div>
+ <BottomBar/>
+ </div>
     )
 }

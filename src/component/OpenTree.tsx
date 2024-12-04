@@ -3,6 +3,10 @@ import { NavLink } from "react-router-dom";
 import { FamilyTree } from '../Models/FamilyTree'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import AppBar from "./AppBar";
+import BottomBar from "./BottomBar";
+import '../Styles/buttonMenu.css';
+import '../Styles/inputFieldsMenu.css';
 
 export default function OpenTree() {
     const [trees, setTrees] = useState<FamilyTree[]>([]);
@@ -29,9 +33,13 @@ export default function OpenTree() {
 
     return (
         <div>
-            <h1>OTWÓRZ Z PLIK JSON</h1>
+            <AppBar/>
+        <div className="App2">
+            <form className="inputRegister">
+            <h1>OTWÃ“RZ Z PLIK JSON</h1>
             <input type="file" accept=".json" />
-            <Button as={NavLink} to={`/`}>OTWÓRZ</Button>
+            <Button as={NavLink} to={`/`}>OTWÃ“RZ</Button>
+            </form>
             <h1> TWOJE PLIKI</h1>
 
             <div>
@@ -40,7 +48,7 @@ export default function OpenTree() {
                         <li key={familyTree.id}>
                             <div>
                                 <h2>{familyTree.name}</h2>
-                                <Button as={NavLink} to={`/`}>OTWÓRZ </Button>
+                                <Button as={NavLink} to={`/`}>OTWÃ“RZ </Button>
                                 <Button as={NavLink} to={`/`}>EDYTUJ</Button>
                             </div>
                         </li>
@@ -49,6 +57,8 @@ export default function OpenTree() {
 
             </div>
 
+        </div>
+        <BottomBar/>
         </div>
     )
 }

@@ -3,6 +3,7 @@ import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import React, { useState } from 'react';
 import '../Styles/buttonMenu.css';
+import '../Styles/inputFieldsMenu.css';
 
 export default function Register() {
 
@@ -21,7 +22,7 @@ export default function Register() {
             <img src={logo} className="App-logo" alt="logo"></img>
             <form  className="inputRegister">
                 <div>
-                    <label>ImiÍ:</label>
+                    <label>Imiƒô:</label>
                     <input
                         type="text"
                         name="name"
@@ -45,7 +46,7 @@ export default function Register() {
                     />
                 </div>
                 <div>
-                    <label>Has≥o:</label>
+                    <label>Has≈Ço:</label>
                     <input
                         type="text"
                         name="password"
@@ -53,7 +54,7 @@ export default function Register() {
                     />
                 </div>
                 <div>
-                    <label>PowtÛrz has≥o:</label>
+                    <label>Powt√≥rz has≈Ço:</label>
                     <input
                         type="text"
                         name="password2"
@@ -68,14 +69,14 @@ export default function Register() {
                             checked={isChecked} 
                             //onChange={handleCheckboxChange} 
                         />
-                AKCEPTUJE POLITYK  PRYWATNOåCI</p>
-                <Button as={NavLink} to={`/privacyPolicy`} className="link" >POLITYKA PRYWATNOåCI</Button>
+                AKCEPTUJƒò POLITYKƒò PRYWATNO≈öCI</p>
+                <Button as={NavLink} to={`/privacyPolicy`} className="link" >POLITYKA PRYWATNO≈öCI</Button>
                    
                 </div>
             
 
 
-            <Button as={NavLink} to={`/login`} className="buttonMenu2" >ZA£”Ø KONTO</Button>
+            <Button as={NavLink} to={`/login`} className="buttonMenu2" >ZA≈Å√ì≈ª KONTO</Button>
         </div>
     )
 }

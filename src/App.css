@@ -37,6 +37,20 @@
     background-attachment: scroll; /* The background scrolls with the content */
 }
 
+.App3 { 
+   margin-top: 0px;
+   text-align: center;
+   display: block; /* Use flexbox */
+   justify-content: center; /* Center content horizontally */
+   align-items: center; /* Center content vertically */
+  
+   height: 100vh; /* Full viewport height */
+   width: 100%; /* Full width of the container */
+   position: relative; /* Allow pseudo-elements or additional elements */
+   /*overflow: auto;*/ /* Prevent scrollbars for overflowing content */
+ background-color: #C6B8AD;
+}
+
 .App-logo {
     height: 250px;
     pointer-events: none;
