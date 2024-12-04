@@ -7,6 +7,7 @@ import AppBar from "./AppBar";
 import BottomBar from "./BottomBar";
 import '../Styles/buttonMenu.css';
 import '../Styles/inputFieldsMenu.css';
+import '../Styles/openTreeStyle.css';
 
 export default function OpenTree() {
     const [trees, setTrees] = useState<FamilyTree[]>([]);
@@ -32,33 +33,41 @@ export default function OpenTree() {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
-            <AppBar/>
-        <div className="App2">
-            <form className="inputRegister">
-            <h1>OTWÓRZ Z PLIK JSON</h1>
-            <input type="file" accept=".json" />
-            <Button as={NavLink} to={`/`}>OTWÓRZ</Button>
-            </form>
-            <h1> TWOJE PLIKI</h1>
-
-            <div>
-                <ul>
-                    {trees.map(familyTree => (
-                        <li key={familyTree.id}>
-                            <div>
-                                <h2>{familyTree.name}</h2>
-                                <Button as={NavLink} to={`/`}>OTWÓRZ </Button>
-                                <Button as={NavLink} to={`/`}>EDYTUJ</Button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-
+        <div className="App4">
+            <AppBar />
+            <div className="app-container">
+                <form className="form-container">
+                    <h1 className="header">OTWÓRZ Z PLIK JSON</h1>
+                    <div className="file-setup">
+                    <input type="file" accept=".json" className="file-input" />
+                    <Button as={NavLink} to={`/`} className="button open-button">
+                        OTWÓRZ
+                    </Button>
+                    </div>
+                   
+                </form>
+                <h1 className="header">TWOJE PLIKI</h1>
+                <div className="file-container">
+                    <ul className="file-list">
+                        {trees.map((familyTree) => (
+                            <li key={familyTree.id} className="file-item">
+                                <div className="file-details">
+                                    <h2 className="file-name">{familyTree.name}</h2>
+                                    <p>
+                                    <Button as={NavLink} to={`/`} className="button open-button">
+                                        EDYTUJ
+                                    </Button>
+                                    <Button as={NavLink} to={`/`} className="button open-button">
+                                        OTWÓRZ
+                                    </Button>
+                                    </p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
-
+            <BottomBar />
         </div>
-        <BottomBar/>
-        </div>
-    )
-}
+    );
+};

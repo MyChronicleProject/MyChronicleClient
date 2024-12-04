@@ -51,6 +51,37 @@
  background-color: #C6B8AD;
 }
 
+
+.App4 {
+  text-align: center;
+  display: block; /* Use flexbox */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+
+  height: 100vh; /* Full viewport height */
+  width: 100%; /* Full width of the container */
+  position: relative; /* Allow pseudo-elements or additional elements */
+
+  /* Set up the main content area */
+  z-index: 1; /* Ensure content appears above the pseudo-element */
+}
+
+.App4::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url('/src/background.png'); /* Replace with your image URL */
+  background-size: cover; /* Maintain the natural dimensions of the image */
+  background-position: top center; /* Start the image from the top and center horizontally */
+  background-attachment: scroll; /* The background scrolls with the content */
+  opacity: 0.2; /* Set the opacity to 20% */
+  z-index: -1; /* Place the background behind the main content */
+}
+
+
 .App-logo {
     height: 250px;
     pointer-events: none;
