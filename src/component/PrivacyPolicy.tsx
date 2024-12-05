@@ -4,7 +4,7 @@ import BottomBar from './BottomBar';
 
 export default function PrivacyPolicy() {
     return (
-        <div>
+        <div className='App4'>
             <AppBar/>
         <div className="privacy-policy">
     <h1>Polityka Prywatności</h1>

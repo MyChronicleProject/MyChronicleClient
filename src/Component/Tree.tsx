@@ -5,6 +5,7 @@ import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 
+
 export default function Tree() {
     const [person, setPerson] = useState<Person[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -33,7 +34,8 @@ export default function Tree() {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
+       
+        <div >
             <h1>Drzewo</h1>
             <ul>
                 {person.map(person => (

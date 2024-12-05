@@ -4,6 +4,9 @@ import { NavLink } from "react-router-dom";
 import React, { useState } from 'react';
 import '../Styles/buttonMenu.css';
 import '../Styles/inputFieldsMenu.css';
+import AppBar from './AppBar';
+import BottomBar from './BottomBar';
+
 
 export default function LoginPage() {
 
@@ -14,6 +17,8 @@ export default function LoginPage() {
 
 
     return (
+        <div>
+            <AppBar />
         <div className="App2">
             <img src={logo} className="App-logo" alt="logo"></img>
             <form  >
@@ -39,6 +44,8 @@ export default function LoginPage() {
 
 
             <Button as={NavLink} to={`/choiceOfActionPage`} className="buttonMenu" >ZALOGUJ SIĘ</Button>
+        </div>
+        <BottomBar />
         </div>
     )
 }

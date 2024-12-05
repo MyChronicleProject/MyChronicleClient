@@ -4,7 +4,7 @@
     height: 50px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: end;
     padding: 0 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -25,11 +25,15 @@
     cursor: pointer;
     padding: 0;
     text-transform: uppercase;
+    text-decoration: none; 
 }
 
 .username-button:hover {
-    color: #c6aa96; /* Lighter beige on hover */
-}
+   
+        text-decoration: underline; /* Underline on hover */
+        color: #d08b56; /* Slightly lighter brown on hover */
+    }
+
 
 .user-icon {
     width: 30px;
@@ -37,4 +41,7 @@
     border-radius: 50%;
     background-color: #c6aa96; /* Beige circle */
     margin-left: 10px;
+}
+.contact-text {
+    color: #8c736b; /* Sets the text color to light green */
 }

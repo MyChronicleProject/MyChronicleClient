@@ -11,7 +11,7 @@ import AddRelationForm from "../Component/AddRelationForm";
 import OpenTree from "../Component/OpenTree";
 import TreeView from "../Component/TreeView";
 import TreeViewEdition from "../Component/TreeViewEdition";
-
+import Tree from "../Component/Tree";
 
 export const routes: RouteObject[] = [
     {

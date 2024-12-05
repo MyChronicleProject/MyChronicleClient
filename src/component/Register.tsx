@@ -1,4 +1,7 @@
 import logo from '../logo.png';
+import AppBar from './AppBar';
+import BottomBar from './BottomBar';
+
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import React, { useState } from 'react';
@@ -18,6 +21,8 @@ export default function Register() {
 
 
     return (
+        <div>
+            <AppBar />
         <div className="App">
             <img src={logo} className="App-logo" alt="logo"></img>
             <form  className="inputRegister">
@@ -77,6 +82,8 @@ export default function Register() {
 
 
             <Button as={NavLink} to={`/login`} className="buttonMenu2" >ZAŁÓŻ KONTO</Button>
+        </div>
+        <BottomBar />
         </div>
     )
 }

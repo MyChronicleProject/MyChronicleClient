@@ -1,9 +1,13 @@
 import AddPersonForm from './AddPersonForm';
 import Tree from './Tree';
+import AppBar from './AppBar';
+import BottomBar from './BottomBar';
 
 export default function TreeViewEdition() {
     return (
-        <div>
+        <div >
+        <AppBar/>
+        <div className='App4'>
             <div className="left-panel">
                 <h1>Drzewo</h1>
                 <Tree />
@@ -13,7 +17,10 @@ export default function TreeViewEdition() {
             </div>
 
         </div>
-    )
+        <BottomBar/>
+        </div>
+    
+    );
 }
 
 
