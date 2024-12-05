@@ -7,6 +7,7 @@ import PrivacyPolicy from "../Component/PrivacyPolicy";
 import SettingsPage from "../Component/SettingsPage";
 import ChoiceOfActionPage from "../Component/ChoiceOfActionPage";
 import AddRelation from "../Component/AddRelation";
+import AddRelationForm from "../Component/AddRelationForm";
 import OpenTree from "../Component/OpenTree";
 import TreeView from "../Component/TreeView";
 import TreeViewEdition from "../Component/TreeViewEdition";
@@ -24,13 +25,13 @@ export const routes: RouteObject[] = [
             { path: 'privacyPolicy', element: <PrivacyPolicy /> },
             { path: 'settingsPage', element: <SettingsPage /> },
             { path: 'choiceOfActionPage', element: <ChoiceOfActionPage /> },
-            { path: 'addRelation', element: <AddRelation /> },
+            { path: 'addRelation/:familyTreeId', element: <AddRelation /> },
             { path: 'openTree', element: <OpenTree /> },
             { path: 'treeView', element: <TreeView /> },
-            { path: 'treeViewEdition', element: <TreeViewEdition /> },
-            { path: 'treeViewEdition/:id', element: <TreeViewEdition /> },
-            { path: '*', element: <Navigate replace to='/not-found' /> }
-
+            { path: 'treeViewEdition/:familyTreeId', element: <TreeViewEdition /> },
+            { path: 'treeViewEdition/:familyTreeId/:id', element: <TreeViewEdition /> },
+            { path: '*', element: <Navigate replace to='/not-found' /> },
+            { path: 'addRelationForm', element: <AddRelationForm /> }
         ]
     }
 ]

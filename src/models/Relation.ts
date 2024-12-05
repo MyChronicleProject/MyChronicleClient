@@ -5,6 +5,34 @@ export enum RelationType {
     Spouse = 'Spouse',
 }
 
+
+export const getRelationTypeNumber = (relationType: string) => {
+    switch (relationType) {
+        case RelationType.Child:
+            return 0;
+        case RelationType.Parent:
+            return 1;
+        case RelationType.Spouse:
+            return 2;
+        default:
+            return 3;
+    }
+};
+
+export const getRelationTypeName = (relation: number) => {
+    switch (relation) {
+        case 0:
+            return RelationType.Child;
+        case 1:
+            return RelationType.Parent;
+        case 2:
+            return RelationType.Spouse;
+        default:
+            return 'Unknown';
+    }
+};
+
+
 export interface Relation {
     id: string;
     personId_1: string;

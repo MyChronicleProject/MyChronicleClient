@@ -3,16 +3,19 @@ import axios from 'axios';
 import { Person } from '../Models/Person';
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 export default function Tree() {
     const [person, setPerson] = useState<Person[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const { familyTreeId } = useParams<{ familyTreeId: string }>(); 
+
 
     useEffect(() => {
         setLoading(true);
-
-        axios.get<Person[]>('https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons')
+        console.log("TreeID: ",familyTreeId)
+        axios.get<Person[]>(`https://localhost:7033/api/Familytrees/${familyTreeId}/persons`)
             .then((response) => {
                 console.log(response.data);
                 setPerson(response.data);
@@ -38,7 +41,7 @@ export default function Tree() {
                         <h2><center>{person.name} {person.lastName}</center></h2>
                         <div>
                             <center>
-                                <NavLink to={`/treeviewedition/${person.id}`} className="button nav-link">
+                                <NavLink to={`/treeviewedition/${familyTreeId}/${person.id}`} className="button nav-link">
                                     Edit
                                 </NavLink>
                             </center>

@@ -17,6 +17,7 @@ export default function AddPersonForm() {
     const [formName, setFormName] = useState<string>('');
     const [buttonSubmitName, setButtonSubmitName] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
+    const { familyTreeId } = useParams<{ familyTreeId: string }>(); 
     const [formData, setFormData] = useState({
         name: '',
         middleName: '',
@@ -64,9 +65,10 @@ export default function AddPersonForm() {
         if (id) {
             setFormName("Edycja osoby");
             setButtonSubmitName("Edytuj osobê");
-            const fetchCar = async () => {
+
+            const fetchPerson = async () => {
                 try {
-                    const response = await axios.get<Person>(`https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons/${id}`);
+                    const response = await axios.get<Person>(`https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${id}`);
                     const personData = response.data;
 
                     console.log('Request Payload:', personData);
@@ -91,11 +93,12 @@ export default function AddPersonForm() {
                 }
             };
 
-            fetchCar();
+            fetchPerson();
         } else {
             setFormName("Dodawanie osoby");
             setButtonSubmitName("Dodaj osobê");
             setLoading(false);
+            console.log("TreeID: ", familyTreeId)
         }
     }, [id]);
 
@@ -140,7 +143,7 @@ export default function AddPersonForm() {
     };
 
     const ifTheSame = async () => {
-        const response = await axios.get<Person>(`https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons/${id}`);
+        const response = await axios.get<Person>(`https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${id}`);
         const personData = response.data;
         if (formData.name != personData.name) {
             console.log("name");
@@ -159,7 +162,7 @@ export default function AddPersonForm() {
             console.log("birthplace");
             return false;
         }
-        if (formData.deathPlace || personData.deathPlace ) ///przy pustych polach 
+        if (formData.deathPlace || personData.deathPlace ) 
             if (formData.deathPlace !== personData.deathPlace) {
                 console.log("deathplace");
                 return false;
@@ -218,21 +221,21 @@ export default function AddPersonForm() {
                     setTheSameError("No value changed");
                     return;
                 }
-                const response = await axios.put(`https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons/${id}`, {
+                const response = await axios.put(`https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${id}`, {
                     ...formData,
                     id:id,
                     birthDate: formData.birthDate.split('T')[0],
                     deathDate: formData.deathDate ? formData.deathDate.split('T')[0] : null,
                     gender: getGenderNumber(formData.gender),
-                    familyTreeId: "08dd0676-a7e3-49ab-84dc-0417de93a67e",
+                    familyTreeId: familyTreeId,
                 });
             } else {
-                const response = await axios.post(`https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons`, {
+                const response = await axios.post(`https://localhost:7033/api/Familytrees/${familyTreeId}/persons`, {
                     ...formData,
                     birthDate: formData.birthDate ? formData.birthDate.split('T')[0] : null,
                     deathDate: formData.deathDate ? formData.deathDate.split('T')[0] : null,
                     gender: getGenderNumber(formData.gender),
-                    familyTreeId: "08dd0676-a7e3-49ab-84dc-0417de93a67e",
+                    familyTreeId: familyTreeId,
                 });
             }
             navigate('/treeviewedition')
