@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Person } from "../Models/Person";
+import { Person } from "../models/Person";
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import { useParams } from "react-router-dom";
