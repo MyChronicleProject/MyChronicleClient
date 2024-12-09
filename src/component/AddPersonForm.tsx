@@ -3,9 +3,9 @@ import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { Gender } from '../Models/Person'
+import { Gender } from '../models/Person'
 import axios from 'axios';
-import { Person,getGenderNumber, getGenderName} from '../Models/Person';
+import { Person,getGenderNumber, getGenderName} from '../models/Person';
 import { useNavigate } from 'react-router-dom';
 
 export default function AddPersonForm() {
@@ -63,7 +63,7 @@ export default function AddPersonForm() {
         resetForm();
         if (id) {
             setFormName("Edycja osoby");
-            setButtonSubmitName("Edytuj osobê");
+            setButtonSubmitName("Edytuj osobï¿½");
             const fetchCar = async () => {
                 try {
                     const response = await axios.get<Person>(`https://localhost:7033/api/Familytrees/08dd0676-a7e3-49ab-84dc-0417de93a67e/persons/${id}`);
@@ -94,7 +94,7 @@ export default function AddPersonForm() {
             fetchCar();
         } else {
             setFormName("Dodawanie osoby");
-            setButtonSubmitName("Dodaj osobê");
+            setButtonSubmitName("Dodaj osobï¿½");
             setLoading(false);
         }
     }, [id]);
@@ -257,7 +257,7 @@ export default function AddPersonForm() {
                 {theSameError && <div className="error-message">{theSameError}</div>}
                 <input type="file" accept=".jpg, .png" />
                 <div>
-                    <label>Imiê:</label>
+                    <label>Imiï¿½:</label>
                     <input
                         type="text"
                         name="name"
@@ -297,7 +297,7 @@ export default function AddPersonForm() {
                     {formErrors.birthDate && <div className="error-message">{formErrors.birthDate}</div>}
                 </div>
                 <div>
-                    <label>Data œmierci:</label>
+                    <label>Data ï¿½mierci:</label>
                     <input
                         type="date"
                         name="deathDate"
@@ -317,7 +317,7 @@ export default function AddPersonForm() {
                     {formErrors.birthPlace && <div className="error-message">{formErrors.birthPlace}</div>}
                 </div>
                 <div>
-                    <label>Miejsce œmierci:</label>
+                    <label>Miejsce ï¿½mierci:</label>
                     <input
                         type="text"
                         name="deathPlace"
@@ -327,7 +327,7 @@ export default function AddPersonForm() {
                     {formErrors.deathPlace && <div className="error-message">{formErrors.deathPlace}</div>}
                 </div>
                 <div>
-                    <label>P³eæ:</label>
+                    <label>Pï¿½eï¿½:</label>
                     <select
                         name="gender"
                         value={formData.gender}
@@ -341,7 +341,7 @@ export default function AddPersonForm() {
                     </select>
                 </div>
                 <div>
-                    <label>Zawód:</label>
+                    <label>Zawï¿½d:</label>
                     <input
                         type="text"
                         name="occupation"

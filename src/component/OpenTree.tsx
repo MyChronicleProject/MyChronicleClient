@@ -1,6 +1,6 @@
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import { FamilyTree } from '../Models/FamilyTree'
+import { FamilyTree } from '../models/FamilyTree'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AppBar from "./AppBar";
