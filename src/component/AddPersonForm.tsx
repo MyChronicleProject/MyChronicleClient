@@ -1,12 +1,12 @@
 import logo from "../logo.svg";
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import { useParams } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
-import { Gender } from '../models/Person'
-import axios from 'axios';
-import { Person,getGenderNumber, getGenderName} from '../models/Person';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Gender } from "../Models/Person";
+import axios from "axios";
+import { Person, getGenderNumber, getGenderName } from "../Models/Person";
+import { useNavigate } from "react-router-dom";
 
 export default function AddPersonForm() {
   const navigate = useNavigate();
