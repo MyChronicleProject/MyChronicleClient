@@ -8,7 +8,13 @@ import axios from "axios";
 import { Person, getGenderNumber, getGenderName } from "../Models/Person";
 import { useNavigate } from "react-router-dom";
 
-export default function AddPersonForm() {
+export default function AddPersonForm({
+  selectedNode,
+  personAdded,
+}: {
+  selectedNode: any;
+  personAdded: (person: any) => void;
+}) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [theSameError, setTheSameError] = useState<string>("");
@@ -60,14 +66,14 @@ export default function AddPersonForm() {
 
   useEffect(() => {
     resetForm();
-    if (id) {
+    if (selectedNode) {
       setFormName("Edycja osoby");
       setButtonSubmitName("Edytuj osobę");
 
       const fetchPerson = async () => {
         try {
           const response = await axios.get<Person>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${id}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`
           );
           const personData = response.data;
 
@@ -101,7 +107,7 @@ export default function AddPersonForm() {
       setLoading(false);
       console.log("TreeID: ", familyTreeId);
     }
-  }, [id]);
+  }, [selectedNode]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -147,7 +153,7 @@ export default function AddPersonForm() {
 
   const ifTheSame = async () => {
     const response = await axios.get<Person>(
-      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${id}`
+      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`
     );
     const personData = response.data;
     if (formData.name != personData.name) {
@@ -224,16 +230,16 @@ export default function AddPersonForm() {
     }
 
     try {
-      if (id) {
+      if (selectedNode) {
         if (await ifTheSame()) {
           setTheSameError("Nie wprowadzono żadnych zmian");
           return;
         }
         const response = await axios.put(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${id}`,
+          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
           {
             ...formData,
-            id: id,
+            id: selectedNode,
             birthDate: formData.birthDate.split("T")[0],
             deathDate: formData.deathDate
               ? formData.deathDate.split("T")[0]
@@ -257,8 +263,16 @@ export default function AddPersonForm() {
             familyTreeId: familyTreeId,
           }
         );
+        if (response.status === 200 && response.data) {
+          const addedPersonId = response.data;
+          const updatedFormData = {
+            ...formData,
+            id: addedPersonId,
+          };
+
+          personAdded(updatedFormData);
+        }
       }
-      navigate("/treeviewedition");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("API error:", error.response?.data);

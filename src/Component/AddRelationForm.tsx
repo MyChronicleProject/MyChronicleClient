@@ -12,7 +12,15 @@ import {
 } from "../Models/Relation";
 import { Person } from "../Models/Person";
 
-export default function AddRelationForm() {
+export default function AddRelationForm({
+  selectedEdge,
+  selectedPersonInTree,
+  relationAdded,
+}: {
+  selectedEdge: any;
+  selectedPersonInTree: string[] | null;
+  relationAdded: (relation: any) => void;
+}) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
@@ -68,14 +76,14 @@ export default function AddRelationForm() {
       .finally(() => {
         setLoading(false);
       });
-    if (id) {
+    if (selectedEdge) {
       setFormName("Edycja relacji");
       setButtonSubmitName("Edytuj relacje");
-      console.log("MamId");
+      console.log("MamId: ", selectedEdge);
       const fetchRelation = async () => {
         try {
           const response = await axios.get<Relation>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${personId}/relations/${id}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`
           );
           const relationData = response.data;
 
@@ -101,18 +109,22 @@ export default function AddRelationForm() {
     } else {
       setFormName("Dodawanie relacji");
       setButtonSubmitName("Dodaj relacje");
-      if (personId) {
+      if (
+        selectedPersonInTree &&
+        selectedPersonInTree[0] &&
+        selectedPersonInTree[1]
+      ) {
         setFormData((prevData) => ({
           ...prevData,
-          personId_1: personId,
-          personId_2: personId,
+          personId_1: selectedPersonInTree[0],
+          personId_2: selectedPersonInTree[1],
         }));
-        console.log("Person1 z link: ", personId);
-        console.log("Person2 z link: ", personId);
+        console.log("Person1 z link: ", selectedPersonInTree[0]);
+        console.log("Person2 z link: ", selectedPersonInTree[1]);
       }
       setLoading(false);
     }
-  }, [id]);
+  }, [selectedEdge]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -151,7 +163,7 @@ export default function AddRelationForm() {
 
   const ifTheSame = async () => {
     const response = await axios.get<Relation>(
-      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${personId}/relations/${id}`
+      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`
     );
     const relationData = response.data;
     if (formData.personId_1 != relationData.personId_1) {
@@ -204,16 +216,16 @@ export default function AddRelationForm() {
     }
 
     try {
-      if (id) {
+      if (selectedEdge) {
         if (await ifTheSame()) {
           setTheSameError("Nie zmieniono żadnej wartości");
           return;
         }
         const response = await axios.put(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${personId}/relations/${id}`,
+          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
           {
             ...formData,
-            id: id,
+            id: selectedEdge.id,
             startDate: formData.startDate.split("T")[0],
             endDate: formData.endDate
               ? formData.endDate.split("T")[0]
@@ -222,19 +234,29 @@ export default function AddRelationForm() {
           }
         );
       } else {
-        const response = await axios.post(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${personId}/relations`,
-          {
-            ...formData,
-            startDate: formData.startDate.split("T")[0],
-            endDate: formData.endDate
-              ? formData.endDate.split("T")[0]
-              : undefined,
-            relationType: getRelationTypeNumber(formData.relationType),
+        if (selectedPersonInTree) {
+          const response = await axios.post(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedPersonInTree[1]}/relations`,
+            {
+              ...formData,
+              startDate: formData.startDate.split("T")[0],
+              endDate: formData.endDate
+                ? formData.endDate.split("T")[0]
+                : undefined,
+              relationType: getRelationTypeNumber(formData.relationType),
+            }
+          );
+          if (response.status === 200 && response.data) {
+            const addedRelationId = response.data;
+            const updatedFormData = {
+              ...formData,
+              id: addedRelationId,
+            };
+
+            relationAdded(updatedFormData);
           }
-        );
+        }
       }
-      navigate("/treeviewedition");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("API error:", error.response?.data);

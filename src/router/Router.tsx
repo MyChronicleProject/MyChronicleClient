@@ -39,7 +39,7 @@ export const routes: RouteObject[] = [
         element: <TreeViewEdition />,
       },
       { path: "*", element: <Navigate replace to="/not-found" /> },
-      { path: "addRelationForm", element: <AddRelationForm /> },
+      //{ path: "addRelationForm", element: <AddRelationForm /> },
       {
         path: "relationList/:familyTreeId/:personId",
         element: <RelationList />,

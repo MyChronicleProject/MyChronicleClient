@@ -1,8 +1,9 @@
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import { FamilyTree } from '../Models/FamilyTree'
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { FamilyTree } from "../Models/FamilyTree";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import AppBar from "./AppBar";
 import BottomBar from "./BottomBar";
 import "../Styles/buttonMenu.css";
@@ -10,11 +11,13 @@ import "../Styles/inputFieldsMenu.css";
 import "../Styles/openTreeStyle.css";
 
 export default function OpenTree() {
+  const navigate = useNavigate();
   const [trees, setTrees] = useState<FamilyTree[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [addTreeForm, setAddTreeForm] = useState<boolean>(true);
-
+  const [fileContent, setFileContent] = useState<any>(null);
+  const [treeData, setTreeData] = useState<any>();
   const [formData, setFormData] = useState({
     name: "",
   });
@@ -22,6 +25,38 @@ export default function OpenTree() {
   const [formErrors, setFormErrors] = useState({
     name: "",
   });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsedData = JSON.parse(reader.result as string) as FamilyTree;
+          setFileContent(parsedData);
+          console.log("Wczytano plik JSON:", parsedData);
+          console.log("FileContent: ", fileContent);
+        } catch (error) {
+          console.error("Błąd parsowania JSON:", error);
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const handleOpenFile = () => {
+    console.log("W metodzie");
+    if (fileContent) {
+      console.log("Otwarto plik JSON:", fileContent);
+      const familyTreeId = fileContent.familyTreeId;
+      console.log("ID drzewa:", familyTreeId);
+      navigate(`/treeViewEdition/${familyTreeId}`, {
+        state: { treeData: fileContent },
+      });
+    } else {
+      console.error("Nie wybrano pliku lub plik jest niepoprawny.");
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -104,11 +139,17 @@ export default function OpenTree() {
           <form className="form-container">
             <h1 className="header">OTWÓRZ Z PLIK JSON</h1>
             <div className="file-setup">
-              <input type="file" accept=".json" className="file-input" />
+              <input
+                type="file"
+                accept=".json"
+                className="file-input"
+                onChange={handleFileChange}
+              />
+
               <Button
-                as={NavLink}
-                to={`/treeView`}
+                type="button"
                 className="button open-button"
+                onClick={handleOpenFile}
               >
                 OTWÓRZ
               </Button>
