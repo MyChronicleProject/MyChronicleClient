@@ -13,6 +13,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { v4 as uuidv4 } from "uuid";
 import { useLocation } from "react-router-dom";
+import ReactDOM from "react-dom/client";
 
 const PlaceholderNode = ({ data }: any) => {
   return (
@@ -107,7 +108,26 @@ export default function Tree({
   };
 
   const saveTreeToFile = () => {
-    const treeData = { familyTreeId, nodes, edges };
+    const sanitizedNodes = nodes.map((node) => ({
+      ...node,
+      data: {
+        ...node.data,
+        label:
+          typeof node.data.label === "string"
+            ? node.data.label
+            : convertLabelToText(node.data.label),
+      },
+    }));
+
+    const sanitizedEdges = edges.map((edge) => ({
+      ...edge,
+    }));
+
+    const treeData = {
+      familyTreeId,
+      nodes: sanitizedNodes,
+      edges: sanitizedEdges,
+    };
 
     const blob = new Blob([JSON.stringify(treeData, null, 2)], {
       type: "application/json",
@@ -123,6 +143,30 @@ export default function Tree({
     URL.revokeObjectURL(url);
   };
 
+  const convertLabelToText = (label: any): string => {
+    if (React.isValidElement(label)) {
+      const extractTextFromElement = (element: React.ReactNode): string => {
+        if (typeof element === "string") {
+          return element;
+        }
+        if (Array.isArray(element)) {
+          return element.map(extractTextFromElement).join("");
+        }
+        if (React.isValidElement(element)) {
+          if (element.type === "br") {
+            return "\\n";
+          }
+          return extractTextFromElement(element.props.children);
+        }
+        return "";
+      };
+
+      return extractTextFromElement(label);
+    }
+
+    return String(label);
+  };
+
   useEffect(() => {
     if (treeData) {
       const { nodes, edges } = treeData;
@@ -136,16 +180,40 @@ export default function Tree({
     console.log("TreeData: ", handleTreeData);
     if (handleTreeData) {
       if (handleTreeData.nodes && handleTreeData.edges) {
-        setNodes(handleTreeData.nodes);
+        const updatedNodes = handleTreeData.nodes.map((node: any) => ({
+          ...node,
+          data: {
+            ...node.data,
+            label:
+              typeof node.data.label === "string"
+                ? convertTextToLabel(node.data.label)
+                : node.data.label,
+          },
+        }));
+
+        setNodes(updatedNodes);
         setEdges(handleTreeData.edges);
 
-        console.log("Wczytano węzły:", handleTreeData.nodes);
+        console.log("Wczytano węzły:", updatedNodes);
         console.log("Wczytano krawędzie:", handleTreeData.edges);
       } else {
         alert("Plik nie zawiera wymaganych danych: nodes i edges.");
       }
     }
   }, [handleTreeData]);
+
+  const convertTextToLabel = (text: string): JSX.Element => {
+    const parts = text.split("\\n").map((part, index) => {
+      return (
+        <React.Fragment key={index}>
+          {part}
+          {index < text.split("\\n").length - 1 && <br />}{" "}
+        </React.Fragment>
+      );
+    });
+
+    return <>{parts}</>;
+  };
 
   const handleNodeDragStop = (event: any, node: any) => {
     if (node.type !== "placeholder") {
