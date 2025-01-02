@@ -81,6 +81,7 @@ export default function Tree({
   useEffect(() => {
     setUpdateKey((prev) => prev + 1);
   }, [nodes]);
+
   const downloadPDF = () => {
     const input = pdfRef.current;
     if (!input) {

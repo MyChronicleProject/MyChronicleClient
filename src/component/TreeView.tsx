@@ -6,13 +6,17 @@ import "reactflow/dist/style.css";
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import PersonDetail from "./PersonDetail";
+import RelationDetail from "./RelationDetail";
 import axios from "axios";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import {
   Relation,
   getRelationTypeNumber,
   RelationType,
 } from "../Models/Relation";
 import { useParams } from "react-router-dom";
+import { FamilyTree } from "../Models/FamilyTree";
 
 export default function TreeView() {
   const [nodes, setNodes] = useState<any[]>([]);
@@ -23,7 +27,12 @@ export default function TreeView() {
   const handleTreeData = state?.treeData;
   const [visiblePerson, setVisiblePerson] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedEdge, setSelectedEdge] = useState<any[]>([null]);
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
+  const [visibleRelation, setVisibleRelation] = useState<boolean>(false);
+  const [visibleRelation2, setVisibleRelation2] = useState<boolean>(false);
+  const pdfRef = useRef<HTMLDivElement | null>(null);
+  const [treeName, setTreeName] = useState<string | null>(null);
 
   useEffect(() => {
     console.log("TreeData: ", handleTreeData);
@@ -52,8 +61,13 @@ export default function TreeView() {
               `https://localhost:7033/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`
             );
             console.log("Pobrano relacje");
-
+            console.log("RElacje", relationResponse.data);
             setRelation(relationResponse.data);
+
+            const treeNameResponse = await axios.get<FamilyTree>(
+              `https://localhost:7033/api/Familytrees/${familyTreeId}`
+            );
+            setTreeName(treeNameResponse.data.name);
           } catch (error) {
             setError("Error fetching data");
             console.error(error);
@@ -69,9 +83,9 @@ export default function TreeView() {
 
   const handleNodeClick = (event: React.MouseEvent, node: any) => {
     console.log("Kliknięto węzeł o ID:", node.id);
+
     if (node.type === "default") {
       if (node.id.includes("*")) {
-        //setNodes(null);
         const [id1, id2] = node.id.split("*");
 
         const clickedRelation = relation.find(
@@ -80,51 +94,95 @@ export default function TreeView() {
             (rel.personId_1 === id2 && rel.personId_2 === id1)
         );
         console.log("ClickedRelation: ", clickedRelation);
-        //onEdgeClick([clickedRelation, null]);
+        setSelectedEdge([clickedRelation, null]);
+        setVisibleRelation(true);
+        setVisibleRelation2(false);
+        setVisiblePerson(false);
       } else {
         console.log("ClickedRelation-node: ", node);
         setSelectedNode(node);
         setVisiblePerson(true);
+        setVisibleRelation2(false);
+        setVisibleRelation(false);
       }
     }
   };
 
-  //  const handleEdgeClick = (event: React.MouseEvent, edge: any) => {
-  //     console.log("Kliknięto relację o ID:", edge);
-  //     if (edge.target.includes("*")) {
-  //       const [id1, id2] = edge.target.split("*");
+  const handleEdgeClick = (event: React.MouseEvent, edge: any) => {
+    console.log("Kliknięto relację o ID:", edge);
+    console.log("RElacje: ", relation);
+    if (edge.target.includes("*")) {
+      const [id1, id2] = edge.target.split("*");
 
-  //       const clickedRelation = relation.find(
-  //         (rel) =>
-  //           (rel.personId_1 === id1 && rel.personId_2 === id2) ||
-  //           (rel.personId_1 === id2 && rel.personId_2 === id1)
-  //       );
-  //       console.log(clickedRelation);
-  //       onEdgeClick([clickedRelation, null]);
-  //     } else if (edge.source.includes("*")) {
-  //       const [id1, id2] = edge.source.split("*");
-  //       console.log(id1, id2);
-  //       const clickedRelation1 = relation.find(
-  //         (rel) =>
-  //           (rel.personId_1 === id1 && rel.personId_2 === edge.target) ||
-  //           (rel.personId_1 === edge.target && rel.personId_2 === id1)
-  //       );
-  //       const clickedRelation2 = relation.find(
-  //         (rel) =>
-  //           (rel.personId_1 === id2 && rel.personId_2 === edge.target) ||
-  //           (rel.personId_1 === edge.target && rel.personId_2 === id2)
-  //       );
-  //       console.log(clickedRelation1, clickedRelation2);
-  //       onEdgeClick([clickedRelation1, clickedRelation2]);
-  //     } else {
-  //       const clickedRelation = relation.find(
-  //         (rel) =>
-  //           (rel.personId_1 === edge.source && rel.personId_2 === edge.target) ||
-  //           (rel.personId_1 === edge.target && rel.personId_2 === edge.source)
-  //       );
-  //       onEdgeClick([clickedRelation, null]);
-  //     }
-  //   };
+      const clickedRelation = relation.find(
+        (rel) =>
+          (rel.personId_1 === id1 && rel.personId_2 === id2) ||
+          (rel.personId_1 === id2 && rel.personId_2 === id1)
+      );
+      console.log(clickedRelation);
+      setSelectedEdge([clickedRelation, null]);
+      setVisiblePerson(false);
+      setVisibleRelation2(false);
+      setVisibleRelation(true);
+    } else if (edge.source.includes("*")) {
+      const [id1, id2] = edge.source.split("*");
+      console.log(id1, id2);
+      const clickedRelation1 = relation.find(
+        (rel) =>
+          (rel.personId_1 === id1 && rel.personId_2 === edge.target) ||
+          (rel.personId_1 === edge.target && rel.personId_2 === id1)
+      );
+      const clickedRelation2 = relation.find(
+        (rel) =>
+          (rel.personId_1 === id2 && rel.personId_2 === edge.target) ||
+          (rel.personId_1 === edge.target && rel.personId_2 === id2)
+      );
+      console.log(clickedRelation1, clickedRelation2);
+      setSelectedEdge([clickedRelation1, clickedRelation2]);
+      setVisiblePerson(false);
+      setVisibleRelation2(true);
+      setVisibleRelation(true);
+    } else {
+      const clickedRelation = relation.find(
+        (rel) =>
+          (rel.personId_1 === edge.source && rel.personId_2 === edge.target) ||
+          (rel.personId_1 === edge.target && rel.personId_2 === edge.source)
+      );
+      console.log(clickedRelation);
+      setSelectedEdge([clickedRelation, null]);
+      setVisiblePerson(false);
+      setVisibleRelation2(false);
+      setVisibleRelation(true);
+    }
+  };
+
+  const downloadPDF = () => {
+    const input = pdfRef.current;
+    if (!input) {
+      console.error("pdfRef is not assigned to any element.");
+      return;
+    }
+    html2canvas(input).then((canvas: any) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("l", "mm", "a4", true);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 30;
+      pdf.addImage(
+        imgData,
+        "PNG",
+        imgX,
+        imgY,
+        imgWidth * ratio,
+        imgHeight * ratio
+      );
+      pdf.save(`${treeName}.pdf`);
+    });
+  };
 
   const convertTextToLabel = (text: string): JSX.Element => {
     const parts = text.split("\\n").map((part, index) => {
@@ -141,13 +199,15 @@ export default function TreeView() {
 
   return (
     <div>
-      {/* <div style={{ height: "100vh" }} ref={pdfRef}> */}
-      <div style={{ height: "100vh" }}>
+      <h1>
+        <center>{treeName}</center>
+      </h1>
+      <div style={{ height: "100vh" }} ref={pdfRef}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
           onNodeClick={handleNodeClick}
-          //onEdgeClick={handleEdgeClick}
+          onEdgeClick={handleEdgeClick}
           fitView
         >
           <MiniMap />
@@ -162,23 +222,22 @@ export default function TreeView() {
           />
         </div>
       )}
-      {/* {visibleRelation && (
-                <div className="person-panel">
-                  <RelationDetail
-                    selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}
-                  />
-                </div>
-              )}
-              {visibleRelation2 && (
-                <div className="person-panel">
-                  <RelationDetail
-                    selectedEdgeId={selectedEdge[1] ? selectedEdge[1] : null}
-                  />
-                </div>
-              )} */}
+      {visibleRelation && (
+        <div className="person-panel">
+          <RelationDetail
+            selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}
+          />
+        </div>
+      )}
+      {visibleRelation2 && (
+        <div className="person-panel">
+          <RelationDetail
+            selectedEdgeId={selectedEdge[1] ? selectedEdge[1] : null}
+          />
+        </div>
+      )}
 
-      {/* <button onClick={() => saveTreeToFile()}>Save</button>
-  <button onClick={downloadPDF}>Download PDF</button> */}
+      <button onClick={downloadPDF}>Download PDF</button>
     </div>
   );
 }
