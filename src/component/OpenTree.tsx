@@ -196,7 +196,7 @@ export default function OpenTree() {
             Dodaj nowe drzewo
           </Button>
           {addTreeForm && (
-            <form>
+            <form className="overlay">
               <div>
                 <label>Nazwa:</label>
                 <input
