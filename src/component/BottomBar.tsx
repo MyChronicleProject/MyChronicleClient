@@ -5,7 +5,7 @@ import '../Styles/appBarStyle.css';
 
 export default function BottomBar() {
     return (
-        <Menu>
+        
              <div className="appbar">
 
                 <p className="contact-text">Skontaktuj się z nami! </p>
@@ -18,6 +18,6 @@ export default function BottomBar() {
                 </Button>
                </div>        
             
-        </Menu>
+        
     )
 }

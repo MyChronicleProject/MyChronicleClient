@@ -15,6 +15,9 @@ import { v4 as uuidv4 } from "uuid";
 import { useLocation } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import useZoomPanHelper from "react-flow-renderer";
+import "../Styles/buttonMenu.css";
+import { Button } from "semantic-ui-react";
+
 
 const PlaceholderNode = ({ data }: any) => {
   return (
@@ -745,8 +748,8 @@ export default function Tree({
           <Background />
         </ReactFlow>
       </div>
-      <button onClick={() => saveTreeToFile()}>Save</button>
-      <button onClick={downloadPDF}>Download PDF</button>
+      <Button onClick={() => saveTreeToFile()} className="buttonMenuOver">Save</Button>
+      <Button onClick={downloadPDF} className="buttonMenuOver2">Download PDF</Button>
     </div>
   );
 }

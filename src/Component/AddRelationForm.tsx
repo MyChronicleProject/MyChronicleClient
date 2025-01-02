@@ -11,6 +11,9 @@ import {
   getRelationTypeName,
 } from "../Models/Relation";
 import { Person } from "../Models/Person";
+import "../Styles/addRelationFormStyle.css";
+import "../Styles/buttonMenu.css";
+
 
 export default function AddRelationForm({
   selectedEdge,
@@ -274,7 +277,7 @@ export default function AddRelationForm({
       <form onSubmit={handleSubmit}>
         <h1> {formName} </h1>
         {theSameError && <div className="error-message">{theSameError}</div>}
-        <div>
+        <div className="inputForm">
           <label>Wybierz osobę:</label>
           <select
             name="personId_1"
@@ -288,7 +291,7 @@ export default function AddRelationForm({
             ))}
           </select>
         </div>
-        <div>
+        <div className="inputForm">
           <label>Wybierz osobę2:</label>
           <select
             name="personId_2"
@@ -302,7 +305,7 @@ export default function AddRelationForm({
             ))}
           </select>
         </div>
-        <div>
+        <div className="inputForm">
           <label>Data rozpoczęcia:</label>
           <input
             type="date"
@@ -314,7 +317,7 @@ export default function AddRelationForm({
             <div className="error-message">{formErrors.startDate}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Data zakończenia:</label>
           <input
             type="date"
@@ -326,7 +329,7 @@ export default function AddRelationForm({
             <div className="error-message">{formErrors.endDate}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Relacja:</label>
           <select
             name="relationType"
@@ -340,7 +343,7 @@ export default function AddRelationForm({
             ))}
           </select>
         </div>
-        <button type="submit"> {buttonSubmitName} </button>
+        <button type="submit" className="buttonMenu2"> {buttonSubmitName} </button>
       </form>
     </div>
   );

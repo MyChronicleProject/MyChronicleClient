@@ -7,6 +7,11 @@ import AddRelationForm from "./AddRelationForm";
 import Tree2 from "./Tree2";
 import { Person } from "../Models/Person";
 import { Relation } from "../Models/Relation";
+import "../Styles/addPersonFormStyle.css";
+import "../Styles/addRelationFormStyle.css";
+
+import { Button } from "semantic-ui-react";
+
 
 export default function TreeViewEdition() {
   const [selectedNode, setSelectedNode] = useState<any>(null);
@@ -103,6 +108,14 @@ export default function TreeViewEdition() {
     setSelectedPersonInTree([personId]);
   };
 
+  
+  const handleExitPerson = () => {
+    setVisiblePerson(false);
+    };
+    const handleExitRelation = () => {
+      setVisiblePerson(false);
+      };
+
   return (
     <div>
       <AppBar />
@@ -121,6 +134,9 @@ export default function TreeViewEdition() {
         </div>
         {visiblePerson && (
           <div className="person-panel">
+            <Button onClick={handleExitPerson} className="exitButton">
+                x
+              </Button>
             <AddPersonForm
               selectedNode={selectedNode ? selectedNode.id : null}
               personAdded={handelPersonAdded}
@@ -128,7 +144,10 @@ export default function TreeViewEdition() {
           </div>
         )}
         {visibleRelation && (
-          <div className="person-panel">
+          <div className="relation-panel">
+             <Button onClick={handleExitRelation} className="exitButton">
+                x
+              </Button>
             <AddRelationForm
               selectedPersonInTree={selectedPersonInTree}
               selectedEdge={selectedEdge[0] ? selectedEdge[0] : null}
@@ -137,7 +156,10 @@ export default function TreeViewEdition() {
           </div>
         )}
         {visibleRelation2 && (
-          <div className="person-panel">
+          <div className="relation-panel">
+             <Button onClick={handleExitRelation} className="exitButton">
+                x
+              </Button>
             <AddRelationForm
               selectedPersonInTree={selectedPersonInTree}
               selectedEdge={selectedEdge[1] ? selectedEdge[1] : null}

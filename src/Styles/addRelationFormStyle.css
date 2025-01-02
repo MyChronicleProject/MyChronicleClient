@@ -1,0 +1,16 @@
+.relation-panel {
+    z-index: 9; /* Higher than the backdrop */
+    background: #B29F8E; /* Green background */
+    height: 100%;
+    position:absolute;
+    top:0;
+    right: 0;
+    
+    /* transform: translate(-50%, -50%); */
+    /* box-shadow: 0px 0px 100000px rgba(0, 0, 0, 1); */
+    color: white; /* Text contrast */
+    padding: 30px; /* Space inside the overlay */
+    /* border-radius: 10px; Optional rounded corners */
+    text-align: center;
+    
+  }

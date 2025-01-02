@@ -53,6 +53,7 @@
 
 
 .App4 {
+  position: relative;
   text-align: center;
   display: block; /* Use flexbox */
   justify-content: center; /* Center content horizontally */
