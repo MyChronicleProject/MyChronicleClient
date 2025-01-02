@@ -15,19 +15,37 @@ body {
     padding: 20px;
     border-radius: 10px;
     margin: 20px;
-    
-    /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
 }
 
-.overlay {
+
+  /* Przycisk dodawania neowego drzewa ovederlay */
+  .overlay {
+    z-index: 9; /* Higher than the backdrop */
+    background: #8c736b; /* Green background */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 100000px rgba(0, 0, 0, 1);
+    color: white; /* Text contrast */
+    padding: 30px; /* Space inside the overlay */
+    border-radius: 10px; /* Optional rounded corners */
+    text-align: center;
+    
+  }
+  
+
+/* .overlay {
     z-index: 9;
     margin: 30px;
     background: #009938;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  }
+  } */
 .header {
     color: #8c736b;
     font-size: 20px;
@@ -76,10 +94,39 @@ body {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+
 .file-list {
     list-style-type: none;
     padding: 0;
+    margin: 0; /* Optional: Remove default margin */
+    height: 300px; /* Define a height to trigger scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional: Add a border for clarity */
+    border-radius: 5px; /* Optional: Add rounded corners */
+
+    /* Scrollbar styling */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #888 transparent; /* For Firefox */
 }
+
+.file-list::-webkit-scrollbar {
+    width: 8px; /* Scrollbar width */
+}
+
+.file-list::-webkit-scrollbar-thumb {
+    background-color: #888; /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded corners for the thumb */
+}
+
+.file-list::-webkit-scrollbar-track {
+    background-color: transparent; /* Track background color */
+}
+
+
+/* .file-list {
+    list-style-type: none;
+    padding: 0;
+} */
 
 .file-item {
     /* display: f; */

@@ -58,7 +58,7 @@
   justify-content: center; /* Center content horizontally */
   align-items: center; /* Center content vertically */
 
-  height: 100vh; /* Full viewport height */
+  height: 100%; /* Full viewport height */
   width: 100%; /* Full width of the container */
   position: relative; /* Allow pseudo-elements or additional elements */
 

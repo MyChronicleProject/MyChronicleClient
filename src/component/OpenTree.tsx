@@ -134,6 +134,10 @@ export default function OpenTree() {
       });
   };
 
+const handleExit=()=> {
+  setAddTreeForm(false);
+}
+
   return (
     <div>
       <div className="App4">
@@ -192,12 +196,13 @@ export default function OpenTree() {
               ))}
             </ul>
           </div>
-          <Button onClick={() => setAddTreeForm(true)}>
+          <Button onClick={() => setAddTreeForm(true)}  className="buttonMenu3">
             Dodaj nowe drzewo
           </Button>
           {addTreeForm && (
             <form className="overlay">
-              <div>
+              <Button onClick={handleExit} className="exitButton">x</Button>
+              <div className="inputBasic">
                 <label>Nazwa:</label>
                 <input
                   type="text"
@@ -209,7 +214,7 @@ export default function OpenTree() {
                   <div className="error-message">{formErrors.name}</div>
                 )}
               </div>
-              <Button onClick={handleCreateTree}>Stwórz nowe drzewo</Button>
+              <Button onClick={handleCreateTree}  className="buttonMenu2">Stwórz nowe drzewo</Button>
             </form>
           )}
         </div>
