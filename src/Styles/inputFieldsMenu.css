@@ -38,3 +38,42 @@
         border-color: #6C2E2E;
         outline: none;
     }
+
+
+
+
+
+
+
+    .inputBasic {
+   
+      margin-bottom: 10px;
+    }
+    
+        .inputBasic label {
+            display: block;
+            font-weight: lighter;
+            color: white;
+           /* margin-bottom: 0.5rem;*/
+            font-family: 'Arial', sans-serif;
+            margin-bottom: 10px;
+        }
+    
+    /* Input, select */
+        .inputBasic input, .form-group select {
+            display: block;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            margin: auto;
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        .inputBasic input:focus, .form-group select:focus {
+            border-color: #6C2E2E;
+            outline: none;
+        }

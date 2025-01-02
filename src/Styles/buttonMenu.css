@@ -57,6 +57,31 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
     }
 
+
+
+    .buttonMenu3 {
+        margin-top: 30px;
+        display: inline-block;
+        background-color: #fff; /* White background */
+        color: #000; /* Black text */
+        font-size: 20px; /* Adjust font size */
+        font-family: 'Georgia', serif; /* Elegant serif font */
+        font-weight: normal; /* Make text bold */
+        padding: 10px 20px; /* Adjust padding for spacing */
+        border-radius: 10px; /* Rounded corners */
+        border: 1px solid #ddd; /* Subtle border */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+        text-align: center; /* Center text */
+        text-decoration: none; /* Remove underline */
+        transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hover effects */
+    }
+    
+        .buttonMenu3:hover {
+            transform: scale(1.05); /* Slightly enlarge on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+        }
+
+
     .welcome-text {
         font-family: "Times New Roman", serif; /* Use a classic serif font */
         font-size: 60px; /* Adjust size as needed */
@@ -68,3 +93,20 @@
         letter-spacing: 2px; /* Add spacing between letters */
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add subtle shadow for depth */
     }
+
+    .exitButton {
+        position: absolute; /* Position relative to the parent div */
+        top: 0px; /* Distance from the top edge */
+        right: 0px; /* Distance from the right edge */
+        background-color: transparent;
+        border: 2px solid #ddd;
+        padding: 5px 10px; /* Optional padding for better appearance */
+        cursor: pointer; /* Indicates it's clickable */
+        border-radius: 5px; /* Optional for rounded corners */
+      }
+
+
+
+
+
+      
