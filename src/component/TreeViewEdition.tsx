@@ -87,8 +87,9 @@ export default function TreeViewEdition() {
 
   const handleRelationAdded = (relation: Relation) => {
     setVisibleRelation(false);
-    if (addedPersonTemp) {
+    if (addedPersonTemp && addedPersonTemp[0] != null) {
       console.log("I'm here");
+      console.log("addedPErsonTemp: ", addedPersonTemp);
       setAddedPersonWithRelation([addedPersonTemp, relation]);
     } else {
       setAddedRelation(relation);
@@ -112,6 +113,7 @@ export default function TreeViewEdition() {
             handlePersonAdded={addedPerson}
             handleAddedPersonWithRelation={addedPersonWithRelation}
             handleRelationAdded={handleAddRelation}
+            handleAddedRelation={addedRelation}
           />
         </div>
         {visiblePerson && (

@@ -14,6 +14,7 @@ import jsPDF from "jspdf";
 import { v4 as uuidv4 } from "uuid";
 import { useLocation } from "react-router-dom";
 import ReactDOM from "react-dom/client";
+import useZoomPanHelper from "react-flow-renderer";
 
 const PlaceholderNode = ({ data }: any) => {
   return (
@@ -42,6 +43,7 @@ export default function Tree({
   handlePersonAdded,
   handleAddedPersonWithRelation,
   handleRelationAdded,
+  handleAddedRelation,
 }: {
   onNodeClick: (node: any) => void;
   onEdgeClick: (edge: any[]) => void;
@@ -49,6 +51,7 @@ export default function Tree({
   onStartView: (startView: boolean) => void;
   handlePersonAdded: any;
   handleAddedPersonWithRelation: any;
+  handleAddedRelation: any;
   handleRelationAdded: (ids: any[]) => void;
 }) {
   const [nodeHeight, setNodeHeight] = useState(0);
@@ -84,7 +87,6 @@ export default function Tree({
       console.error("pdfRef is not assigned to any element.");
       return;
     }
-
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("l", "mm", "a4", true);
@@ -352,9 +354,21 @@ export default function Tree({
 
   const onConnect = (params: any) => {
     console.log("Dodaje krawedza: ", params.target, " : ", params.source);
-    setAddRelationToExistsPerson(true);
-    handleRelationAdded([params.target, params.source]);
-    //setEdges((eds) => addEdge(params, eds));
+    const relationExists = relation.some(
+      (relation) =>
+        (relation.personId_1 === params.target &&
+          relation.personId_2 === params.source) ||
+        (relation.personId_2 === params.target &&
+          relation.personId_1 === params.source)
+    );
+    if (relationExists) {
+      console.log("Relacja istnieje");
+    } else {
+      if (!params.target.includes("*") && !params.source.includes("*")) {
+        setAddRelationToExistsPerson(true);
+        handleRelationAdded([params.target, params.source]);
+      }
+    }
   };
 
   useEffect(() => {
@@ -427,7 +441,9 @@ export default function Tree({
       addNode({
         id: handlePersonAdded.id,
         type: "default",
-        data: { label: `${handlePersonAdded.name}` },
+        data: {
+          label: `${handlePersonAdded.name} ${handlePersonAdded.lastName}`,
+        },
         position: { x: 0, y: 0 },
       });
 
@@ -481,7 +497,7 @@ export default function Tree({
       if (!addRelationToExistPerson) {
         addRelationWithPersonFunction(relatedNode);
       } else {
-        addRelationToExistPersonFunction(relatedNode);
+        // addRelationToExistPersonFunction();
       }
     }
   }, [handleAddedPersonWithRelation]);
@@ -575,7 +591,138 @@ export default function Tree({
     }
   }
 
-  function addRelationToExistPersonFunction(relatedNode: any) {}
+  function addRelationToExistPersonFunction() {
+    console.log("Probuje dodac relacje:  ", handleAddedRelation);
+
+    if (handleAddedRelation.relationType === "Child") {
+      const sourceNodeMarriage = edges.find(
+        (edge) =>
+          edge.source === handleAddedRelation.personId_1 &&
+          edge.target.includes("*")
+      );
+      if (sourceNodeMarriage) {
+        const targetParts = sourceNodeMarriage.target.split("*");
+        let secondParent: string | undefined;
+        if (targetParts[0] === handleAddedRelation.personId_1) {
+          secondParent = targetParts[1];
+        } else {
+          secondParent = targetParts[0];
+        }
+        console.log("MAriage: ", sourceNodeMarriage);
+        console.log("Second PArent: ", secondParent);
+        if (secondParent) {
+          const edgeWithSecondParentExists = edges.find(
+            (edge) =>
+              edge.source === secondParent &&
+              edge.target === handleAddedRelation.personId_2
+          );
+
+          if (edgeWithSecondParentExists) {
+            console.log("Dodaje edge ");
+            const updatedEdges = edges.filter(
+              (edge) => edge.id !== edgeWithSecondParentExists.id
+            );
+            setEdges(updatedEdges);
+
+            addEdges({
+              id: handleAddedRelation.id,
+              source: sourceNodeMarriage.target,
+              target: handleAddedRelation.personId_2,
+              animated: true,
+            });
+          } else {
+            addEdges({
+              id: handleAddedRelation.id,
+              source: handleAddedRelation.personId_1,
+              target: handleAddedRelation.personId_2,
+              animated: true,
+            });
+          }
+        }
+      }
+    } else if (handleAddedRelation.relationType === "Parent") {
+      const sourceNodeMarriage = edges.find(
+        (edge) =>
+          edge.source === handleAddedRelation.personId_2 &&
+          edge.target.includes("*")
+      );
+      if (sourceNodeMarriage) {
+        const targetParts = sourceNodeMarriage.target.split("*");
+        let secondParent: string | undefined;
+        if (targetParts[0] === handleAddedRelation.personId_2) {
+          secondParent = targetParts[1];
+        } else {
+          secondParent = targetParts[0];
+        }
+        console.log("MAriage: ", sourceNodeMarriage);
+        console.log("Second PArent: ", secondParent);
+        if (secondParent) {
+          const edgeWithSecondParentExists = edges.find(
+            (edge) =>
+              edge.source === secondParent &&
+              edge.target === handleAddedRelation.personId_1
+          );
+
+          if (edgeWithSecondParentExists) {
+            console.log("Dodaje edge ");
+            const updatedEdges = edges.filter(
+              (edge) => edge.id !== edgeWithSecondParentExists.id
+            );
+            setEdges(updatedEdges);
+
+            addEdges({
+              id: handleAddedRelation.id,
+              source: sourceNodeMarriage.target,
+              target: handleAddedRelation.personId_1,
+              animated: true,
+            });
+          } else {
+            const mariageExists = edges.find(
+              (edge) =>
+                edge.source === sourceNodeMarriage.target &&
+                edge.target === handleAddedRelation.personId_1
+            );
+
+            if (mariageExists) {
+              const updatedEdges = edges.filter(
+                (edge) => edge.id !== mariageExists.id
+              );
+              setEdges(updatedEdges);
+            }
+
+            addEdges({
+              id: handleAddedRelation.id,
+              source: handleAddedRelation.personId_2,
+              target: handleAddedRelation.personId_1,
+              animated: true,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    console.log("AddedRElation:: ", handleAddedRelation);
+
+    if (handleAddedRelation) {
+      console.log("W if");
+      const fetchRelation = async () => {
+        try {
+          const response = await axios.get<Relation>(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`
+          );
+          const relationData = response.data;
+          addRelation(relationData);
+        } catch (err) {
+          setError("Failed to fetch relation data");
+        } finally {
+        }
+      };
+      fetchRelation();
+    }
+    addRelationToExistPersonFunction();
+  }, [handleAddedRelation]);
 
   return (
     <div>

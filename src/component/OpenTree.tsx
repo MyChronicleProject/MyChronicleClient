@@ -50,7 +50,10 @@ export default function OpenTree() {
       console.log("Otwarto plik JSON:", fileContent);
       const familyTreeId = fileContent.familyTreeId;
       console.log("ID drzewa:", familyTreeId);
-      navigate(`/treeViewEdition/${familyTreeId}`, {
+      // navigate(`/treeViewEdition/${familyTreeId}`, {
+      //   state: { treeData: fileContent },
+      // });
+      navigate(`/treeView/${familyTreeId}`, {
         state: { treeData: fileContent },
       });
     } else {
@@ -172,7 +175,7 @@ export default function OpenTree() {
                       </Button>
                       <Button
                         as={NavLink}
-                        to={`/${familyTree.id}`}
+                        to={`/treeView/${familyTree.id}`}
                         className="button open-button"
                       >
                         OTWÓRZ
