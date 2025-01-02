@@ -101,7 +101,7 @@ body {
     margin: 0; /* Optional: Remove default margin */
     height: 300px; /* Define a height to trigger scrolling */
     overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #ddd; /* Optional: Add a border for clarity */
+    border: 0px solid #ddd; /* Optional: Add a border for clarity */
     border-radius: 5px; /* Optional: Add rounded corners */
 
     /* Scrollbar styling */
