@@ -21,7 +21,7 @@ export default function AddRelationForm({
   const { id } = useParams<{ id: string }>();
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
   const { personId } = useParams<{ personId: string }>();
-  const [selectedEdge, setSelectedEdge] = useState<any[]>([null]);
+
   const [buttonSubmitName, setButtonSubmitName] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [personList, setPersonList] = useState<Person[]>([]);

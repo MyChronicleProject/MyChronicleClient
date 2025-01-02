@@ -61,6 +61,23 @@ export default function OpenTree() {
     }
   };
 
+  const handleOpenFileWithEditMode = () => {
+    console.log("W metodzie");
+    if (fileContent) {
+      console.log("Otwarto plik JSON:", fileContent);
+      const familyTreeId = fileContent.familyTreeId;
+      console.log("ID drzewa:", familyTreeId);
+      navigate(`/treeViewEdition/${familyTreeId}`, {
+        state: { treeData: fileContent },
+      });
+      // navigate(`/treeView/${familyTreeId}`, {
+      //   state: { treeData: fileContent },
+      // });
+    } else {
+      console.error("Nie wybrano pliku lub plik jest niepoprawny.");
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     setAddTreeForm(false);
@@ -134,9 +151,9 @@ export default function OpenTree() {
       });
   };
 
-const handleExit=()=> {
-  setAddTreeForm(false);
-}
+  const handleExit = () => {
+    setAddTreeForm(false);
+  };
 
   return (
     <div>
@@ -159,6 +176,13 @@ const handleExit=()=> {
                 onClick={handleOpenFile}
               >
                 OTWÓRZ
+              </Button>
+              <Button
+                type="button"
+                className="button open-button"
+                onClick={handleOpenFileWithEditMode}
+              >
+                Edit
               </Button>
             </div>
           </form>
@@ -196,12 +220,14 @@ const handleExit=()=> {
               ))}
             </ul>
           </div>
-          <Button onClick={() => setAddTreeForm(true)}  className="buttonMenu3">
+          <Button onClick={() => setAddTreeForm(true)} className="buttonMenu3">
             Dodaj nowe drzewo
           </Button>
           {addTreeForm && (
             <form className="overlay">
-              <Button onClick={handleExit} className="exitButton">x</Button>
+              <Button onClick={handleExit} className="exitButton">
+                x
+              </Button>
               <div className="inputBasic">
                 <label>Nazwa:</label>
                 <input
@@ -214,7 +240,9 @@ const handleExit=()=> {
                   <div className="error-message">{formErrors.name}</div>
                 )}
               </div>
-              <Button onClick={handleCreateTree}  className="buttonMenu2">Stwórz nowe drzewo</Button>
+              <Button onClick={handleCreateTree} className="buttonMenu2">
+                Stwórz nowe drzewo
+              </Button>
             </form>
           )}
         </div>
