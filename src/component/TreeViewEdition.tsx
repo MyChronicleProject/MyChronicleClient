@@ -87,10 +87,13 @@ export default function TreeViewEdition() {
 
   const handleRelationAdded = (relation: Relation) => {
     setVisibleRelation(false);
-    if (addedPersonTemp && addedPersonTemp[0] != null) {
+    console.log("Dodaje relacje nie wiem czy z czlowiekiem czy bez");
+    console.log("Person: ", addedPersonTemp);
+    if (addedPersonTemp) {
       console.log("I'm here");
       console.log("addedPErsonTemp: ", addedPersonTemp);
       setAddedPersonWithRelation([addedPersonTemp, relation]);
+      setAddedPersonTemp(null);
     } else {
       setAddedRelation(relation);
     }
