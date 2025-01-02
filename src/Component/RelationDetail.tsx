@@ -13,22 +13,15 @@ import {
 import { Person } from "../Models/Person";
 
 export default function AddRelationForm({
-  selectedEdge,
-  selectedPersonInTree,
-  relationAdded,
+  selectedEdgeId,
 }: {
-  selectedEdge: any;
-  selectedPersonInTree: string[] | null;
-  relationAdded: (relation: any) => void;
+  selectedEdgeId: any;
 }) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
   const { personId } = useParams<{ personId: string }>();
-  const [isChecked, setIsChecked] = useState(false);
-  const [theSameError, setTheSameError] = useState<string>("");
-  const [loading, setLoading] = useState(true);
-  const [formName, setFormName] = useState<string>("");
+  const [selectedEdge, setSelectedEdge] = useState<any[]>([null]);
   const [buttonSubmitName, setButtonSubmitName] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [personList, setPersonList] = useState<Person[]>([]);
@@ -41,27 +34,8 @@ export default function AddRelationForm({
     endDate: "",
   });
 
-  const resetForm = () => {
-    setFormData({
-      personId_1: "",
-      personId_2: "",
-      relationType: "Child",
-      startDate: "",
-      endDate: "",
-    });
-  };
-
-  const [formErrors, setFormErrors] = useState({
-    personId_1: "",
-    personId_2: "",
-    relationType: "",
-    startDate: "",
-    endDate: "",
-  });
-
   useEffect(() => {
     console.log("W use efekt");
-    resetForm();
     axios
       .get<Person[]>(
         `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`
@@ -73,17 +47,13 @@ export default function AddRelationForm({
       .catch(() => {
         setError("Error fetching persons");
       })
-      .finally(() => {
-        setLoading(false);
-      });
-    if (selectedEdge) {
-      setFormName("Edycja relacji");
-      setButtonSubmitName("Edytuj relacje");
-      console.log("MamId: ", selectedEdge);
+      .finally(() => {});
+    if (selectedEdgeId) {
+      console.log("MamId: ", selectedEdgeId);
       const fetchRelation = async () => {
         try {
           const response = await axios.get<Relation>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdgeId.personId_1}/relations/${selectedEdgeId.id}`
           );
           const relationData = response.data;
 
@@ -102,29 +72,11 @@ export default function AddRelationForm({
         } catch (err) {
           setError("Failed to fetch relation data");
         } finally {
-          setLoading(false);
         }
       };
       fetchRelation();
-    } else {
-      setFormName("Dodawanie relacji");
-      setButtonSubmitName("Dodaj relacje");
-      if (
-        selectedPersonInTree &&
-        selectedPersonInTree[0] &&
-        selectedPersonInTree[1]
-      ) {
-        setFormData((prevData) => ({
-          ...prevData,
-          personId_1: selectedPersonInTree[0],
-          personId_2: selectedPersonInTree[1],
-        }));
-        console.log("Person1 z link: ", selectedPersonInTree[0]);
-        console.log("Person2 z link: ", selectedPersonInTree[1]);
-      }
-      setLoading(false);
     }
-  }, [selectedEdge]);
+  }, [selectedEdgeId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -136,151 +88,13 @@ export default function AddRelationForm({
     }));
   };
 
-  const validateField = (name: string, value: string) => {
-    switch (name) {
-      case "personId_1":
-        console.log("PersonId_1: ", value);
-        return value.trim() === "" ? "Wybór osoby jest wymagany" : "";
-      case "personId_2":
-        console.log("PersonId_2: ", value);
-        return value.trim() === "" ? "Wybór osoby jest wymagany" : "";
-      case "endDate":
-        return "";
-      case "startDate":
-        return value.trim() === ""
-          ? "Data rozpoczęcia relacji jest wymagana"
-          : "";
-      case "relationType":
-        return "";
-      default:
-        return "";
-    }
-  };
-
-  const getFormattedDate = (date: string | null | undefined) => {
-    return date ? date.split("T")[0] : "";
-  };
-
-  const ifTheSame = async () => {
-    const response = await axios.get<Relation>(
-      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`
-    );
-    const relationData = response.data;
-    if (formData.personId_1 != relationData.personId_1) {
-      console.log("ID1");
-      return false;
-    }
-    if (formData.personId_2 != relationData.personId_2) {
-      console.log("ID2");
-      return false;
-    }
-    if (formData.startDate !== relationData.startDate.split("T")[0]) {
-      console.log("startdate");
-      return false;
-    }
-    if (relationData.startDate && relationData.endDate.includes("T")) {
-      if (formData.startDate !== relationData.endDate.split("T")[0]) {
-        console.log("enddate");
-        return false;
-      }
-    }
-    if (
-      getRelationTypeNumber(formData.relationType).toString() !==
-      relationData.relationType.toString()
-    ) {
-      console.log("relation");
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    console.log("W handleSubmit");
-    e.preventDefault();
-
-    const newFormErrors: any = {};
-    let hasError = false;
-
-    for (const [key, value] of Object.entries(formData)) {
-      const error = validateField(key, value);
-      if (error) {
-        console.log("Error: ", key, " ", error);
-        newFormErrors[key] = error;
-        hasError = true;
-      }
-    }
-
-    setFormErrors(newFormErrors);
-    if (hasError) {
-      return;
-    }
-
-    try {
-      if (selectedEdge) {
-        if (await ifTheSame()) {
-          setTheSameError("Nie zmieniono żadnej wartości");
-          return;
-        }
-        const response = await axios.put(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
-          {
-            ...formData,
-            id: selectedEdge.id,
-            startDate: formData.startDate.split("T")[0],
-            endDate: formData.endDate
-              ? formData.endDate.split("T")[0]
-              : undefined,
-            relationType: getRelationTypeNumber(formData.relationType),
-          }
-        );
-      } else {
-        if (selectedPersonInTree) {
-          const response = await axios.post(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedPersonInTree[1]}/relations`,
-            {
-              ...formData,
-              startDate: formData.startDate.split("T")[0],
-              endDate: formData.endDate
-                ? formData.endDate.split("T")[0]
-                : undefined,
-              relationType: getRelationTypeNumber(formData.relationType),
-            }
-          );
-          if (response.status === 200 && response.data) {
-            const addedRelationId = response.data;
-            const updatedFormData = {
-              ...formData,
-              id: addedRelationId,
-            };
-
-            relationAdded(updatedFormData);
-          }
-        }
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("API error:", error.response?.data);
-      } else {
-        console.error("Unexpected error:", error);
-      }
-    }
-  };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <h1> {formName} </h1>
-        {theSameError && <div className="error-message">{theSameError}</div>}
+      <form>
+        <h1> Szczegóły </h1>
         <div>
           <label>Wybierz osobę:</label>
-          <select
-            name="personId_1"
-            value={formData.personId_1}
-            onChange={handleChange}
-          >
+          <select name="personId_1" value={formData.personId_1} disabled>
             {personList.map((person) => (
               <option key={person.id} value={person.id}>
                 {person.name} {person.lastName}
@@ -289,12 +103,8 @@ export default function AddRelationForm({
           </select>
         </div>
         <div>
-          <label>Wybierz osobę2:</label>
-          <select
-            name="personId_2"
-            value={formData.personId_2}
-            onChange={handleChange}
-          >
+          <label>Osoba 1:</label>
+          <select name="personId_2" value={formData.personId_2} disabled>
             {personList.map((person) => (
               <option key={person.id} value={person.id}>
                 {person.name} {person.lastName}
@@ -308,11 +118,8 @@ export default function AddRelationForm({
             type="date"
             name="startDate"
             value={formData.startDate.slice(0, 10)}
-            onChange={handleChange}
+            readOnly
           />
-          {formErrors.startDate && (
-            <div className="error-message">{formErrors.startDate}</div>
-          )}
         </div>
         <div>
           <label>Data zakończenia:</label>
@@ -320,19 +127,12 @@ export default function AddRelationForm({
             type="date"
             name="endDate"
             value={formData.endDate.slice(0, 10)}
-            onChange={handleChange}
+            readOnly
           />
-          {formErrors.endDate && (
-            <div className="error-message">{formErrors.endDate}</div>
-          )}
         </div>
         <div>
           <label>Relacja:</label>
-          <select
-            name="relationType"
-            value={formData.relationType}
-            onChange={handleChange}
-          >
+          <select name="relationType" value={formData.relationType} disabled>
             {Object.values(RelationType).map((relationType) => (
               <option key={relationType} value={relationType}>
                 {relationType}
