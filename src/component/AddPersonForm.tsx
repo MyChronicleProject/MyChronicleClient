@@ -23,6 +23,8 @@ export default function AddPersonForm({
   const [buttonSubmitName, setButtonSubmitName] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
+  const [image, setImage] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     name: "",
     middleName: "",
@@ -263,13 +265,29 @@ export default function AddPersonForm({
             familyTreeId: familyTreeId,
           }
         );
+
         if (response.status === 200 && response.data) {
           const addedPersonId = response.data;
           const updatedFormData = {
             ...formData,
             id: addedPersonId,
           };
-
+          if (image) {
+            const responseFoto = await axios.post(
+              `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${updatedFormData.id}/files`,
+              {
+                name: "",
+                fileType: 0,
+                content: image,
+                fileExtension: 0,
+                personId: updatedFormData.id,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+          }
+          setImage(null);
           personAdded(updatedFormData);
         }
       }
@@ -282,6 +300,21 @@ export default function AddPersonForm({
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          const base64String = (reader.result as string).split(",")[1];
+          setImage(base64String);
+          console.log("Obraz załadowany jako Base64:", base64String);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -290,7 +323,12 @@ export default function AddPersonForm({
       <form onSubmit={handleSubmit}>
         <h1> {formName} </h1>
         {theSameError && <div className="error-message">{theSameError}</div>}
-        <input type="file" accept=".jpg, .png" />
+        <input
+          type="file"
+          accept=".jpg, .png"
+          className="file-input"
+          onChange={handleFileChange}
+        />
         <div>
           <label>Imię:</label>
           <input
