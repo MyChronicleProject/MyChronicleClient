@@ -7,6 +7,11 @@ import { Gender } from "../Models/Person";
 import axios from "axios";
 import { Person, getGenderNumber, getGenderName } from "../Models/Person";
 import { useNavigate } from "react-router-dom";
+import "../Styles/addPersonFormStyle.css";
+import "../Styles/buttonMenu.css";
+import "../Styles/inputFieldsMenu.css";
+
+
 
 export default function AddPersonForm({
   selectedNode,
@@ -321,7 +326,7 @@ export default function AddPersonForm({
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h1> {formName} </h1>
+        <h1 > {formName} </h1>
         {theSameError && <div className="error-message">{theSameError}</div>}
         <input
           type="file"
@@ -330,6 +335,10 @@ export default function AddPersonForm({
           onChange={handleFileChange}
         />
         <div>
+        <div className="inputForm">
+        <input type="file" accept=".jpg, .png" />
+        </div>
+        <div className="inputForm">
           <label>Imię:</label>
           <input
             type="text"
@@ -341,7 +350,7 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.name}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Drugie imie:</label>
           <input
             type="text"
@@ -353,7 +362,7 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.middleName}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Nazwisko:</label>
           <input
             type="text"
@@ -365,7 +374,7 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.lastName}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Data urodzenia:</label>
           <input
             type="date"
@@ -377,7 +386,7 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.birthDate}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Data śmierci:</label>
           <input
             type="date"
@@ -389,7 +398,7 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.deathDate}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Miejsce urodzenia:</label>
           <input
             type="text"
@@ -401,7 +410,7 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.birthPlace}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Miejsce śmierci:</label>
           <input
             type="text"
@@ -413,7 +422,7 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.deathPlace}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Płeć:</label>
           <select name="gender" value={formData.gender} onChange={handleChange}>
             {Object.values(Gender).map((gender) => (
@@ -423,7 +432,7 @@ export default function AddPersonForm({
             ))}
           </select>
         </div>
-        <div>
+        <div className="inputForm">
           <label>Zawód:</label>
           <input
             type="text"
@@ -435,7 +444,7 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.occupation}</div>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Notatka:</label>
           <input
             type="text"
@@ -447,7 +456,7 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.note}</div>
           )}
         </div>
-        <button type="submit"> {buttonSubmitName} </button>
+        <button type="submit" className="buttonMenu2"> {buttonSubmitName} </button>
       </form>
     </div>
   );
