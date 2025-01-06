@@ -17,13 +17,13 @@ import ReactDOM from "react-dom/client";
 import useZoomPanHelper from "react-flow-renderer";
 import "../Styles/buttonMenu.css";
 import { Button } from "semantic-ui-react";
-
+import CustomNode from './CustomNode';
 
 const PlaceholderNode = ({ data }: any) => {
   return (
     <div
       style={{
-        padding: "10px",
+        padding: "5px",
         border: "1px dashed #999",
         backgroundColor: "#f5f5f5",
         textAlign: "center",
@@ -36,6 +36,7 @@ const PlaceholderNode = ({ data }: any) => {
 };
 const nodeTypes = {
   placeholder: PlaceholderNode,
+  custom: CustomNode,
 };
 
 export default function Tree({
@@ -440,13 +441,13 @@ export default function Tree({
       };
 
       console.log("Ilosc osob: ");
-
+      
       console.log("Dodano osobę: ", handlePersonAdded);
       addNode({
         id: handlePersonAdded.id,
-        type: "default",
+        type: "custom",
         data: {
-          label: `${handlePersonAdded.name} ${handlePersonAdded.lastName}`,
+          name: `${handlePersonAdded.name}`,surname:`${handlePersonAdded.lastName}`,photo:'_-_'
         },
         position: { x: 0, y: 0 },
       });
