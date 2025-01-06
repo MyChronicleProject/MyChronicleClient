@@ -17,13 +17,13 @@ import ReactDOM from "react-dom/client";
 import useZoomPanHelper from "react-flow-renderer";
 import "../Styles/buttonMenu.css";
 import { Button } from "semantic-ui-react";
-
+import CustomNode from './CustomNode';
 
 const PlaceholderNode = ({ data }: any) => {
   return (
     <div
       style={{
-        padding: "10px",
+        padding: "5px",
         border: "1px dashed #999",
         backgroundColor: "#f5f5f5",
         textAlign: "center",
@@ -36,6 +36,7 @@ const PlaceholderNode = ({ data }: any) => {
 };
 const nodeTypes = {
   placeholder: PlaceholderNode,
+  custom: CustomNode
 };
 
 export default function Tree({
@@ -243,7 +244,7 @@ export default function Tree({
 
   const handleNodeClick = (event: React.MouseEvent, node: any) => {
     console.log("Kliknięto węzeł o ID:", node.id);
-    if (node.type === "default") {
+    if (node.type === "custom") {
       if (node.id.includes("*")) {
         onNodeClick(null);
         const [id1, id2] = node.id.split("*");
@@ -344,7 +345,7 @@ export default function Tree({
       type: "placeholder",
       parentId: parentNode.id,
       data: { label: "+" },
-      position: { x: parentNode.position.x, y: parentNode.position.y + 30 },
+      position: { x: parentNode.position.x, y: parentNode.position.y + 40 },
     };
   };
 
@@ -440,13 +441,13 @@ export default function Tree({
       };
 
       console.log("Ilosc osob: ");
-
+      
       console.log("Dodano osobę: ", handlePersonAdded);
       addNode({
         id: handlePersonAdded.id,
-        type: "default",
+        type: "custom",
         data: {
-          label: `${handlePersonAdded.name} ${handlePersonAdded.lastName}`,
+          name: `${handlePersonAdded.name}`,surname:`${handlePersonAdded.lastName}`,photo:`*-*`
         },
         position: { x: 0, y: 0 },
       });
@@ -510,9 +511,9 @@ export default function Tree({
     if (handleAddedPersonWithRelation[1].relationType === RelationType.Child) {
       addNode({
         id: handleAddedPersonWithRelation[0].id,
-        type: "default",
+        type: "custom",
         data: {
-          label: `${handleAddedPersonWithRelation[0].name} ${handleAddedPersonWithRelation[0].lastName}`,
+          name: `${handleAddedPersonWithRelation[0].name}`,surname:`${handleAddedPersonWithRelation[0].lastName}`,photo:`*-*`
         },
         position: {
           x: relatedNode.position.x,
@@ -531,9 +532,9 @@ export default function Tree({
     ) {
       addNode({
         id: handleAddedPersonWithRelation[0].id,
-        type: "default",
+        type: "custom",
         data: {
-          label: `${handleAddedPersonWithRelation[0].name} ${handleAddedPersonWithRelation[0].lastName}`,
+          name: `${handleAddedPersonWithRelation[0].name}`,surname:`${handleAddedPersonWithRelation[0].lastName}`,photo:`*-*`
         },
         position: {
           x: relatedNode.position.x,
@@ -552,9 +553,9 @@ export default function Tree({
     ) {
       addNode({
         id: handleAddedPersonWithRelation[0].id,
-        type: "default",
+        type: "custom",
         data: {
-          label: `${handleAddedPersonWithRelation[0].name} ${handleAddedPersonWithRelation[0].lastName}`,
+          name: `${handleAddedPersonWithRelation[0].name}`,surname:`${handleAddedPersonWithRelation[0].lastName}`,photo:`*-*`
         },
         position: {
           x: relatedNode.position.x + 180,
@@ -564,14 +565,9 @@ export default function Tree({
 
       addNode({
         id: `${handleAddedPersonWithRelation[1].personId_1}*${handleAddedPersonWithRelation[1].personId_2}`,
-        type: "default",
+        type: "custom",
         data: {
-          label: (
-            <>
-              Małżeństwo <br />
-              {handleAddedPersonWithRelation[1].startDate}
-            </>
-          ),
+          name: `Malzenstwo`,surname:`${handleAddedPersonWithRelation[1].startDate}`,photo:`*-*`
         },
         position: {
           x: relatedNode.position.x + 90,
