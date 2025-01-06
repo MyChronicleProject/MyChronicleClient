@@ -17,7 +17,11 @@ import ReactDOM from "react-dom/client";
 import useZoomPanHelper from "react-flow-renderer";
 import "../Styles/buttonMenu.css";
 import { Button } from "semantic-ui-react";
+<<<<<<< HEAD
 import CustomNode from './CustomNode';
+=======
+
+>>>>>>> contViews
 
 const PlaceholderNode = ({ data }: any) => {
   return (

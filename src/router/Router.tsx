@@ -35,6 +35,7 @@ export const routes: RouteObject[] = [
       { path: "treeView", element: <TreeView /> },
       { path: "treeViewEdition/:familyTreeId", element: <TreeViewEdition /> },
       { path: "treeView/:familyTreeId", element: <TreeView /> },
+
       {
         path: "treeViewEdition/:familyTreeId/:id",
         element: <TreeViewEdition />,

@@ -199,45 +199,48 @@ export default function TreeView() {
 
   return (
     <div>
-      <h1>
-        <center>{treeName}</center>
-      </h1>
-      <div style={{ height: "100vh" }} ref={pdfRef}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodeClick={handleNodeClick}
-          onEdgeClick={handleEdgeClick}
-          fitView
-        >
-          <MiniMap />
-          <Controls />
-          <Background />
-        </ReactFlow>
+      <AppBar />
+      <div>
+        <h1>
+          <center>{treeName}</center>
+        </h1>
+        <div style={{ height: "100vh" }} ref={pdfRef}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodeClick={handleNodeClick}
+            onEdgeClick={handleEdgeClick}
+            fitView
+          >
+            <MiniMap />
+            <Controls />
+            <Background />
+          </ReactFlow>
+        </div>
+        {visiblePerson && (
+          <div className="person-panel">
+            <PersonDetail
+              selectedNodeId={selectedNode ? selectedNode.id : null}
+            />
+          </div>
+        )}
+        {visibleRelation && (
+          <div className="person-panel">
+            <RelationDetail
+              selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}
+            />
+          </div>
+        )}
+        {visibleRelation2 && (
+          <div className="person-panel">
+            <RelationDetail
+              selectedEdgeId={selectedEdge[1] ? selectedEdge[1] : null}
+            />
+          </div>
+        )}
       </div>
-      {visiblePerson && (
-        <div className="person-panel">
-          <PersonDetail
-            selectedNodeId={selectedNode ? selectedNode.id : null}
-          />
-        </div>
-      )}
-      {visibleRelation && (
-        <div className="person-panel">
-          <RelationDetail
-            selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}
-          />
-        </div>
-      )}
-      {visibleRelation2 && (
-        <div className="person-panel">
-          <RelationDetail
-            selectedEdgeId={selectedEdge[1] ? selectedEdge[1] : null}
-          />
-        </div>
-      )}
-
       <button onClick={downloadPDF}>Download PDF</button>
+      <BottomBar />
     </div>
   );
 }

@@ -140,7 +140,6 @@ export default function AddRelationForm({
             ))}
           </select>
         </div>
-        <button type="submit"> {buttonSubmitName} </button>
       </form>
     </div>
   );

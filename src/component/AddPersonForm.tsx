@@ -10,8 +10,18 @@ import { useNavigate } from "react-router-dom";
 import "../Styles/addPersonFormStyle.css";
 import "../Styles/buttonMenu.css";
 import "../Styles/inputFieldsMenu.css";
+<<<<<<< HEAD
 
 
+=======
+import {
+  FileDTO,
+  FileExtension,
+  FileType,
+  getFileExtensionNumber,
+  getFileTypeNumber,
+} from "../Models/File";
+>>>>>>> contViews
 
 export default function AddPersonForm({
   selectedNode,
@@ -28,6 +38,9 @@ export default function AddPersonForm({
   const [buttonSubmitName, setButtonSubmitName] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
+  //const [image, setImage] = useState<string | null>(null);
+  const [fileToSend, setFileToSend] = useState<FileDTO | null>(null);
+
   const [formData, setFormData] = useState({
     name: "",
     middleName: "",
@@ -268,13 +281,30 @@ export default function AddPersonForm({
             familyTreeId: familyTreeId,
           }
         );
+        console.log("Dodano osobe:          ", fileToSend);
         if (response.status === 200 && response.data) {
           const addedPersonId = response.data;
           const updatedFormData = {
             ...formData,
             id: addedPersonId,
           };
-
+          console.log("File:          ", fileToSend);
+          if (fileToSend) {
+            const responseFoto = await axios.post(
+              `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${updatedFormData.id}/files`,
+              {
+                name: fileToSend.name,
+                fileType: getFileTypeNumber(fileToSend.fileType),
+                content: fileToSend.content,
+                fileExtension: getFileExtensionNumber(fileToSend.fileExtension),
+                personId: updatedFormData.id,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+          }
+          setFileToSend(null);
           personAdded(updatedFormData);
         }
       }
@@ -287,6 +317,60 @@ export default function AddPersonForm({
     }
   };
 
+  const getFileExtension = (file: any) => {
+    const name = file.name;
+    const extension = name.split(".").pop();
+    if (
+      extension &&
+      Object.values(FileExtension).includes(extension as FileExtension)
+    ) {
+      return extension as FileExtension;
+    }
+    return FileExtension.pdf;
+  };
+
+  const getFileType = (fileExtension: any) => {
+    if (
+      fileExtension === FileExtension.docx ||
+      fileExtension == FileExtension.pdf
+    ) {
+      return FileType.Document;
+    } else if (fileExtension === FileExtension.mp3) {
+      return FileType.Audio;
+    } else {
+      return FileType.Image;
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    console.log(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          const base64String = (reader.result as string).split(",")[1];
+          const fileExtension = getFileExtension(file);
+          const fileType = getFileType(fileExtension);
+
+          setFileToSend({
+            content: base64String,
+            fileExtension: fileExtension,
+            fileType: fileType,
+            name: file.name,
+            personId: "",
+          });
+
+          console.log("Obraz załadowany jako Base64:", base64String);
+          console.log("File po: ", fileToSend);
+        }
+      };
+      reader.readAsDataURL(file);
+      console.log("File po: ", file);
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -295,9 +379,19 @@ export default function AddPersonForm({
       <form onSubmit={handleSubmit}>
         <h1 > {formName} </h1>
         {theSameError && <div className="error-message">{theSameError}</div>}
+<<<<<<< HEAD
         <div className="inputForm">
         <input type="file" accept=".jpg, .png" />
         </div>
+=======
+        <input
+          type="file"
+          accept=".jpg, .png, .pdf, .docx, .mp3"
+          className="file-input"
+          onChange={handleFileChange}
+        />
+
+>>>>>>> contViews
         <div className="inputForm">
           <label>Imię:</label>
           <input
@@ -416,7 +510,14 @@ export default function AddPersonForm({
             <div className="error-message">{formErrors.note}</div>
           )}
         </div>
+<<<<<<< HEAD
         <button type="submit" className="buttonMenu2"> {buttonSubmitName} </button>
+=======
+        <button type="submit" className="buttonMenu2">
+          {" "}
+          {buttonSubmitName}{" "}
+        </button>
+>>>>>>> contViews
       </form>
     </div>
   );
