@@ -1,5 +1,6 @@
 import React from "react";
-import { File, getFileTypeName } from "../Models/File";
+import { File, getFileTypeName } from "../../Models/File";
+
 import {
   FileDTO,
   FileExtension,
@@ -7,10 +8,11 @@ import {
   getFileExtensionNumber,
   getFileExtensionName,
   getFileTypeNumber,
-} from "../Models/File";
-import PdfViewer from "./pdfViewer";
+} from "../../Models/File";
+
 import DocxViewer from "./DocxViewer";
 import AudioPlayer from "./AudioPlayer";
+import PdfViewer from "./pdfViewer";
 
 interface AudioPlayerProps {
   file: File;
@@ -22,20 +24,33 @@ const OpenFile: React.FC<AudioPlayerProps> = ({ file }) => {
   }
 
   const fileExtensionName = getFileExtensionName(parseInt(file.fileExtension));
-  const fileTypeName = getFileTypeName(parseInt(file.fileType));
+  const fileTypeName = file.fileType;
 
   const renderViewer = () => {
     switch (fileTypeName) {
       case FileType.Audio:
-        return <AudioPlayer base64Audio={file.fileExtension} />;
+        console.log("REnderuje audio");
+        return <AudioPlayer base64Audio={file.content} />;
       case FileType.Image:
-        return <div>nie obsłużone</div>;
+        return (
+          <img
+            decoding="async"
+            src={`data:image/jpeg;base64,${file.content}`}
+            alt={file.name}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "150px",
+              objectFit: "contain",
+              objectPosition: "center",
+            }}
+          />
+        );
       case FileType.Document:
         switch (fileExtensionName) {
           case FileExtension.pdf:
-            return <PdfViewer base64={file.fileExtension} />;
+            return <PdfViewer base64={file.content} />;
           default:
-            return <DocxViewer fileContent={file.fileExtension} />;
+            return <DocxViewer fileContent={file.content} />;
         }
       default:
         return <div>No file available</div>;

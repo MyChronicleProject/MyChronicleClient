@@ -1,12 +1,12 @@
 import Tree from "./Tree";
-import AppBar from "./AppBar";
-import BottomBar from "./BottomBar";
+import AppBar from "./AppBars/AppBar";
+import BottomBar from "./AppBars/BottomBar";
 import ReactFlow, { MiniMap, Controls, Background, addEdge } from "reactflow";
 import "reactflow/dist/style.css";
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import PersonDetail from "./PersonDetail";
-import RelationDetail from "./RelationDetail";
+import PersonDetail from "./DetailPages/PersonDetail";
+import RelationDetail from "./DetailPages/RelationDetail";
 import axios from "axios";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";

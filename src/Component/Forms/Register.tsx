@@ -1,16 +1,15 @@
-import logo from "../logo.png";
-import AppBar from "./AppBar";
-import BottomBar from "./BottomBar";
+import logo from "../../logo.png";
+import AppBar from "../AppBars/AppBar";
+import BottomBar from "../AppBars/BottomBar";
 import { useNavigate } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import "../Styles/buttonMenu.css";
-import "../Styles/inputFieldsMenu.css";
+import "../../Styles/buttonMenu.css";
+import "../../Styles/inputFieldsMenu.css";
 import { useParams } from "react-router-dom";
-import { User } from "../Models/User";
 import axios from "axios";
-import PrivacyPolicy from "./PrivacyPolicy";
+import PrivacyPolicy from ".././PrivacyPolicy";
 
 export default function Register() {
   const navigate = useNavigate();

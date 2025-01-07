@@ -1,9 +1,9 @@
-import AddPersonForm from "./AddPersonForm";
+import AddPersonForm from "./Forms/AddPersonForm";
 import Tree from "./Tree";
-import AppBar from "./AppBar";
-import BottomBar from "./BottomBar";
+import AppBar from "./AppBars/AppBar";
+import BottomBar from "./AppBars/BottomBar";
 import React, { useEffect, useState } from "react";
-import AddRelationForm from "./AddRelationForm";
+import AddRelationForm from "./Forms/AddRelationForm";
 import Tree2 from "./Tree2";
 import { Person } from "../Models/Person";
 import { Relation } from "../Models/Relation";
@@ -11,7 +11,6 @@ import "../Styles/addPersonFormStyle.css";
 import "../Styles/addRelationFormStyle.css";
 
 import { Button } from "semantic-ui-react";
-
 
 export default function TreeViewEdition() {
   const [selectedNode, setSelectedNode] = useState<any>(null);
@@ -73,7 +72,7 @@ export default function TreeViewEdition() {
     setVisiblePerson(false);
   };
 
-  const handelPersonAdded = (person: Person) => {
+  const handelPersonAdded = (person: any) => {
     setVisiblePerson(false);
     console.log("StartView: ", startView);
     if (startView) {
@@ -108,13 +107,12 @@ export default function TreeViewEdition() {
     setSelectedPersonInTree([personId]);
   };
 
-  
   const handleExitPerson = () => {
     setVisiblePerson(false);
-    };
-    const handleExitRelation = () => {
-      setVisiblePerson(false);
-      };
+  };
+  const handleExitRelation = () => {
+    setVisiblePerson(false);
+  };
 
   return (
     <div>
@@ -135,8 +133,8 @@ export default function TreeViewEdition() {
         {visiblePerson && (
           <div className="person-panel">
             <Button onClick={handleExitPerson} className="exitButton">
-                x
-              </Button>
+              x
+            </Button>
             <AddPersonForm
               selectedNode={selectedNode ? selectedNode.id : null}
               personAdded={handelPersonAdded}
@@ -145,9 +143,9 @@ export default function TreeViewEdition() {
         )}
         {visibleRelation && (
           <div className="relation-panel">
-             <Button onClick={handleExitRelation} className="exitButton">
-                x
-              </Button>
+            <Button onClick={handleExitRelation} className="exitButton">
+              x
+            </Button>
             <AddRelationForm
               selectedPersonInTree={selectedPersonInTree}
               selectedEdge={selectedEdge[0] ? selectedEdge[0] : null}
@@ -157,9 +155,9 @@ export default function TreeViewEdition() {
         )}
         {visibleRelation2 && (
           <div className="relation-panel">
-             <Button onClick={handleExitRelation} className="exitButton">
-                x
-              </Button>
+            <Button onClick={handleExitRelation} className="exitButton">
+              x
+            </Button>
             <AddRelationForm
               selectedPersonInTree={selectedPersonInTree}
               selectedEdge={selectedEdge[1] ? selectedEdge[1] : null}

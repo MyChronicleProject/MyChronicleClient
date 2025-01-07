@@ -2,12 +2,11 @@ import { Navigate, RouteObject, createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Menu from "../Component/Menu";
 import LoginPage from "../Component/LoginPage";
-import Register from "../Component/Register";
+import Register from "../Component/Forms/Register";
 import PrivacyPolicy from "../Component/PrivacyPolicy";
 import SettingsPage from "../Component/SettingsPage";
 import ChoiceOfActionPage from "../Component/ChoiceOfActionPage";
-import AddRelation from "../Component/AddRelation";
-import AddRelationForm from "../Component/AddRelationForm";
+import AddRelationForm from "../Component/Forms/AddRelationForm";
 import OpenTree from "../Component/OpenTree";
 import TreeView from "../Component/TreeView";
 import TreeViewEdition from "../Component/TreeViewEdition";
@@ -26,11 +25,7 @@ export const routes: RouteObject[] = [
       { path: "privacyPolicy", element: <PrivacyPolicy /> },
       { path: "settingsPage", element: <SettingsPage /> },
       { path: "choiceOfActionPage", element: <ChoiceOfActionPage /> },
-      { path: "addRelation/:familyTreeId/:personId", element: <AddRelation /> },
-      {
-        path: "addRelation/:familyTreeId/:personId/:id",
-        element: <AddRelation />,
-      },
+
       { path: "openTree", element: <OpenTree /> },
       { path: "treeView", element: <TreeView /> },
       { path: "treeViewEdition/:familyTreeId", element: <TreeViewEdition /> },

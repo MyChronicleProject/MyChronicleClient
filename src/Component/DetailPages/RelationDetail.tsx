@@ -1,16 +1,16 @@
 import { Button, Container, Menu } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import "../Styles/appBarStyle.css";
+import "../../Styles/appBarStyle.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { RelationType } from "../Models/Relation";
+import { RelationType } from "../../Models/Relation";
 import {
   Relation,
   getRelationTypeNumber,
   getRelationTypeName,
-} from "../Models/Relation";
-import { Person } from "../Models/Person";
+} from "../../Models/Relation";
+import { Person } from "../../Models/Person";
 
 export default function AddRelationForm({
   selectedEdgeId,

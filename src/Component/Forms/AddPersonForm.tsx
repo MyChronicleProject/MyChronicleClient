@@ -3,22 +3,22 @@ import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { Gender } from "../Models/Person";
+import { Gender } from "../../Models/Person";
 import axios from "axios";
-import { Person, getGenderNumber, getGenderName } from "../Models/Person";
+import { Person, getGenderNumber, getGenderName } from "../../Models/Person";
 import { useNavigate } from "react-router-dom";
-import "../Styles/addPersonFormStyle.css";
-import "../Styles/buttonMenu.css";
-import "../Styles/inputFieldsMenu.css";
-import { File, getFileTypeName } from "../Models/File";
+import "../../Styles/addPersonFormStyle.css";
+import "../../Styles/buttonMenu.css";
+import "../../Styles/inputFieldsMenu.css";
+import { File, getFileTypeName } from "../../Models/File";
 import {
   FileDTO,
   FileExtension,
   FileType,
   getFileExtensionNumber,
   getFileTypeNumber,
-} from "../Models/File";
-import OpenFile from "./OpenFile";
+} from "../../Models/File";
+import OpenFile from "../OpenFiles/OpenFile";
 
 export default function AddPersonForm({
   selectedNode,
@@ -37,7 +37,8 @@ export default function AddPersonForm({
   const [error, setError] = useState<string | null>(null);
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
   const [fileToSend, setFileToSend] = useState<FileDTO | null>(null);
-
+  const [fileToOpen, setFileToOpen] = useState<File | null>(null);
+  const MAX_FILE_SIZE = 20000000;
   const [formData, setFormData] = useState({
     name: "",
     middleName: "",
@@ -53,6 +54,20 @@ export default function AddPersonForm({
 
   const resetForm = () => {
     setFormData({
+      name: "",
+      middleName: "",
+      lastName: "",
+      birthDate: "",
+      deathDate: "",
+      birthPlace: "",
+      deathPlace: "",
+      gender: "male",
+      occupation: "",
+      note: "",
+    });
+  };
+  const resetFormError = () => {
+    setFormErrors({
       name: "",
       middleName: "",
       lastName: "",
@@ -81,6 +96,7 @@ export default function AddPersonForm({
 
   useEffect(() => {
     resetForm();
+    resetFormError();
     if (selectedNode) {
       setFormName("Edycja osoby");
       setButtonSubmitName("Edytuj osobę");
@@ -109,7 +125,14 @@ export default function AddPersonForm({
             note: personData.note || "",
           });
           console.log("PerosnData:", personData);
-          setFiles(personData.files);
+          const transformedFiles = personData.files.map((file) => ({
+            ...file,
+            fileType: getFileTypeName(parseInt(file.fileType)) as FileType,
+            fileExtension: getFileTypeName(
+              parseInt(file.fileExtension)
+            ) as FileExtension,
+          }));
+          setFiles(transformedFiles);
         } catch (err) {
           setError("Failed to fetch person data");
         } finally {
@@ -225,8 +248,13 @@ export default function AddPersonForm({
     return true;
   };
 
+  useEffect(() => {
+    console.log("Nowa lista plikó: ", files);
+  }, [files]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     console.log("W handleSubmit");
+    setFileToOpen(null);
     e.preventDefault();
 
     const newFormErrors: any = {};
@@ -286,11 +314,11 @@ export default function AddPersonForm({
           if (responseFoto.status === 200 || responseFoto.status === 201) {
             const newFile: File = {
               id: responseFoto.data,
-              fileType: fileToSend.fileType,
-              personId: fileToSend.personId,
+              fileType: fileToSend.fileType as FileType,
+              personId: selectedNode,
               name: fileToSend.name,
               content: fileToSend.content,
-              fileExtension: fileToSend.fileExtension,
+              fileExtension: fileToSend.fileExtension as FileExtension,
               person: [],
             };
             setFiles((prevFiles) => [...prevFiles, newFile]);
@@ -322,9 +350,11 @@ export default function AddPersonForm({
         console.log("Dodano osobe:          ", fileToSend);
         if (response.status === 200 && response.data) {
           const addedPersonId = response.data;
-          const updatedFormData = {
+          let updatedFormData = {
             ...formData,
             id: addedPersonId,
+            photoId: "",
+            photo: "",
           };
           console.log("File:          ", fileToSend);
           if (fileToSend) {
@@ -341,11 +371,23 @@ export default function AddPersonForm({
                 },
               }
             );
+            if (
+              fileToSend &&
+              responseFoto.status === 200 &&
+              responseFoto.data
+            ) {
+              updatedFormData = {
+                ...updatedFormData,
+                photo: fileToSend.content,
+                photoId: responseFoto.data,
+              };
+            }
           }
           setFileToSend(null);
           personAdded(updatedFormData);
         }
       }
+      setTheSameError("");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("API error:", error.response?.data);
@@ -385,6 +427,11 @@ export default function AddPersonForm({
     console.log(file);
 
     if (file) {
+      console.log("File size: ", file.size);
+      if (file.size > MAX_FILE_SIZE) {
+        alert("Plik jest zbyt duży. Maksymalny rozmiar to 30 MB.");
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.result) {
@@ -413,10 +460,9 @@ export default function AddPersonForm({
   if (error) return <div>Error: {error}</div>;
 
   const handleOpenFile = (file: File) => {
-    console.log("Open fiel ", file.name);
-    console.log("Open fielID ", file.id);
-    <OpenFile file={file} />;
-    // Możesz tutaj zaimplementować dodatkowe funkcjonalności, np. otwieranie pliku w nowym oknie
+    console.log("Open fiel ", file);
+
+    setFileToOpen(file);
   };
 
   const handleDeleteFile = (fileToDelete: File) => {
@@ -430,15 +476,18 @@ export default function AddPersonForm({
         );
       })
       .catch(() => {
-        setError("Error deleting car");
+        setError("Error deleting file");
       });
   };
+
+  const handleAddFile = () => {};
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <h1> {formName} </h1>
         {theSameError && <div className="error-message">{theSameError}</div>}
+        <p>Dodaj zdjęcie profilowe</p>
         <input
           type="file"
           accept=".jpg, .png, .pdf, .docx, .mp3"
@@ -571,7 +620,15 @@ export default function AddPersonForm({
       </form>
 
       <div>
-        <h3>Uploaded Files:</h3>
+        <h3>Pliki:</h3>
+        <p>Dodaj plik:</p>
+        <input
+          type="file"
+          accept=".jpg, .png, .pdf, .docx, .mp3"
+          className="file-input"
+          onChange={handleFileChange}
+        />
+        <button onClick={() => handleAddFile()}>Dodaj</button>
         {files.length === 0 ? (
           <p>No files uploaded yet.</p>
         ) : (
@@ -586,6 +643,11 @@ export default function AddPersonForm({
           </ul>
         )}
       </div>
+      {fileToOpen && (
+        <div>
+          <OpenFile file={fileToOpen} />
+        </div>
+      )}
     </div>
   );
 }

@@ -2,19 +2,20 @@ import logo from "../logo.png";
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import "../Styles/buttonMenu.css";
+import "../../Styles/buttonMenu.css";
 import React, { useState, useEffect } from "react";
-import AppBar from "./AppBar";
-import BottomBar from "./BottomBar";
-import { Gender } from "../Models/Person";
+import AppBar from "../AppBars/AppBar";
+import BottomBar from "../AppBars/BottomBar";
+import { Gender } from "../../Models/Person";
 import axios from "axios";
-import { Person, getGenderNumber, getGenderName } from "../Models/Person";
-import { File, FileType, getFileTypeName } from "../Models/File";
+import { Person, getGenderNumber, getGenderName } from "../../Models/Person";
+import { File, FileType, getFileTypeName } from "../../Models/File";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import FileSlider from "./FileSlider";
-import AudioSlider from "./AudioSlider";
+import FileSlider from "../Slider/FileSlider";
+import AudioSlider from "../Slider/AudioSlider";
+import ImageSlider from "../Slider/ImageSlider";
 
 export default function PersonDetail({
   selectedNodeId,
@@ -96,53 +97,6 @@ export default function PersonDetail({
     setAudios(audiosFiles);
     console.log("Audio: ", audiosFiles);
   }, [files]);
-
-  const ImageSlider: React.FC<{ images: File[] }> = ({ images }) => {
-    const settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 3000,
-    };
-
-    return (
-      <div style={{ maxWidth: "200px", margin: "20px auto", height: "200px" }}>
-        {" "}
-        <Slider {...settings}>
-          {images.length > 0 ? (
-            images.map((image) => (
-              <div
-                key={image.id}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-              >
-                <img
-                  decoding="async"
-                  src={`data:image/jpeg;base64,${image.content}`}
-                  alt={image.name}
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "150px",
-                    objectFit: "contain",
-                    objectPosition: "center",
-                  }}
-                />
-              </div>
-            ))
-          ) : (
-            <p>No images found</p>
-          )}
-        </Slider>
-      </div>
-    );
-  };
 
   return (
     <div>
@@ -250,15 +204,6 @@ export default function PersonDetail({
       <div>
         <AudioSlider files={audios} />
       </div>
-
-      {/* <div>
-        <h1>Audio</h1>
-        {audios && audios.length > 0 && audios[0] && audios[0].content ? (
-          <AudioPlayer base64Audio={audios[0].content} />
-        ) : (
-          <p>No audio</p>
-        )}
-      </div> */}
     </div>
   );
 }
