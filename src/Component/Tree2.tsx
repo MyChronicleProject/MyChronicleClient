@@ -584,7 +584,6 @@ export default function Tree({
         data: {
           name: `Malzenstwo`,
           date: `${handleAddedPersonWithRelation[1].startDate}`,
-         
         },
         position: {
           x: relatedNode.position.x + 90,

@@ -111,7 +111,7 @@ export default function TreeViewEdition() {
     setVisiblePerson(false);
   };
   const handleExitRelation = () => {
-    setVisiblePerson(false);
+    setVisibleRelation2(false);
   };
 
   return (

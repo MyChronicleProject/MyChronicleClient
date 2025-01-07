@@ -35,8 +35,11 @@ const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {
 
   return (
     <div style={{ width: "200px", margin: "20px auto", height: "auto" }}>
-      <h2 style={{ textAlign: "center" }}>Dokumenty</h2>
-      {files.length === 1 ? (
+      {files.length > 0 && <h2 style={{ textAlign: "center" }}>Dokumenty</h2>}
+
+      {files.length === 0 ? (
+        <div></div>
+      ) : files.length === 1 ? (
         <div
           onClick={() =>
             handleFileClick(files[0].content, files[0].fileExtension)

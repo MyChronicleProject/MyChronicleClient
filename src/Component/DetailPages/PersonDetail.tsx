@@ -105,11 +105,7 @@ export default function PersonDetail({
         <div>
           {images ? (
             <div>
-              {images.length > 0 ? (
-                <ImageSlider images={images} />
-              ) : (
-                <p>No images found</p>
-              )}
+              {images.length > 0 ? <ImageSlider images={images} /> : <p></p>}
             </div>
           ) : (
             <p>Image not found or loading...</p>
