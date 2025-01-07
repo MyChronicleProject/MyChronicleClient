@@ -18,6 +18,7 @@ import useZoomPanHelper from "react-flow-renderer";
 import "../Styles/buttonMenu.css";
 import { Button } from "semantic-ui-react";
 import CustomNode from "./CustomNode";
+import CustomNodeSpouse from "./CustomNodeSpouse";
 
 const PlaceholderNode = ({ data }: any) => {
   return (
@@ -37,6 +38,7 @@ const PlaceholderNode = ({ data }: any) => {
 const nodeTypes = {
   placeholder: PlaceholderNode,
   custom: CustomNode,
+  customSpouse: CustomNodeSpouse,
 };
 
 export default function Tree({
@@ -578,11 +580,11 @@ export default function Tree({
 
       addNode({
         id: `${handleAddedPersonWithRelation[1].personId_1}*${handleAddedPersonWithRelation[1].personId_2}`,
-        type: "custom",
+        type: "customSpouse",
         data: {
           name: `Malzenstwo`,
-          surname: `${handleAddedPersonWithRelation[1].startDate}`,
-          photo: `*-*`,
+          date: `${handleAddedPersonWithRelation[1].startDate}`,
+         
         },
         position: {
           x: relatedNode.position.x + 90,
