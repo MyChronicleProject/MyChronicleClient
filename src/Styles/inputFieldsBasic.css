@@ -1,0 +1,123 @@
+.inputMainForm {
+    
+    /*padding: 2rem;*/
+  /*  border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 300px;
+    margin: 20px auto;
+    box-sizing: border-box;*/
+  margin-bottom: 20px;
+}
+
+    .inputMainForm label {
+        display: block;
+        font-weight: lighter;
+        color: #333;
+       /* margin-bottom: 0.5rem;*/
+        font-family: 'Arial', sans-serif;
+    }
+
+/* Input, select */
+    .inputMainForm input, .form-group select {
+        display: block;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        max-width: 300px;
+        margin: auto;
+        margin-bottom: 15px;
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    /* Input:focus, select:focus */
+    .inputMainForm input:focus, .form-group select:focus {
+        border-color: #6C2E2E;
+        outline: none;
+    }
+
+    .inputField {
+   
+        margin-bottom: 10px;
+      }
+      
+          .inputField label {
+            display: flex;
+            font-weight: bold;
+            font-size: large;
+            font-family: 'Georgia', serif; 
+            color: #352415;
+           /* margin-bottom: 0.5rem;*/
+            
+            margin-bottom: 5px;
+          }
+      
+      /* Input, select */
+          .inputField input, .form-group select {
+            display: block;
+            background-color: #B9AA9D;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            /* margin: auto; */
+            margin-bottom: 5px;
+            width: 100%;
+            padding: 0.2rem;
+            border: 1px solid #352415;
+            border-radius: 10px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+          }
+          .inputField input:focus, .form-group select:focus {
+              border-color: #6C2E2E;
+              outline: none;
+          }
+
+
+
+
+
+    
+        /* Select (Dropdown or list choice) */
+        .inputField  select {
+            pointer-events:visible !important;
+            display: block;
+            background-color: transparent;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            /* margin: auto; */
+            margin-bottom: 5px;
+            width: 100%;
+            padding: 0.2rem;
+            border: 1px solid #352415;
+            border-radius: 10px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        
+        .inputField select:focus {
+            border-color: #6C2E2E;
+            outline: none;
+        }
+
+
+        .error-messsage{
+            
+            font-weight: lighter;
+            font-size: small;
+            color: #352415;
+        }
+
+        .headerTree {
+            position: absolute; /* Allow precise positioning */
+            top: 0; /* Align to the top */
+            left: 0; /* Align to the left */
+            margin: 10px; /* Add some space from the edges */
+            font-size: 3rem; /* Adjust font size */
+            font-family: 'Georgia', serif; 
+            color: #352415; /* Text color */
+            background: transparent; /* Ensure background doesn't affect layout */
+            text-align: left; /* Align text to the left */
+        }

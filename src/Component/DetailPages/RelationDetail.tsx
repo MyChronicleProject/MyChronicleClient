@@ -11,6 +11,8 @@ import {
   getRelationTypeName,
 } from "../../Models/Relation";
 import { Person } from "../../Models/Person";
+import "../../Styles/buttonMenu.css";
+import "../../Styles/inputFieldsBasic.css";
 
 export default function AddRelationForm({
   selectedEdgeId,
@@ -89,10 +91,10 @@ export default function AddRelationForm({
   };
 
   return (
-    <div>
+    <div >
       <form>
         <h1> Szczegóły </h1>
-        <div>
+        <div className="inputField">
           <label>Wybierz osobę:</label>
           <select name="personId_1" value={formData.personId_1} disabled>
             {personList.map((person) => (
@@ -102,7 +104,7 @@ export default function AddRelationForm({
             ))}
           </select>
         </div>
-        <div>
+        <div className="inputField">
           <label>Osoba 1:</label>
           <select name="personId_2" value={formData.personId_2} disabled>
             {personList.map((person) => (
@@ -112,7 +114,7 @@ export default function AddRelationForm({
             ))}
           </select>
         </div>
-        <div>
+        <div className="inputField">
           <label>Data rozpoczęcia:</label>
           <input
             type="date"
@@ -121,7 +123,7 @@ export default function AddRelationForm({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputField">
           <label>Data zakończenia:</label>
           <input
             type="date"
@@ -130,7 +132,7 @@ export default function AddRelationForm({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputField">
           <label>Relacja:</label>
           <select name="relationType" value={formData.relationType} disabled>
             {Object.values(RelationType).map((relationType) => (

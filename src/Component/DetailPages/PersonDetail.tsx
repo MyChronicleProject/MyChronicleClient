@@ -16,6 +16,8 @@ import "slick-carousel/slick/slick-theme.css";
 import FileSlider from "../Slider/FileSlider";
 import AudioSlider from "../Slider/AudioSlider";
 import ImageSlider from "../Slider/ImageSlider";
+import "../../Styles/buttonMenu.css";
+import "../../Styles/inputFieldsBasic.css";
 
 export default function PersonDetail({
   selectedNodeId,
@@ -115,11 +117,11 @@ export default function PersonDetail({
             <p>Image not found or loading...</p>
           )}
         </div>
-        <div>
+        <div className="inputField">
           <label>Imię:</label>
           <input type="text" name="name" value={formData.name} readOnly />
         </div>
-        <div>
+        <div className="inputField">
           <label>Drugie imie:</label>
           <input
             type="text"
@@ -128,7 +130,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputField">
           <label>Nazwisko:</label>
           <input
             type="text"
@@ -137,7 +139,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputField">
           <label>Data urodzenia:</label>
           <input
             type="date"
@@ -146,7 +148,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputField">
           <label>Data śmierci:</label>
           <input
             type="date"
@@ -155,7 +157,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputField">
           <label>Miejsce urodzenia:</label>
           <input
             type="text"
@@ -164,7 +166,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputField">
           <label>Miejsce śmierci:</label>
           <input
             type="text"
@@ -173,7 +175,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputField">
           <label>Płeć:</label>
           <select name="gender" value={formData.gender} disabled>
             {Object.values(Gender).map((gender) => (
@@ -183,7 +185,7 @@ export default function PersonDetail({
             ))}
           </select>
         </div>
-        <div>
+        <div className="inputField">
           <label>Zawód:</label>
           <input
             type="text"
@@ -192,7 +194,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputField"> 
           <label>Notatka:</label>
           <input type="text" name="note" value={formData.note} readOnly />
         </div>

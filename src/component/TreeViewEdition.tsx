@@ -111,7 +111,7 @@ export default function TreeViewEdition() {
     setVisiblePerson(false);
   };
   const handleExitRelation = () => {
-    setVisiblePerson(false);
+    setVisibleRelation(false);
   };
 
   return (
@@ -141,6 +141,7 @@ export default function TreeViewEdition() {
             />
           </div>
         )}
+        <div>
         {visibleRelation && (
           <div className="relation-panel">
             <Button onClick={handleExitRelation} className="exitButton">
@@ -165,6 +166,7 @@ export default function TreeViewEdition() {
             />
           </div>
         )}
+        </div>
       </div>
       <BottomBar />
     </div>

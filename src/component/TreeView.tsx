@@ -19,6 +19,9 @@ import { useParams } from "react-router-dom";
 import { FamilyTree } from "../Models/FamilyTree";
 import CustomNode from "./CustomNode";
 import CustomNodeSpouse from "./CustomNodeSpouse";
+import { Button } from "semantic-ui-react";
+import "../Styles/inputFieldsBasic.css";
+
 
 const nodeTypes = {
   custom: CustomNode,
@@ -204,14 +207,23 @@ export default function TreeView() {
     return <>{parts}</>;
   };
 
+  const handleExitPerson = () => {
+    setVisiblePerson(false);
+  };
+  const handleExitRelation = () => {
+    setVisibleRelation(false);
+  };
+
   return (
     <div>
       <AppBar />
-      <div>
-        <h1>
+      <div className="App4">
+        <h1 className="headerTree">
           <center>{treeName}</center>
         </h1>
+        
         <div style={{ height: "100vh" }} ref={pdfRef}>
+          
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -227,20 +239,29 @@ export default function TreeView() {
         </div>
         {visiblePerson && (
           <div className="person-panel">
+            <Button onClick={handleExitPerson} className="exitButton">
+              x
+            </Button>
             <PersonDetail
               selectedNodeId={selectedNode ? selectedNode.id : null}
             />
           </div>
         )}
         {visibleRelation && (
-          <div className="person-panel">
+          <div className="relation-panel">
+            <Button onClick={handleExitRelation} className="exitButton">
+                          x
+                        </Button>
             <RelationDetail
               selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}
             />
           </div>
         )}
         {visibleRelation2 && (
-          <div className="person-panel">
+          <div className="relation-panel">
+            <Button onClick={handleExitRelation} className="exitButton">
+                          x
+                        </Button>
             <RelationDetail
               selectedEdgeId={selectedEdge[1] ? selectedEdge[1] : null}
             />
