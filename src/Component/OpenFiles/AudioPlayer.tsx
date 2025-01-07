@@ -9,13 +9,19 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ base64Audio }) => {
   console.log("Zmiana w player");
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
-      <center></center>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: "20px",
+      }}
+    >
       <audio controls>
         <source src={audioSrc} type="audio/mp3" />
         Twój przeglądarka nie obsługuje elementu audio.
       </audio>
-      <center />
     </div>
   );
 };

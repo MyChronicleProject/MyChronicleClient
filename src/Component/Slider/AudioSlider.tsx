@@ -50,8 +50,8 @@ const AudioSlider: React.FC<{ files: File[] }> = ({ files }) => {
       </div>
 
       {selectedAudio ? (
-        <div style={{ marginTop: "20px" }}>
-          <AudioPlayer base64Audio={selectedAudio} />
+        <div style={{ marginTop: "20px", alignItems: "center" }}>
+          <AudioPlayer key={selectedAudio} base64Audio={selectedAudio} />
         </div>
       ) : (
         <div></div>

@@ -1,7 +1,7 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { File, FileExtension } from "../../Models/File";
 import PdfViewer from "../OpenFiles/pdfViewer";
 import DocxViewer from "../OpenFiles/DocxViewer";
@@ -23,6 +23,10 @@ const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {
     autoplaySpeed: 9000,
   };
 
+  useEffect(() => {
+    setSelectedFile(null);
+  }, [files]);
+
   const handleFileClick = (fileContent: string, fileExtension: string) => {
     setSelectedFile(fileContent);
     setSelectedFileExtension(fileExtension);
@@ -32,27 +36,47 @@ const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {
   return (
     <div style={{ width: "200px", margin: "20px auto", height: "auto" }}>
       <h2 style={{ textAlign: "center" }}>Dokumenty</h2>
-      <div style={{ marginBottom: "20px" }}>
-        <Slider {...settings}>
-          {files.map((file, index) => (
-            <div
-              key={index}
-              onClick={() => handleFileClick(file.content, file.fileExtension)}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "10px 0",
-                width: "100%",
-              }}
-            >
-              <div style={{ textAlign: "center", width: "100%" }}>
-                <h3 style={{ margin: "0", fontSize: "12px" }}>{file.name}</h3>{" "}
+      {files.length === 1 ? (
+        <div
+          onClick={() =>
+            handleFileClick(files[0].content, files[0].fileExtension)
+          }
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "10px 0",
+            width: "100%",
+            textAlign: "center",
+          }}
+        >
+          <h3 style={{ margin: "0", fontSize: "12px" }}>{files[0].name}</h3>
+        </div>
+      ) : (
+        <div style={{ marginBottom: "20px" }}>
+          <Slider {...settings}>
+            {files.map((file, index) => (
+              <div
+                key={index}
+                onClick={() =>
+                  handleFileClick(file.content, file.fileExtension)
+                }
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "10px 0",
+                  width: "100%",
+                }}
+              >
+                <div style={{ textAlign: "center", width: "100%" }}>
+                  <h3 style={{ margin: "0", fontSize: "12px" }}>{file.name}</h3>
+                </div>
               </div>
-            </div>
-          ))}
-        </Slider>
-      </div>
+            ))}
+          </Slider>
+        </div>
+      )}
 
       {selectedFile && selectedFileExtension ? (
         <div style={{ marginTop: "20px" }}>
