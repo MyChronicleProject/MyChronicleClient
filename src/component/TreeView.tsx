@@ -17,6 +17,11 @@ import {
 } from "../Models/Relation";
 import { useParams } from "react-router-dom";
 import { FamilyTree } from "../Models/FamilyTree";
+import CustomNode from "./CustomNode";
+
+const nodeTypes = {
+  custom: CustomNode,
+};
 
 export default function TreeView() {
   const [nodes, setNodes] = useState<any[]>([]);
@@ -84,7 +89,7 @@ export default function TreeView() {
   const handleNodeClick = (event: React.MouseEvent, node: any) => {
     console.log("Kliknięto węzeł o ID:", node.id);
 
-    if (node.type === "default") {
+    if (node.type === "custom") {
       if (node.id.includes("*")) {
         const [id1, id2] = node.id.split("*");
 
@@ -210,6 +215,7 @@ export default function TreeView() {
             edges={edges}
             onNodeClick={handleNodeClick}
             onEdgeClick={handleEdgeClick}
+            nodeTypes={nodeTypes}
             fitView
           >
             <MiniMap />

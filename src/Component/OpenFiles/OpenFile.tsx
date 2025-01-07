@@ -23,8 +23,8 @@ const OpenFile: React.FC<AudioPlayerProps> = ({ file }) => {
     return <div>No file available</div>;
   }
 
-  const fileExtensionName = getFileExtensionName(parseInt(file.fileExtension));
-  const fileTypeName = file.fileType;
+  const fileExtensionName = file.fileExtension as FileExtension;
+  const fileTypeName = file.fileType as FileType;
 
   const renderViewer = () => {
     switch (fileTypeName) {

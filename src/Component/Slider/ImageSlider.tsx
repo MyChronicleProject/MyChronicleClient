@@ -17,35 +17,58 @@ const ImageSlider: React.FC<{ images: File[] }> = ({ images }) => {
 
   return (
     <div style={{ maxWidth: "200px", margin: "20px auto", height: "200px" }}>
-      <Slider {...settings}>
-        {images.length > 0 ? (
-          images.map((image) => (
-            <div
-              key={image.id}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-              }}
-            >
-              <img
-                decoding="async"
-                src={`data:image/jpeg;base64,${image.content}`}
-                alt={image.name}
+      {images.length === 1 ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <img
+            decoding="async"
+            src={`data:image/jpeg;base64,${images[0].content}`}
+            alt={images[0].name}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "150px",
+              objectFit: "contain",
+              objectPosition: "center",
+            }}
+          />
+        </div>
+      ) : (
+        <Slider {...settings}>
+          {images.length > 0 ? (
+            images.map((image) => (
+              <div
+                key={image.id}
                 style={{
-                  maxWidth: "100%",
-                  maxHeight: "150px",
-                  objectFit: "contain",
-                  objectPosition: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
                 }}
-              />
-            </div>
-          ))
-        ) : (
-          <p>No images found</p>
-        )}
-      </Slider>
+              >
+                <img
+                  decoding="async"
+                  src={`data:image/jpeg;base64,${image.content}`}
+                  alt={image.name}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "150px",
+                    objectFit: "contain",
+                    objectPosition: "center",
+                  }}
+                />
+              </div>
+            ))
+          ) : (
+            <p>No images found</p>
+          )}
+        </Slider>
+      )}
     </div>
   );
 };
