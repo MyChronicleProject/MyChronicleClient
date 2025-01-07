@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
-import { Handle, Position } from 'reactflow';
-import '../Styles/nodeStyle.css';
+import React, { memo } from "react";
+import { Handle, Position } from "reactflow";
+import "../Styles/nodeStyle.css";
 
 interface CustomNodeProps {
   data: {
@@ -15,7 +15,17 @@ const CustomNode: React.FC<CustomNodeProps> = ({ data }) => {
     <div className="custom-node">
       <div className="custom-node-header">
         <div className="custom-node-photo">
-          {data.photo}
+          {/* {data.photo} */}
+          <img
+            decoding="async"
+            src={`data:image/jpeg;base64,${data.photo}`}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "150px",
+              objectFit: "contain",
+              objectPosition: "center",
+            }}
+          />
         </div>
         <div className="custom-node-info">
           <div className="custom-node-name">{data.name}</div>

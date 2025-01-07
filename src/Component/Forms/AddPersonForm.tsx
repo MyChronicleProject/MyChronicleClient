@@ -3,20 +3,22 @@ import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { Gender } from "../Models/Person";
+import { Gender } from "../../Models/Person";
 import axios from "axios";
-import { Person, getGenderNumber, getGenderName } from "../Models/Person";
+import { Person, getGenderNumber, getGenderName } from "../../Models/Person";
 import { useNavigate } from "react-router-dom";
-import "../Styles/addPersonFormStyle.css";
-import "../Styles/buttonMenu.css";
-import "../Styles/inputFieldsMenu.css";
+import "../../Styles/addPersonFormStyle.css";
+import "../../Styles/buttonMenu.css";
+import "../../Styles/inputFieldsMenu.css";
+import { File, getFileTypeName } from "../../Models/File";
 import {
   FileDTO,
   FileExtension,
   FileType,
   getFileExtensionNumber,
   getFileTypeNumber,
-} from "../Models/File";
+} from "../../Models/File";
+import OpenFile from "../OpenFiles/OpenFile";
 
 export default function AddPersonForm({
   selectedNode,
@@ -27,15 +29,19 @@ export default function AddPersonForm({
 }) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [files, setFiles] = useState<File[]>([]);
   const [theSameError, setTheSameError] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [formName, setFormName] = useState<string>("");
   const [buttonSubmitName, setButtonSubmitName] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
-  //const [image, setImage] = useState<string | null>(null);
+  const [profilePictureToSend, setProfilePictureToSend] =
+    useState<FileDTO | null>(null);
   const [fileToSend, setFileToSend] = useState<FileDTO | null>(null);
 
+  const [fileToOpen, setFileToOpen] = useState<File | null>(null);
+  const MAX_FILE_SIZE = 20000000;
   const [formData, setFormData] = useState({
     name: "",
     middleName: "",
@@ -51,6 +57,20 @@ export default function AddPersonForm({
 
   const resetForm = () => {
     setFormData({
+      name: "",
+      middleName: "",
+      lastName: "",
+      birthDate: "",
+      deathDate: "",
+      birthPlace: "",
+      deathPlace: "",
+      gender: "male",
+      occupation: "",
+      note: "",
+    });
+  };
+  const resetFormError = () => {
+    setFormErrors({
       name: "",
       middleName: "",
       lastName: "",
@@ -79,6 +99,7 @@ export default function AddPersonForm({
 
   useEffect(() => {
     resetForm();
+    resetFormError();
     if (selectedNode) {
       setFormName("Edycja osoby");
       setButtonSubmitName("Edytuj osobę");
@@ -106,6 +127,15 @@ export default function AddPersonForm({
             occupation: personData.occupation || "",
             note: personData.note || "",
           });
+          console.log("PerosnData:", personData);
+          const transformedFiles = personData.files.map((file) => ({
+            ...file,
+            fileType: getFileTypeName(parseInt(file.fileType)) as FileType,
+            fileExtension: getFileTypeName(
+              parseInt(file.fileExtension)
+            ) as FileExtension,
+          }));
+          setFiles(transformedFiles);
         } catch (err) {
           setError("Failed to fetch person data");
         } finally {
@@ -221,8 +251,13 @@ export default function AddPersonForm({
     return true;
   };
 
+  useEffect(() => {
+    console.log("Nowa lista plikó: ", files);
+  }, [files]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     console.log("W handleSubmit");
+    setFileToOpen(null);
     e.preventDefault();
 
     const newFormErrors: any = {};
@@ -244,23 +279,65 @@ export default function AddPersonForm({
 
     try {
       if (selectedNode) {
-        if (await ifTheSame()) {
+        const theSame = await ifTheSame();
+        if (theSame && !profilePictureToSend) {
           setTheSameError("Nie wprowadzono żadnych zmian");
           return;
         }
-        const response = await axios.put(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
-          {
-            ...formData,
-            id: selectedNode,
-            birthDate: formData.birthDate.split("T")[0],
-            deathDate: formData.deathDate
-              ? formData.deathDate.split("T")[0]
-              : null,
-            gender: getGenderNumber(formData.gender),
-            familyTreeId: familyTreeId,
+        if (!theSame) {
+          const response = await axios.put(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
+            {
+              ...formData,
+              id: selectedNode,
+              birthDate: formData.birthDate.split("T")[0],
+              deathDate: formData.deathDate
+                ? formData.deathDate.split("T")[0]
+                : null,
+              gender: getGenderNumber(formData.gender),
+              familyTreeId: familyTreeId,
+            }
+          );
+        }
+
+        if (profilePictureToSend) {
+          const responseFoto = await axios.post(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files`,
+            {
+              name: profilePictureToSend.name,
+              fileType: getFileTypeNumber(profilePictureToSend.fileType),
+              content: profilePictureToSend.content,
+              fileExtension: getFileExtensionNumber(
+                profilePictureToSend.fileExtension
+              ),
+              personId: selectedNode,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (responseFoto.status === 200 || responseFoto.status === 201) {
+            const newFile: File = {
+              id: responseFoto.data,
+              fileType: profilePictureToSend.fileType as FileType,
+              personId: selectedNode,
+              name: profilePictureToSend.name,
+              content: profilePictureToSend.content,
+              fileExtension:
+                profilePictureToSend.fileExtension as FileExtension,
+              person: [],
+            };
+            setFiles((prevFiles) => [...prevFiles, newFile]);
+            alert(
+              `File ${profilePictureToSend.name} uploaded and added to the list successfully!`
+            );
+          } else {
+            alert(
+              `Failed to upload file ${profilePictureToSend.name}. Server responded with status ${responseFoto.status}`
+            );
           }
-        );
+        }
+        setProfilePictureToSend(null);
       } else {
         const response = await axios.post(
           `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`,
@@ -276,33 +353,49 @@ export default function AddPersonForm({
             familyTreeId: familyTreeId,
           }
         );
-        console.log("Dodano osobe:          ", fileToSend);
+        console.log("Dodano osobe:          ", profilePictureToSend);
         if (response.status === 200 && response.data) {
           const addedPersonId = response.data;
-          const updatedFormData = {
+          let updatedFormData = {
             ...formData,
             id: addedPersonId,
+            photoId: "",
+            photo: "",
           };
-          console.log("File:          ", fileToSend);
-          if (fileToSend) {
+          console.log("File:          ", profilePictureToSend);
+          if (profilePictureToSend) {
             const responseFoto = await axios.post(
               `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${updatedFormData.id}/files`,
               {
-                name: fileToSend.name,
-                fileType: getFileTypeNumber(fileToSend.fileType),
-                content: fileToSend.content,
-                fileExtension: getFileExtensionNumber(fileToSend.fileExtension),
+                name: profilePictureToSend.name,
+                fileType: getFileTypeNumber(profilePictureToSend.fileType),
+                content: profilePictureToSend.content,
+                fileExtension: getFileExtensionNumber(
+                  profilePictureToSend.fileExtension
+                ),
                 personId: updatedFormData.id,
                 headers: {
                   "Content-Type": "application/json",
                 },
               }
             );
+            if (
+              profilePictureToSend &&
+              responseFoto.status === 200 &&
+              responseFoto.data
+            ) {
+              updatedFormData = {
+                ...updatedFormData,
+                photo: profilePictureToSend.content,
+                photoId: responseFoto.data,
+              };
+            }
           }
-          setFileToSend(null);
+          setProfilePictureToSend(null);
           personAdded(updatedFormData);
         }
       }
+      setTheSameError("");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("API error:", error.response?.data);
@@ -337,11 +430,52 @@ export default function AddPersonForm({
     }
   };
 
+  const handleFileChangeProfilePicture = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    console.log(file);
+
+    if (file) {
+      console.log("File size: ", file.size);
+      if (file.size > MAX_FILE_SIZE) {
+        alert("Plik jest zbyt duży. Maksymalny rozmiar to 30 MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          const base64String = (reader.result as string).split(",")[1];
+          const fileExtension = getFileExtension(file);
+          const fileType = getFileType(fileExtension);
+
+          setProfilePictureToSend({
+            content: base64String,
+            fileExtension: fileExtension,
+            fileType: fileType,
+            name: file.name,
+            personId: "",
+          });
+
+          console.log("Obraz załadowany jako Base64:", base64String);
+          console.log("File po: ", profilePictureToSend);
+        }
+      };
+      reader.readAsDataURL(file);
+      console.log("File po: ", file);
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     console.log(file);
 
     if (file) {
+      console.log("File size: ", file.size);
+      if (file.size > MAX_FILE_SIZE) {
+        alert("Plik jest zbyt duży. Maksymalny rozmiar to 30 MB.");
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.result) {
@@ -358,7 +492,7 @@ export default function AddPersonForm({
           });
 
           console.log("Obraz załadowany jako Base64:", base64String);
-          console.log("File po: ", fileToSend);
+          console.log("File po: ", profilePictureToSend);
         }
       };
       reader.readAsDataURL(file);
@@ -369,16 +503,84 @@ export default function AddPersonForm({
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  const handleOpenFile = (file: File) => {
+    console.log("Open fiel ", file);
+
+    setFileToOpen(file);
+  };
+
+  const handleDeleteFile = (fileToDelete: File) => {
+    axios
+      .delete(
+        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${fileToDelete.personId}/files/${fileToDelete.id}`
+      )
+      .then(() => {
+        setFiles((prevFiles) =>
+          prevFiles.filter((file) => file !== fileToDelete)
+        );
+      })
+      .catch(() => {
+        setError("Error deleting file");
+      });
+  };
+
+  const handleAddFile = async () => {
+    if (fileToSend) {
+      try {
+        const responseFoto = await axios.post(
+          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files`,
+          {
+            name: fileToSend.name,
+            fileType: getFileTypeNumber(fileToSend.fileType),
+            content: fileToSend.content,
+            fileExtension: getFileExtensionNumber(fileToSend.fileExtension),
+            personId: selectedNode,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (responseFoto.status === 200 || responseFoto.status === 201) {
+          const newFile: File = {
+            id: responseFoto.data,
+            fileType: fileToSend.fileType as FileType,
+            personId: selectedNode,
+            name: fileToSend.name,
+            content: fileToSend.content,
+            fileExtension: fileToSend.fileExtension as FileExtension,
+            person: [],
+          };
+          setFiles((prevFiles) => [...prevFiles, newFile]);
+          alert(
+            `File ${fileToSend.name} uploaded and added to the list successfully!`
+          );
+        } else {
+          alert(
+            `Failed to upload file ${fileToSend.name}. Server responded with status ${responseFoto.status}`
+          );
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        alert("An error occurred while uploading the file.");
+      }
+      setProfilePictureToSend(null);
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <h1> {formName} </h1>
         {theSameError && <div className="error-message">{theSameError}</div>}
+        <p>Dodaj zdjęcie profilowe</p>
         <input
           type="file"
-          accept=".jpg, .png, .pdf, .docx, .mp3"
+          accept=".jpg, .png,"
           className="file-input"
-          onChange={handleFileChange}
+          onChange={handleFileChangeProfilePicture}
         />
 
         <div className="inputForm">
@@ -504,6 +706,38 @@ export default function AddPersonForm({
           {buttonSubmitName}{" "}
         </button>
       </form>
+
+      {formName === "Edycja osoby" && (
+        <div>
+          <h3>Pliki:</h3>
+          <p>Dodaj plik:</p>
+          <input
+            type="file"
+            accept=".jpg, .png, .pdf, .docx, .mp3"
+            className="file-input"
+            onChange={handleFileChange}
+          />
+          <button onClick={() => handleAddFile()}>Dodaj</button>
+          {files.length === 0 ? (
+            <p>No files uploaded yet.</p>
+          ) : (
+            <ul>
+              {files.map((file, index) => (
+                <li key={index}>
+                  {file.name}{" "}
+                  <button onClick={() => handleOpenFile(file)}>Open</button>{" "}
+                  <button onClick={() => handleDeleteFile(file)}>Delete</button>
+                </li>
+              ))}
+            </ul>
+          )}
+          {fileToOpen && (
+            <div>
+              <OpenFile file={fileToOpen} />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

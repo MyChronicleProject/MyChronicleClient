@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
-import AudioPlayer from "./AudioPlayer";
-import { File } from "../Models/File";
+import AudioPlayer from "../OpenFiles/AudioPlayer";
+import { File } from "../../Models/File";
 
 const AudioSlider: React.FC<{ files: File[] }> = ({ files }) => {
   const [selectedAudio, setSelectedAudio] = useState<string | null>(null);
@@ -10,6 +10,10 @@ const AudioSlider: React.FC<{ files: File[] }> = ({ files }) => {
     setSelectedAudio(audioContent);
     console.log("Zmiana pliku");
   };
+
+  useEffect(() => {
+    setSelectedAudio(null);
+  }, [files]);
 
   const settings = {
     dots: true,

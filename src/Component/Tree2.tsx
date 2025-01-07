@@ -17,7 +17,7 @@ import ReactDOM from "react-dom/client";
 import useZoomPanHelper from "react-flow-renderer";
 import "../Styles/buttonMenu.css";
 import { Button } from "semantic-ui-react";
-import CustomNode from './CustomNode';
+import CustomNode from "./CustomNode";
 
 const PlaceholderNode = ({ data }: any) => {
   return (
@@ -36,7 +36,7 @@ const PlaceholderNode = ({ data }: any) => {
 };
 const nodeTypes = {
   placeholder: PlaceholderNode,
-  custom: CustomNode
+  custom: CustomNode,
 };
 
 export default function Tree({
@@ -77,6 +77,7 @@ export default function Tree({
   const placeholderIdMap = useRef(new Map<string, string>());
   const [updateKey, setUpdateKey] = useState(0);
   const { state } = useLocation();
+
   const [addRelationToExistPerson, setAddRelationToExistsPerson] =
     useState(false);
   let relationId = 0;
@@ -441,13 +442,16 @@ export default function Tree({
       };
 
       console.log("Ilosc osob: ");
-      
+
       console.log("Dodano osobę: ", handlePersonAdded);
       addNode({
         id: handlePersonAdded.id,
         type: "custom",
         data: {
-          name: `${handlePersonAdded.name}`,surname:`${handlePersonAdded.lastName}`,photo:`*-*`
+          name: `${handlePersonAdded.name}`,
+          surname: `${handlePersonAdded.lastName}`,
+          photo: `${handlePersonAdded.photo}`,
+          photoId: `${handlePersonAdded.photoId}`,
         },
         position: { x: 0, y: 0 },
       });
@@ -513,7 +517,10 @@ export default function Tree({
         id: handleAddedPersonWithRelation[0].id,
         type: "custom",
         data: {
-          name: `${handleAddedPersonWithRelation[0].name}`,surname:`${handleAddedPersonWithRelation[0].lastName}`,photo:`*-*`
+          name: `${handleAddedPersonWithRelation[0].name}`,
+          surname: `${handleAddedPersonWithRelation[0].lastName}`,
+          photo: `${handleAddedPersonWithRelation[0].photo}`,
+          photoId: `${handleAddedPersonWithRelation[0].photoId}`,
         },
         position: {
           x: relatedNode.position.x,
@@ -534,7 +541,10 @@ export default function Tree({
         id: handleAddedPersonWithRelation[0].id,
         type: "custom",
         data: {
-          name: `${handleAddedPersonWithRelation[0].name}`,surname:`${handleAddedPersonWithRelation[0].lastName}`,photo:`*-*`
+          name: `${handleAddedPersonWithRelation[0].name}`,
+          surname: `${handleAddedPersonWithRelation[0].lastName}`,
+          photo: `${handleAddedPersonWithRelation[0].photo}`,
+          photoId: `${handleAddedPersonWithRelation[0].photoId}`,
         },
         position: {
           x: relatedNode.position.x,
@@ -555,7 +565,10 @@ export default function Tree({
         id: handleAddedPersonWithRelation[0].id,
         type: "custom",
         data: {
-          name: `${handleAddedPersonWithRelation[0].name}`,surname:`${handleAddedPersonWithRelation[0].lastName}`,photo:`*-*`
+          name: `${handleAddedPersonWithRelation[0].name}`,
+          surname: `${handleAddedPersonWithRelation[0].lastName}`,
+          photo: `${handleAddedPersonWithRelation[0].photo}`,
+          photoId: `${handleAddedPersonWithRelation[0].photoId}`,
         },
         position: {
           x: relatedNode.position.x + 180,
@@ -567,7 +580,9 @@ export default function Tree({
         id: `${handleAddedPersonWithRelation[1].personId_1}*${handleAddedPersonWithRelation[1].personId_2}`,
         type: "custom",
         data: {
-          name: `Malzenstwo`,surname:`${handleAddedPersonWithRelation[1].startDate}`,photo:`*-*`
+          name: `Malzenstwo`,
+          surname: `${handleAddedPersonWithRelation[1].startDate}`,
+          photo: `*-*`,
         },
         position: {
           x: relatedNode.position.x + 90,
@@ -744,8 +759,12 @@ export default function Tree({
           <Background />
         </ReactFlow>
       </div>
-      <Button onClick={() => saveTreeToFile()} className="buttonMenuOver">Save</Button>
-      <Button onClick={downloadPDF} className="buttonMenuOver2">Download PDF</Button>
+      <Button onClick={() => saveTreeToFile()} className="buttonMenuOver">
+        Save
+      </Button>
+      <Button onClick={downloadPDF} className="buttonMenuOver2">
+        Download PDF
+      </Button>
     </div>
   );
 }

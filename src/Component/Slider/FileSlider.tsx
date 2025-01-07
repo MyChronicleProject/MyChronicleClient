@@ -2,10 +2,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useState } from "react";
-import { File, FileExtension } from "../Models/File";
-import PdfViewer from "./pdfViewer";
-import DocxViewer from "./DocxViewer";
-import { getFileExtensionName } from "../Models/File";
+import { File, FileExtension } from "../../Models/File";
+import PdfViewer from "../OpenFiles/pdfViewer";
+import DocxViewer from "../OpenFiles/DocxViewer";
+import { getFileExtensionName } from "../../Models/File";
 
 const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
