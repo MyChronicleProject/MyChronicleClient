@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import "../Styles/addPersonFormStyle.css";
 import "../Styles/buttonMenu.css";
 import "../Styles/inputFieldsMenu.css";
+import { File, getFileTypeName } from "../Models/File";
 import {
   FileDTO,
   FileExtension,
@@ -17,6 +18,7 @@ import {
   getFileExtensionNumber,
   getFileTypeNumber,
 } from "../Models/File";
+import OpenFile from "./OpenFile";
 
 export default function AddPersonForm({
   selectedNode,
@@ -27,13 +29,13 @@ export default function AddPersonForm({
 }) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [files, setFiles] = useState<File[]>([]);
   const [theSameError, setTheSameError] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [formName, setFormName] = useState<string>("");
   const [buttonSubmitName, setButtonSubmitName] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
-  //const [image, setImage] = useState<string | null>(null);
   const [fileToSend, setFileToSend] = useState<FileDTO | null>(null);
 
   const [formData, setFormData] = useState({
@@ -106,6 +108,8 @@ export default function AddPersonForm({
             occupation: personData.occupation || "",
             note: personData.note || "",
           });
+          console.log("PerosnData:", personData);
+          setFiles(personData.files);
         } catch (err) {
           setError("Failed to fetch person data");
         } finally {
@@ -244,23 +248,62 @@ export default function AddPersonForm({
 
     try {
       if (selectedNode) {
-        if (await ifTheSame()) {
+        const theSame = await ifTheSame();
+        if (theSame && !fileToSend) {
           setTheSameError("Nie wprowadzono żadnych zmian");
           return;
         }
-        const response = await axios.put(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
-          {
-            ...formData,
-            id: selectedNode,
-            birthDate: formData.birthDate.split("T")[0],
-            deathDate: formData.deathDate
-              ? formData.deathDate.split("T")[0]
-              : null,
-            gender: getGenderNumber(formData.gender),
-            familyTreeId: familyTreeId,
+        if (!theSame) {
+          const response = await axios.put(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
+            {
+              ...formData,
+              id: selectedNode,
+              birthDate: formData.birthDate.split("T")[0],
+              deathDate: formData.deathDate
+                ? formData.deathDate.split("T")[0]
+                : null,
+              gender: getGenderNumber(formData.gender),
+              familyTreeId: familyTreeId,
+            }
+          );
+        }
+
+        if (fileToSend) {
+          const responseFoto = await axios.post(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files`,
+            {
+              name: fileToSend.name,
+              fileType: getFileTypeNumber(fileToSend.fileType),
+              content: fileToSend.content,
+              fileExtension: getFileExtensionNumber(fileToSend.fileExtension),
+              personId: selectedNode,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (responseFoto.status === 200 || responseFoto.status === 201) {
+            const newFile: File = {
+              id: responseFoto.data,
+              fileType: fileToSend.fileType,
+              personId: fileToSend.personId,
+              name: fileToSend.name,
+              content: fileToSend.content,
+              fileExtension: fileToSend.fileExtension,
+              person: [],
+            };
+            setFiles((prevFiles) => [...prevFiles, newFile]);
+            alert(
+              `File ${fileToSend.name} uploaded and added to the list successfully!`
+            );
+          } else {
+            alert(
+              `Failed to upload file ${fileToSend.name}. Server responded with status ${responseFoto.status}`
+            );
           }
-        );
+        }
+        setFileToSend(null);
       } else {
         const response = await axios.post(
           `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`,
@@ -368,6 +411,28 @@ export default function AddPersonForm({
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+
+  const handleOpenFile = (file: File) => {
+    console.log("Open fiel ", file.name);
+    console.log("Open fielID ", file.id);
+    <OpenFile file={file} />;
+    // Możesz tutaj zaimplementować dodatkowe funkcjonalności, np. otwieranie pliku w nowym oknie
+  };
+
+  const handleDeleteFile = (fileToDelete: File) => {
+    axios
+      .delete(
+        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${fileToDelete.personId}/files/${fileToDelete.id}`
+      )
+      .then(() => {
+        setFiles((prevFiles) =>
+          prevFiles.filter((file) => file !== fileToDelete)
+        );
+      })
+      .catch(() => {
+        setError("Error deleting car");
+      });
+  };
 
   return (
     <div>
@@ -504,6 +569,23 @@ export default function AddPersonForm({
           {buttonSubmitName}{" "}
         </button>
       </form>
+
+      <div>
+        <h3>Uploaded Files:</h3>
+        {files.length === 0 ? (
+          <p>No files uploaded yet.</p>
+        ) : (
+          <ul>
+            {files.map((file, index) => (
+              <li key={index}>
+                {file.name}{" "}
+                <button onClick={() => handleOpenFile(file)}>Open</button>{" "}
+                <button onClick={() => handleDeleteFile(file)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

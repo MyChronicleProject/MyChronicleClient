@@ -18,7 +18,6 @@ import useZoomPanHelper from "react-flow-renderer";
 import "../Styles/buttonMenu.css";
 import { Button } from "semantic-ui-react";
 
-
 const PlaceholderNode = ({ data }: any) => {
   return (
     <div
@@ -748,8 +747,12 @@ export default function Tree({
           <Background />
         </ReactFlow>
       </div>
-      <Button onClick={() => saveTreeToFile()} className="buttonMenuOver">Save</Button>
-      <Button onClick={downloadPDF} className="buttonMenuOver2">Download PDF</Button>
+      <Button onClick={() => saveTreeToFile()} className="buttonMenuOver">
+        Save
+      </Button>
+      <Button onClick={downloadPDF} className="buttonMenuOver2">
+        Download PDF
+      </Button>
     </div>
   );
 }
