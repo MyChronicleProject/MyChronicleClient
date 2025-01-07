@@ -18,9 +18,11 @@ import {
 import { useParams } from "react-router-dom";
 import { FamilyTree } from "../Models/FamilyTree";
 import CustomNode from "./CustomNode";
+import CustomNodeSpouse from "./CustomNodeSpouse";
 
 const nodeTypes = {
   custom: CustomNode,
+  customSpouse: CustomNodeSpouse,
 };
 
 export default function TreeView() {
