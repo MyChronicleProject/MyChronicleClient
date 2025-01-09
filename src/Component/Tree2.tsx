@@ -50,6 +50,7 @@ export default function Tree({
   handleAddedPersonWithRelation,
   handleRelationAdded,
   handleAddedRelation,
+  handleEditedPerson,
 }: {
   onNodeClick: (node: any) => void;
   onEdgeClick: (edge: any[]) => void;
@@ -59,6 +60,7 @@ export default function Tree({
   handleAddedPersonWithRelation: any;
   handleAddedRelation: any;
   handleRelationAdded: (ids: any[]) => void;
+  handleEditedPerson: any;
 }) {
   const [nodeHeight, setNodeHeight] = useState(0);
   const [person, setPerson] = useState<Person[]>([]);
@@ -427,6 +429,39 @@ export default function Tree({
   }, [treeExists]);
 
   useEffect(() => {
+    if (handleEditedPerson) {
+      console.log("Before update: ", nodes);
+      console.log("EditedPerson: ", handleEditedPerson);
+
+      const nodeToEdit = nodes.find((per) => per.id === handleEditedPerson.id);
+
+      if (nodeToEdit) {
+        const updatedNode = {
+          ...nodeToEdit,
+          data: {
+            ...nodeToEdit.data,
+            ...(handleEditedPerson.ifPersonUpdated && {
+              name: handleEditedPerson.name,
+              surname: handleEditedPerson.lastName,
+            }),
+            ...(handleEditedPerson.ifPhotoUpdated && {
+              photo: handleEditedPerson.photo,
+              photoId: handleEditedPerson.photoId,
+            }),
+          },
+        };
+        console.log("UpdateNode: ", updatedNode);
+
+        setNodes((prevNodes) =>
+          prevNodes.map((node) =>
+            node.id === updatedNode.id ? updatedNode : node
+          )
+        );
+      }
+    }
+  }, [handleEditedPerson]);
+
+  useEffect(() => {
     console.log("In useEffect");
     if (handlePersonAdded && handlePersonAdded.id) {
       console.log("W if");
@@ -507,8 +542,6 @@ export default function Tree({
       );
       if (!addRelationToExistPerson) {
         addRelationWithPersonFunction(relatedNode);
-      } else {
-        // addRelationToExistPersonFunction();
       }
     }
   }, [handleAddedPersonWithRelation]);

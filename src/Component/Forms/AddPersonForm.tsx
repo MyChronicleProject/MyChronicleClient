@@ -23,9 +23,11 @@ import OpenFile from "../OpenFiles/OpenFile";
 export default function AddPersonForm({
   selectedNode,
   personAdded,
+  personEdited,
 }: {
   selectedNode: any;
   personAdded: (person: any) => void;
+  personEdited: (person: any) => void;
 }) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -284,6 +286,15 @@ export default function AddPersonForm({
           setTheSameError("Nie wprowadzono żadnych zmian");
           return;
         }
+        let updatedPerson = {
+          ifPersonUpdated: false,
+          id: selectedNode,
+          name: "",
+          lastName: "",
+          ifPhotoUpdated: false,
+          photoId: "",
+          photo: "",
+        };
         if (!theSame) {
           const response = await axios.put(
             `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
@@ -298,6 +309,14 @@ export default function AddPersonForm({
               familyTreeId: familyTreeId,
             }
           );
+          if (response.status === 200 || response.status === 201) {
+            updatedPerson = {
+              ...updatedPerson,
+              name: formData.name,
+              lastName: formData.lastName,
+              ifPersonUpdated: true,
+            };
+          }
         }
 
         if (profilePictureToSend) {
@@ -327,6 +346,14 @@ export default function AddPersonForm({
                 profilePictureToSend.fileExtension as FileExtension,
               person: [],
             };
+            if (responseFoto.status === 200 || responseFoto.status === 201) {
+              updatedPerson = {
+                ...updatedPerson,
+                photoId: responseFoto.data,
+                photo: profilePictureToSend.content,
+                ifPhotoUpdated: true,
+              };
+            }
             setFiles((prevFiles) => [...prevFiles, newFile]);
             alert(
               `File ${profilePictureToSend.name} uploaded and added to the list successfully!`
@@ -337,6 +364,7 @@ export default function AddPersonForm({
             );
           }
         }
+        personEdited(updatedPerson);
         setProfilePictureToSend(null);
       } else {
         const response = await axios.post(

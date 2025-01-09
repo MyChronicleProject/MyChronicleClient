@@ -20,6 +20,7 @@ export default function TreeViewEdition() {
     string[] | null
   >(null);
   const [addedRelation, setAddedRelation] = useState<any>([null]);
+  const [editedPerson, setEditedPerson] = useState<any>(null);
   const [addedPersonTemp, setAddedPersonTemp] = useState<any>([null]);
   const [startView, setStartView] = useState<boolean>(false);
   const [visibleRelation, setVisibleRelation] = useState<boolean>(false);
@@ -103,6 +104,10 @@ export default function TreeViewEdition() {
     }
   };
 
+  const handlePersonEdited = (person: any) => {
+    setEditedPerson(person);
+  };
+
   const handleSelectedPersonInTree = (personId: string) => {
     setSelectedPersonInTree([personId]);
   };
@@ -128,6 +133,7 @@ export default function TreeViewEdition() {
             handleAddedPersonWithRelation={addedPersonWithRelation}
             handleRelationAdded={handleAddRelation}
             handleAddedRelation={addedRelation}
+            handleEditedPerson={editedPerson}
           />
         </div>
         {visiblePerson && (
@@ -138,6 +144,7 @@ export default function TreeViewEdition() {
             <AddPersonForm
               selectedNode={selectedNode ? selectedNode.id : null}
               personAdded={handelPersonAdded}
+              personEdited={handlePersonEdited}
             />
           </div>
         )}

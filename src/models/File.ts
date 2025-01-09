@@ -4,6 +4,7 @@ export enum FileType {
   Image = "Image",
   Audio = "Audio",
   Document = "Document",
+  ProfileImage = "ProfileImage",
 }
 
 export enum FileExtension {
@@ -73,8 +74,10 @@ export const getFileTypeNumber = (fileType: string) => {
       return 1;
     case FileType.Document:
       return 2;
-    default:
+    case FileType.ProfileImage:
       return 3;
+    default:
+      return 4;
   }
 };
 
@@ -86,6 +89,8 @@ export const getFileTypeName = (fileType: number) => {
       return FileType.Audio;
     case 2:
       return FileType.Document;
+    case 3:
+      return FileType.ProfileImage;
     default:
       return "Unknown";
   }

@@ -91,27 +91,25 @@ export default function TreeView() {
   const handleNodeClick = (event: React.MouseEvent, node: any) => {
     console.log("Kliknięto węzeł o ID:", node.id);
 
-    if (node.type === "custom") {
-      if (node.id.includes("*")) {
-        const [id1, id2] = node.id.split("*");
+    if (node.id.includes("*")) {
+      const [id1, id2] = node.id.split("*");
 
-        const clickedRelation = relation.find(
-          (rel) =>
-            (rel.personId_1 === id1 && rel.personId_2 === id2) ||
-            (rel.personId_1 === id2 && rel.personId_2 === id1)
-        );
-        console.log("ClickedRelation: ", clickedRelation);
-        setSelectedEdge([clickedRelation, null]);
-        setVisibleRelation(true);
-        setVisibleRelation2(false);
-        setVisiblePerson(false);
-      } else {
-        console.log("ClickedRelation-node: ", node);
-        setSelectedNode(node);
-        setVisiblePerson(true);
-        setVisibleRelation2(false);
-        setVisibleRelation(false);
-      }
+      const clickedRelation = relation.find(
+        (rel) =>
+          (rel.personId_1 === id1 && rel.personId_2 === id2) ||
+          (rel.personId_1 === id2 && rel.personId_2 === id1)
+      );
+      console.log("ClickedRelation: ", clickedRelation);
+      setSelectedEdge([clickedRelation, null]);
+      setVisibleRelation(true);
+      setVisibleRelation2(false);
+      setVisiblePerson(false);
+    } else {
+      console.log("ClickedRelation-node: ", node);
+      setSelectedNode(node);
+      setVisiblePerson(true);
+      setVisibleRelation2(false);
+      setVisibleRelation(false);
     }
   };
 

@@ -1,47 +1,45 @@
 .appbar {
-    background-color: #f4f4f4; /* Light gray */
-    border-bottom: 1px solid #d1d1d1;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    padding: 0 20px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f4f4f4; /* Light gray */
+  border-bottom: 1px solid #d1d1d1;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding: 0 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .appbar-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 /* Styles for the Username Button */
 .username-button {
-    font-size: 16px;
-    color: #8c736b;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    text-transform: uppercase;
-    text-decoration: none; 
+  font-size: 16px;
+  color: #8c736b;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-transform: uppercase;
+  text-decoration: none;
 }
 
 .username-button:hover {
-   
-        text-decoration: underline; /* Underline on hover */
-        color: #d08b56; /* Slightly lighter brown on hover */
-    }
-
+  text-decoration: underline; /* Underline on hover */
+  color: #d08b56; /* Slightly lighter brown on hover */
+}
 
 .user-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: #c6aa96; /* Beige circle */
-    margin-left: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #c6aa96; /* Beige circle */
+  margin-left: 10px;
 }
 .contact-text {
-    color: #8c736b; /* Sets the text color to light green */
+  color: #8c736b; /* Sets the text color to light green */
 }
