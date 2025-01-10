@@ -92,7 +92,7 @@ export default function AddRelationForm({
     <div>
       <form>
         <h1> Szczegóły </h1>
-        <div>
+        <div className="inputForm">
           <label>Wybierz osobę:</label>
           <select name="personId_1" value={formData.personId_1} disabled>
             {personList.map((person) => (
@@ -102,7 +102,7 @@ export default function AddRelationForm({
             ))}
           </select>
         </div>
-        <div>
+        <div className="inputForm">
           <label>Osoba 1:</label>
           <select name="personId_2" value={formData.personId_2} disabled>
             {personList.map((person) => (
@@ -112,7 +112,7 @@ export default function AddRelationForm({
             ))}
           </select>
         </div>
-        <div>
+        <div className="inputForm">
           <label>Data rozpoczęcia:</label>
           <input
             type="date"
@@ -121,7 +121,7 @@ export default function AddRelationForm({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Data zakończenia:</label>
           <input
             type="date"
@@ -130,7 +130,7 @@ export default function AddRelationForm({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Relacja:</label>
           <select name="relationType" value={formData.relationType} disabled>
             {Object.values(RelationType).map((relationType) => (

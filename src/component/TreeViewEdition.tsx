@@ -153,26 +153,24 @@ export default function TreeViewEdition() {
             <Button onClick={handleExitRelation} className="exitButton">
               x
             </Button>
-            <AddRelationForm
-              selectedPersonInTree={selectedPersonInTree}
-              selectedEdge={selectedEdge[0] ? selectedEdge[0] : null}
-              relationAdded={handleRelationAdded}
-            />
-          </div>
-        )}
-        {visibleRelation2 && (
-          <div className="relation-panel">
-            <Button onClick={handleExitRelation} className="exitButton">
-              x
-            </Button>
-            <AddRelationForm
-              selectedPersonInTree={selectedPersonInTree}
-              selectedEdge={selectedEdge[1] ? selectedEdge[1] : null}
-              relationAdded={handleRelationAdded}
-            />
+            {visibleRelation && (
+              <AddRelationForm
+                selectedPersonInTree={selectedPersonInTree}
+                selectedEdge={selectedEdge[0] ? selectedEdge[0] : null}
+                relationAdded={handleRelationAdded}
+              />
+            )}
+            {visibleRelation2 && (
+              <AddRelationForm
+                selectedPersonInTree={selectedPersonInTree}
+                selectedEdge={selectedEdge[1] ? selectedEdge[1] : null}
+                relationAdded={handleRelationAdded}
+              />
+            )}
           </div>
         )}
       </div>
+
       <BottomBar />
     </div>
   );

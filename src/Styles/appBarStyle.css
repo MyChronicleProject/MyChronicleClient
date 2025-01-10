@@ -1,11 +1,13 @@
 .appbar {
   background-color: #f4f4f4; /* Light gray */
   border-bottom: 1px solid #d1d1d1;
-  height: 50px;
+  height: 5%;
   display: flex;
   align-items: center;
   justify-content: end;
-  padding: 0 20px;
+  padding: 0 0px;
+  width: 100%;
+  top: 0;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -42,4 +44,18 @@
 }
 .contact-text {
   color: #8c736b; /* Sets the text color to light green */
+}
+
+.appBarBottom {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f4f4f4;
+  border-bottom: 1px solid #d1d1d1;
+  height: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding: 0 0px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }

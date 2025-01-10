@@ -157,8 +157,8 @@ export default function OpenTree() {
 
   return (
     <div>
+      <AppBar />
       <div className="App4">
-        <AppBar />
         <div className="app-container">
           <form className="form-container">
             <h1 className="header">OTWÓRZ Z PLIK JSON</h1>

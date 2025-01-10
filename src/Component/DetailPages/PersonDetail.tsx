@@ -111,11 +111,11 @@ export default function PersonDetail({
             <p>Image not found or loading...</p>
           )}
         </div>
-        <div>
+        <div className="inputForm">
           <label>Imię:</label>
           <input type="text" name="name" value={formData.name} readOnly />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Drugie imie:</label>
           <input
             type="text"
@@ -124,7 +124,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Nazwisko:</label>
           <input
             type="text"
@@ -133,7 +133,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Data urodzenia:</label>
           <input
             type="date"
@@ -142,7 +142,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Data śmierci:</label>
           <input
             type="date"
@@ -151,7 +151,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Miejsce urodzenia:</label>
           <input
             type="text"
@@ -160,7 +160,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Miejsce śmierci:</label>
           <input
             type="text"
@@ -169,7 +169,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Płeć:</label>
           <select name="gender" value={formData.gender} disabled>
             {Object.values(Gender).map((gender) => (
@@ -179,7 +179,7 @@ export default function PersonDetail({
             ))}
           </select>
         </div>
-        <div>
+        <div className="inputForm">
           <label>Zawód:</label>
           <input
             type="text"
@@ -188,7 +188,7 @@ export default function PersonDetail({
             readOnly
           />
         </div>
-        <div>
+        <div className="inputForm">
           <label>Notatka:</label>
           <input type="text" name="note" value={formData.note} readOnly />
         </div>

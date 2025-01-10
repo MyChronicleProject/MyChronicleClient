@@ -1,58 +1,56 @@
-
-
 .App {
- /*   margin-top: 15px;
+  /*   margin-top: 15px;
     margin-bottom: 30px;*/
-    text-align: center;
-    display: inline-block; /* Use flexbox */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    height: auto; /* Full viewport height */
-    width: 100%; /* Full width of the container */
-    position: relative; /* Allow pseudo-elements or additional elements */
-    /*overflow: auto;*/ /* Prevent scrollbars for overflowing content */
-    background-image: url('/src/background.png'); /* Replace with your image URL */
-    /*background-repeat: no-repeat ;*/ /* Prevent repeating horizontally or vertically */
-    background-size: 100% auto; /* Maintain the natural dimensions of the image */
-    background-position: top center; /* Start the image from the top and center horizontally */
-    background-attachment: scroll; /* The background scrolls with the content */
+  text-align: center;
+  display: inline-block; /* Use flexbox */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  height: auto; /* Full viewport height */
+  width: 100%; /* Full width of the container */
+  position: relative; /* Allow pseudo-elements or additional elements */
+  /*overflow: auto;*/ /* Prevent scrollbars for overflowing content */
+  background-image: url("/src/background.png"); /* Replace with your image URL */
+  /*background-repeat: no-repeat ;*/ /* Prevent repeating horizontally or vertically */
+  background-size: 100% auto; /* Maintain the natural dimensions of the image */
+  background-position: top center; /* Start the image from the top and center horizontally */
+  background-attachment: scroll; /* The background scrolls with the content */
 }
 
 .App2 {
-   /* margin-top: 15px;
+  /* margin-top: 15px;
     margin-bottom: 30px;*/
-    text-align: center;
-    display: block; /* Use flexbox */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-   
-    height: 100vh; /* Full viewport height */
-    width: 100%; /* Full width of the container */
-    position: relative; /* Allow pseudo-elements or additional elements */
-    /*overflow: auto;*/ /* Prevent scrollbars for overflowing content */
-    background-image: url('/src/background.png'); /* Replace with your image URL */
-    /*background-repeat: no-repeat ;*/ /* Prevent repeating horizontally or vertically */
-    background-size: cover; /* Maintain the natural dimensions of the image */
-    background-position: top center; /* Start the image from the top and center horizontally */
-    background-attachment: scroll; /* The background scrolls with the content */
+  text-align: center;
+  display: block; /* Use flexbox */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+
+  height: 100vh; /* Full viewport height */
+  width: 100%; /* Full width of the container */
+  position: relative; /* Allow pseudo-elements or additional elements */
+  /*overflow: auto;*/ /* Prevent scrollbars for overflowing content */
+  background-image: url("/src/background.png"); /* Replace with your image URL */
+  /*background-repeat: no-repeat ;*/ /* Prevent repeating horizontally or vertically */
+  background-size: cover; /* Maintain the natural dimensions of the image */
+  background-position: top center; /* Start the image from the top and center horizontally */
+  background-attachment: scroll; /* The background scrolls with the content */
 }
 
-.App3 { 
-   margin-top: 0px;
-   text-align: center;
-   display: block; /* Use flexbox */
-   justify-content: center; /* Center content horizontally */
-   align-items: center; /* Center content vertically */
-  
-   height: 100vh; /* Full viewport height */
-   width: 100%; /* Full width of the container */
-   position: relative; /* Allow pseudo-elements or additional elements */
-   /*overflow: auto;*/ /* Prevent scrollbars for overflowing content */
- background-color: #C6B8AD;
-}
+.App3 {
+  margin-top: 0px;
+  text-align: center;
+  display: block; /* Use flexbox */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
 
+  height: 100vh; /* Full viewport height */
+  width: 100%; /* Full width of the container */
+  position: relative; /* Allow pseudo-elements or additional elements */
+  /*overflow: auto;*/ /* Prevent scrollbars for overflowing content */
+  background-color: #c6b8ad;
+}
 
 .App4 {
+  flex: 1;
   position: relative;
   text-align: center;
   display: block; /* Use flexbox */
@@ -74,7 +72,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  background-image: url('/src/background.png'); /* Replace with your image URL */
+  background-image: url("/src/background.png"); /* Replace with your image URL */
   background-size: cover; /* Maintain the natural dimensions of the image */
   background-position: top center; /* Start the image from the top and center horizontally */
   background-attachment: scroll; /* The background scrolls with the content */
@@ -82,18 +80,17 @@
   z-index: -1; /* Place the background behind the main content */
 }
 
-
 .App-logo {
-    height: 250px;
-    pointer-events: none;
-    align-self: center;
+  height: 250px;
+  pointer-events: none;
+  align-self: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    /*animation: App-logo-spin infinite 20s linear;*/
+    /*animation: App-logo-spin infinite 20s linear;
   }
-}
+} */
 
 .App-header {
   background-color: #282c34;

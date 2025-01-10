@@ -2,6 +2,7 @@ import Tree from "./Tree";
 import AppBar from "./AppBars/AppBar";
 import BottomBar from "./AppBars/BottomBar";
 import ReactFlow, { MiniMap, Controls, Background, addEdge } from "reactflow";
+import { Button } from "semantic-ui-react";
 import "reactflow/dist/style.css";
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
@@ -205,11 +206,8 @@ export default function TreeView() {
   return (
     <div>
       <AppBar />
-      <div>
-        <h1>
-          <center>{treeName}</center>
-        </h1>
-        <div style={{ height: "100vh" }} ref={pdfRef}>
+      <div className="App4">
+        <div className="left-panel" style={{ height: "100vh" }} ref={pdfRef}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -223,6 +221,7 @@ export default function TreeView() {
             <Background />
           </ReactFlow>
         </div>
+
         {visiblePerson && (
           <div className="person-panel">
             <PersonDetail
@@ -230,22 +229,26 @@ export default function TreeView() {
             />
           </div>
         )}
+
         {visibleRelation && (
-          <div className="person-panel">
-            <RelationDetail
-              selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}
-            />
-          </div>
-        )}
-        {visibleRelation2 && (
-          <div className="person-panel">
-            <RelationDetail
-              selectedEdgeId={selectedEdge[1] ? selectedEdge[1] : null}
-            />
+          <div className="relation-panel">
+            {visibleRelation && (
+              <RelationDetail
+                selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}
+              />
+            )}
+            {visibleRelation2 && (
+              <RelationDetail
+                selectedEdgeId={selectedEdge[1] ? selectedEdge[1] : null}
+              />
+            )}
           </div>
         )}
       </div>
-      <button onClick={downloadPDF}>Download PDF</button>
+      {/* <button onClick={downloadPDF}>Download PDF</button> */}
+      {/* <Button onClick={downloadPDF} className="buttonMenuOver">
+        Download PDF
+      </Button> */}
       <BottomBar />
     </div>
   );

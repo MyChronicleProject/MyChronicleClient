@@ -5,7 +5,7 @@ import "../../Styles/appBarStyle.css";
 
 export default function BottomBar() {
   return (
-    <div className="appbar">
+    <div className="appBarBottom">
       <p className="contact-text">Skontaktuj się z nami! </p>
       <Button as={NavLink} to="/settingsPage" className="username-button">
         Contact email
