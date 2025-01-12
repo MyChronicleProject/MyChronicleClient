@@ -30,6 +30,12 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.email === "" && formData.password === "") {
+      setFormErrors({
+        error: "Wypełnij pola email i hasło",
+      });
+      return;
+    }
     try {
       const response = await axios.post(
         `https://localhost:7033/api/Account/login`,
