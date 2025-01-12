@@ -7,14 +7,18 @@ import axios from "axios";
 import { useState } from "react";
 
 export default function SettingsPage() {
-  const [changePassForm, setChangePassForm] = useState<boolean>(true);
+  const [changePassForm, setChangePassForm] = useState<boolean>(false);
   const [formData, setFormData] = useState({
-    pass: "",
-    newPass: "",
-    repPass: "",
+    password: "",
+    newPassword: "",
+    newPassword2: "",
   });
+
   const [formErrors, setFormErrors] = useState({
-    name: "",
+    error: "",
+    password: "",
+    newPassword: "",
+    newPassword2: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,13 +29,97 @@ export default function SettingsPage() {
     }));
   };
 
+  const clearForm = () => {
+    setFormData({
+      password: "",
+      newPassword: "",
+      newPassword2: "",
+    });
+  };
+
   const handleExit = () => {
     setChangePassForm(false);
   };
 
+  const handleChangePassForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const newFormErrors: any = {};
+    console.log("changePassForm state: ", changePassForm);
+    let hasError = false;
 
-  const handleChangePassForm = () => {
+    for (const [key, value] of Object.entries(formData)) {
+      const error = validateField(key, value);
+      if (error) {
+        console.log("Error: ", key, " ", error);
+        newFormErrors[key] = error;
+        hasError = true;
+      }
+    }
+    console.log("changePassForm state: ", changePassForm);
+    setFormErrors(newFormErrors);
+    if (hasError) {
+      return;
+    }
 
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+        return;
+      }
+      console.log("changePassForm state: ", changePassForm);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.put(
+        `https://localhost:7033/api/Account/changepassword`,
+        {
+          ...formData,
+        },
+        config
+      );
+      if (response.status === 200) {
+        setChangePassForm(false);
+        clearForm();
+      }
+    } catch (error2: any) {
+      if (axios.isAxiosError(error2)) {
+        console.error("API error:", error2.response?.data);
+        setFormErrors((prevState) => ({
+          ...prevState,
+          error: error2.response?.data || "An unknown API error occurred",
+        }));
+      } else {
+        setFormErrors((prevState) => ({
+          ...prevState,
+          error: "Unexpected error occurred. Please try again.",
+        }));
+        console.error("Unexpected error:", error2);
+      }
+    }
+  };
+
+  const validateField = (name: string, value: string) => {
+    switch (name) {
+      case "password":
+        return value.trim() === "" ? "Stare hasło jest wymagane" : "";
+
+      case "newPassword":
+        return value.trim() === "" ? "Nowe hasło jest wymagane" : "";
+
+      case "newPassword2":
+        if (value.trim() === "")
+          return "Powtórzenie nowego hasła jest wymagane";
+        if (value !== formData.newPassword)
+          return "Nowe hasła muszą być identyczne";
+        return "";
+
+      default:
+        return "";
+    }
   };
 
   const navigate = useNavigate();
@@ -44,12 +132,10 @@ export default function SettingsPage() {
 
   const handleRemoveAccount = () => {
     const token = localStorage.getItem("token");
-
     if (!token) {
       console.error("Brak tokena. Użytkownik nie jest zalogowany.");
       return;
     }
-
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -76,7 +162,13 @@ export default function SettingsPage() {
         <div className="setting-setup">
           <h1 className="setting-item">USERNAME</h1>
           <p className="setting-item">
-            <Button onClick={() => setChangePassForm(true)} className="buttonMenu3">
+            <Button
+              onClick={() => {
+                setChangePassForm(true);
+                clearForm();
+              }}
+              className="buttonMenu3"
+            >
               ZMIEŃ HASŁO
             </Button>
           </p>
@@ -95,17 +187,15 @@ export default function SettingsPage() {
             </Button>
           </p>
           <p className="setting-item">
-            <Button as={NavLink} to={`/`} className="setting-header">
+            <Button onClick={handleRemoveAccount} className="setting-header">
               USUŃ KONTO
             </Button>
           </p>
         </div>
 
-
-
         {changePassForm && (
           <>
-            <div className="overlayBackground" ></div>
+            <div className="overlayBackground"></div>
             <form className="overlay">
               <Button onClick={handleExit} className="exitButton">
                 x
@@ -113,38 +203,45 @@ export default function SettingsPage() {
               <div className="inputBasic">
                 <label>Stare hasło:</label>
                 <input
-                  type="text"
-                  name="name"
-                  value={formData.pass}
+                  type="password"
+                  name="password"
+                  value={formData.password}
                   onChange={handleChange}
                 />
-
+                {formErrors.password && (
+                  <span className="error">{formErrors.password}</span>
+                )}
                 <div className="inputBasic">
                   <label>Nowe hasło:</label>
                   <input
-                    type="text"
-                    name="name"
-                    value={formData.newPass}
+                    type="password"
+                    name="newPassword"
+                    value={formData.newPassword}
                     onChange={handleChange}
                   />
+                  {formErrors.newPassword && (
+                    <span className="error">{formErrors.newPassword}</span>
+                  )}
                 </div>
                 <div className="inputBasic">
                   <label>Powtórz nowe hasło:</label>
                   <input
-                    type="text"
-                    name="name"
-                    value={formData.repPass}
+                    type="password"
+                    name="newPassword2"
+                    value={formData.newPassword2}
                     onChange={handleChange}
                   />
+                  {formErrors.newPassword2 && (
+                    <span className="error">{formErrors.newPassword2}</span>
+                  )}
                 </div>
 
-
-                {formErrors.name && (
-                  <div className="error-message">{formErrors.name}</div>
+                {formErrors.error && (
+                  <div className="error-message">{formErrors.error}</div>
                 )}
               </div>
               <Button onClick={handleChangePassForm} className="buttonMenu2">
-                Zmieńhaslo
+                Zmień haslo
               </Button>
             </form>
           </>

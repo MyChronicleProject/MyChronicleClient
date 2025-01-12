@@ -11,7 +11,6 @@ import "../Styles/inputFieldsMenu.css";
 import "../Styles/openTreeStyle.css";
 import "../Styles/openFileStyle.css";
 
-
 export default function OpenTree() {
   const navigate = useNavigate();
   const [trees, setTrees] = useState<FamilyTree[]>([]);
@@ -119,7 +118,8 @@ export default function OpenTree() {
     }));
   };
 
-  const handleCreateTree = () => {
+  const handleCreateTree = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (formData.name.trim() === "") {
       setFormErrors((prevErrors) => ({
         ...prevErrors,
@@ -262,9 +262,8 @@ export default function OpenTree() {
             Dodaj nowe drzewo
           </Button>
           {addTreeForm && (
-
             <>
-              <div className="overlayBackground" ></div>
+              <div className="overlayBackground"></div>
               <form className="overlay">
                 <Button onClick={handleExit} className="exitButton">
                   x
