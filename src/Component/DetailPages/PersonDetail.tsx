@@ -17,6 +17,7 @@ import FileSlider from "../Slider/FileSlider";
 import AudioSlider from "../Slider/AudioSlider";
 import ImageSlider from "../Slider/ImageSlider";
 
+
 export default function PersonDetail({
   selectedNodeId,
 }: {
@@ -40,6 +41,8 @@ export default function PersonDetail({
     occupation: "",
     note: "",
   });
+  const [fileToOpen, setFileToOpen] = useState<File | null>(null);
+
 
   useEffect(() => {
     if (selectedNodeId) {
@@ -111,10 +114,14 @@ export default function PersonDetail({
     console.log("Audio: ", audiosFiles);
   }, [files]);
 
+  const handleExitFile = async () => {
+    setFileToOpen(null);
+  };
+
   return (
     <div>
       <form>
-        <h1> SZCZEGÓŁY </h1>
+        <h1 className="FileForm-header"> SZCZEGÓŁY </h1>
         <div>
           {images ? (
             <div>
@@ -213,6 +220,8 @@ export default function PersonDetail({
       <div>
         <AudioSlider files={audios} />
       </div>
+
+
     </div>
   );
 }

@@ -60,7 +60,7 @@ export default function AddRelationForm({
       .catch(() => {
         setError("Error fetching persons");
       })
-      .finally(() => {});
+      .finally(() => { });
     if (selectedEdgeId) {
       console.log("MamId: ", selectedEdgeId);
       const fetchRelation = async () => {
@@ -117,7 +117,7 @@ export default function AddRelationForm({
   return (
     <div>
       <form>
-        <h1> Szczegóły </h1>
+        <h1 className="FileForm-header"> Szczegóły </h1>
         <div className="inputForm">
           <label>Wybierz osobę:</label>
           <select name="personId_1" value={formData.personId_1} disabled>

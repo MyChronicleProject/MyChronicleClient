@@ -32,7 +32,7 @@ const DocxViewer = ({ fileContent }: { fileContent: string }) => {
 
   return (
     <div style={{ width: "100%", margin: "20px auto", padding: "10px" }}>
-      <h2 style={{ textAlign: "center" }}>Dokument</h2>
+      {/* <h2 style={{ textAlign: "center" }}>Dokument</h2> */}
 
       {htmlContent ? (
         <div
@@ -40,9 +40,10 @@ const DocxViewer = ({ fileContent }: { fileContent: string }) => {
           style={{
             border: "1px solid #ccc",
             padding: "10px",
-            marginTop: "20px",
+            marginTop: "0px",
             maxHeight: "600px",
             overflowY: "auto",
+            background: "white",
           }}
         />
       ) : (

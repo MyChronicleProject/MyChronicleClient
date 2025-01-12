@@ -40,7 +40,7 @@ export default function SettingsPage() {
         <div className="setting-setup">
           <h1 className="setting-item">USERNAME</h1>
           <p className="setting-item">
-            <Button onClick={() => setChangePassForm(true)} className="buttonMenu3">
+            <Button onClick={() => setChangePassForm(true)} className="setting-header">
               ZMIEŃ HASŁO
             </Button>
           </p>

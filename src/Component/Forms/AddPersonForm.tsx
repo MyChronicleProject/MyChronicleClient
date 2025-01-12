@@ -11,6 +11,7 @@ import "../../Styles/addPersonFormStyle.css";
 import "../../Styles/buttonMenu.css";
 import "../../Styles/inputFieldsMenu.css";
 import "../../Styles/openFileStyle.css";
+import "../../Styles/filesFormStyle.css";
 import { File, getFileTypeName } from "../../Models/File";
 import {
   FileDTO,
@@ -693,13 +694,13 @@ export default function AddPersonForm({
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h1> {formName} </h1>
+        <h1 className="FileForm-header"> {formName} </h1>
         {theSameError && <div className="error-message">{theSameError}</div>}
-        <p>Dodaj zdjęcie profilowe</p>
+        <p className="FileForm-header">Dodaj zdjęcie profilowe</p>
         <input
           type="file"
           accept=".jpg, .png,"
-          className="file-input"
+          className="FileForm-input"
           onChange={handleFileChangeProfilePicture}
         />
 
@@ -827,43 +828,64 @@ export default function AddPersonForm({
         </button>
       </form>
 
+
       {formName === "Edycja osoby" && (
-        <div>
-          <h3>Pliki:</h3>
-          <p>Dodaj plik:</p>
+        <div className="FileForm-upload-container">
+          <h3 className="FileForm-header" >Pliki:</h3>
+          <p className="FileForm-header">Dodaj plik:</p>
           <input
             type="file"
             accept=".jpg, .png, .pdf, .docx, .mp3"
-            className="file-input"
+            className="FileForm-input"
             onChange={handleFileChange}
           />
-          <button onClick={() => handleAddFile()}>Dodaj</button>
+          <button onClick={() => handleAddFile()} className="FileForm-btn">Dodaj</button>
           {files.length === 0 ? (
             <p>No files uploaded yet.</p>
           ) : (
-            <ul>
+            <ul className="FileForm-list">
               {files.map((file, index) => (
-                <li key={index}>
-                  {file.name}{" "}
-                  <button onClick={() => handleOpenFile(file)}>Open</button>{" "}
-                  <button onClick={() => handleDeleteFile(file)}>Delete</button>
+                <li key={index} >
+                  <div className="FileForm-item">
+                    {file.name}
+                  </div>
+                  <div>
+                    <button onClick={() => handleOpenFile(file)} className="FileForm-item-btn">Open</button>
+                    <button onClick={() => handleDeleteFile(file)} className="FileForm-item-btn FileForm-item-btn-delete">Delete</button>
+                  </div>
                 </li>
               ))}
             </ul>
           )}
-       {fileToOpen && (
-  <>
-    <div className="overlayBackground" onClick={handleExitFile}></div>
-    <div className="openFileStyle">
-      <Button onClick={handleExitFile} className="exitButton">
-        x
-      </Button>
-      <OpenFile file={fileToOpen} />
-    </div>
-  </>
-)}
+
+
+          {fileToOpen && (
+            <>
+              <div className="overlayBackground" onClick={handleExitFile}></div>
+              {fileToOpen?.fileType === FileType.Document ? (
+                <>
+
+                  <div className="openFileStyle2">
+                    <Button onClick={handleExitFile} className="exitButton">
+                      x
+                    </Button>
+                    <OpenFile file={fileToOpen} />
+                  </div>
+                </>
+              ) : (
+                <div className="openFileStyle">
+                  <Button onClick={handleExitFile} className="exitButton">
+                    x
+                  </Button>
+                  <OpenFile file={fileToOpen} />
+                </div>
+              )
+
+              }
+            </>
+          )}
         </div>
-      )}
+      )};
     </div>
-  );
+  )
 }

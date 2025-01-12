@@ -6,6 +6,7 @@ import { File, FileExtension } from "../../Models/File";
 import PdfViewer from "../OpenFiles/pdfViewer";
 import DocxViewer from "../OpenFiles/DocxViewer";
 import { getFileExtensionName } from "../../Models/File";
+import { Button } from "semantic-ui-react";
 
 const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
@@ -33,9 +34,15 @@ const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {
     console.log(fileExtension);
   };
 
+
+  const handleExitFile = async () => {
+    setSelectedFile(null);
+  };
+
+
   return (
     <div style={{ width: "200px", margin: "20px auto", height: "auto" }}>
-      {files.length > 0 && <h2 style={{ textAlign: "center" }}>Dokumenty</h2>}
+      {files.length > 0 && <h2 className="FileForm-header" >Dokumenty</h2>}
 
       {files.length === 0 ? (
         <div></div>
@@ -53,7 +60,7 @@ const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {
             textAlign: "center",
           }}
         >
-          <h3 style={{ margin: "0", fontSize: "12px" }}>{files[0].name}</h3>
+          <h3 style={{ margin: "0", fontSize: "12px", color: "black" }}>{files[0].name}</h3>
         </div>
       ) : (
         <div style={{ marginBottom: "20px" }}>
@@ -73,7 +80,7 @@ const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {
                 }}
               >
                 <div style={{ textAlign: "center", width: "100%" }}>
-                  <h3 style={{ margin: "0", fontSize: "12px" }}>{file.name}</h3>
+                  <h3 style={{ margin: "0", fontSize: "12px", color: "black" }}>{file.name}</h3>
                 </div>
               </div>
             ))}
@@ -82,14 +89,21 @@ const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {
       )}
 
       {selectedFile && selectedFileExtension ? (
-        <div style={{ marginTop: "20px" }}>
-          {getFileExtensionName(parseInt(selectedFileExtension)) ===
-          FileExtension.pdf ? (
-            <PdfViewer base64={selectedFile} />
-          ) : (
-            <DocxViewer fileContent={selectedFile} />
-          )}
-        </div>
+        <>
+          <div className="overlayBackground" onClick={handleExitFile}></div>
+          <div className="openFileStyle">
+
+            <Button onClick={handleExitFile} className="exitButton">
+              x
+            </Button>
+            {getFileExtensionName(parseInt(selectedFileExtension)) ===
+              FileExtension.pdf ? (
+              <PdfViewer base64={selectedFile} />
+            ) : (
+              <DocxViewer fileContent={selectedFile} />
+            )}
+          </div>
+        </>
       ) : (
         <div></div>
       )}
