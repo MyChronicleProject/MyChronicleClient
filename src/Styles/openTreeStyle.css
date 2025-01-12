@@ -21,17 +21,17 @@ body {
 
 /* Przycisk dodawania neowego drzewa ovederlay */
 .overlay {
-  z-index: 9; /* Higher than the backdrop */
   background: #8c736b; /* Green background */
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0px 0px 100000px rgba(0, 0, 0, 1);
   color: white; /* Text contrast */
   padding: 30px; /* Space inside the overlay */
   border-radius: 10px; /* Optional rounded corners */
   text-align: center;
+  z-index: 1000; /* Ensures it appears above other elements */
+
 }
 
 /* .overlay {

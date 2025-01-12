@@ -4,8 +4,36 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../Styles/settingsPageStyle.css";
 import AppBar from "./AppBars/AppBar";
 import axios from "axios";
+import { useState } from "react";
 
 export default function SettingsPage() {
+  const [changePassForm, setChangePassForm] = useState<boolean>(true);
+  const [formData, setFormData] = useState({
+    pass: "",
+    newPass: "",
+    repPass: "",
+  });
+  const [formErrors, setFormErrors] = useState({
+    name: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleExit = () => {
+    setChangePassForm(false);
+  };
+
+
+  const handleChangePassForm = () => {
+
+  };
+
   const navigate = useNavigate();
   const handleLogOut = () => {
     localStorage.removeItem("token");
@@ -48,7 +76,7 @@ export default function SettingsPage() {
         <div className="setting-setup">
           <h1 className="setting-item">USERNAME</h1>
           <p className="setting-item">
-            <Button as={NavLink} to={`/`} className="setting-header">
+            <Button onClick={() => setChangePassForm(true)} className="buttonMenu3">
               ZMIEŃ HASŁO
             </Button>
           </p>
@@ -72,6 +100,55 @@ export default function SettingsPage() {
             </Button>
           </p>
         </div>
+
+
+
+        {changePassForm && (
+          <>
+            <div className="overlayBackground" ></div>
+            <form className="overlay">
+              <Button onClick={handleExit} className="exitButton">
+                x
+              </Button>
+              <div className="inputBasic">
+                <label>Stare hasło:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.pass}
+                  onChange={handleChange}
+                />
+
+                <div className="inputBasic">
+                  <label>Nowe hasło:</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.newPass}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="inputBasic">
+                  <label>Powtórz nowe hasło:</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.repPass}
+                    onChange={handleChange}
+                  />
+                </div>
+
+
+                {formErrors.name && (
+                  <div className="error-message">{formErrors.name}</div>
+                )}
+              </div>
+              <Button onClick={handleChangePassForm} className="buttonMenu2">
+                Zmieńhaslo
+              </Button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );

@@ -151,7 +151,10 @@
         right: 0px; /* Distance from the right edge */
         background-color: transparent;
         border: 2px solid #ddd;
-        padding: 5px 10px; /* Optional padding for better appearance */
+        padding: 0px 0px; 
+        margin-top: 0;
+        font-family: "Arial", serif;
+        font-weight:bold;
         cursor: pointer; /* Indicates it's clickable */
         border-radius: 5px; /* Optional for rounded corners */
       }
