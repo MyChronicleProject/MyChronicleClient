@@ -81,8 +81,20 @@ export default function OpenTree() {
   useEffect(() => {
     setLoading(true);
     setAddTreeForm(false);
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+      return;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     axios
-      .get<FamilyTree[]>("https://localhost:7033/api/FamilyTrees")
+      .get<FamilyTree[]>("https://localhost:7033/api/FamilyTrees", config)
       .then((response) => {
         setTrees(response.data);
       })
@@ -116,15 +128,27 @@ export default function OpenTree() {
         ...prevErrors,
         name: "",
       }));
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
       axios
-        .post("https://localhost:7033/api/FamilyTrees", formData)
+        .post("https://localhost:7033/api/FamilyTrees", formData, config)
         .then((response) => {
           console.log("Tree created", response.data);
           setTrees((prevTrees) => [...prevTrees, response.data]);
           setFormData({ name: "" });
 
           axios
-            .get<FamilyTree[]>("https://localhost:7033/api/FamilyTrees")
+            .get<FamilyTree[]>("https://localhost:7033/api/FamilyTrees", config)
             .then((response) => {
               setTrees(response.data);
             })
@@ -140,8 +164,20 @@ export default function OpenTree() {
   };
 
   const deleteTree = (id: string) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+      return;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     axios
-      .delete(`https://localhost:7033/api/FamilyTrees/${id}`)
+      .delete(`https://localhost:7033/api/FamilyTrees/${id}`, config)
       .then(() => {
         setTrees((prevTrees) => prevTrees.filter((tree) => tree.id !== id));
         console.log("Tree deleted successfully");

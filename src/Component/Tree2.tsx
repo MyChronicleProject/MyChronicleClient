@@ -385,8 +385,21 @@ export default function Tree({
     const fetchData = async () => {
       setLoading(true);
       try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+          return;
+        }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
         const tree = await axios.get<Person[]>(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`
+          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`,
+          config
         );
 
         if (handleTreeData) {
@@ -398,13 +411,15 @@ export default function Tree({
         }
 
         const personResponse = await axios.get<Person[]>(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`
+          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`,
+          config
         );
 
         setPerson(personResponse.data);
 
         const relationResponse = await axios.get<Relation[]>(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`
+          `https://localhost:7033/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`,
+          config
         );
         console.log("Pobrano relacje");
 
@@ -463,12 +478,25 @@ export default function Tree({
 
   useEffect(() => {
     console.log("In useEffect");
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+      return;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     if (handlePersonAdded && handlePersonAdded.id) {
       console.log("W if");
       const fetchPerson = async () => {
         try {
           const response = await axios.get<Person>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handlePersonAdded.id}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handlePersonAdded.id}`,
+            config
           );
           const personData = response.data;
           addPerson(personData);
@@ -521,8 +549,21 @@ export default function Tree({
       console.log("W if");
       const fetchRelation = async () => {
         try {
+          const token = localStorage.getItem("token");
+
+          if (!token) {
+            console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+            return;
+          }
+
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
           const response = await axios.get<Relation>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+            config
           );
           const relationData = response.data;
           addRelation(relationData);
@@ -758,8 +799,21 @@ export default function Tree({
       console.log("W if");
       const fetchRelation = async () => {
         try {
+          const token = localStorage.getItem("token");
+
+          if (!token) {
+            console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+            return;
+          }
+
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
           const response = await axios.get<Relation>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`,
+            config
           );
           const relationData = response.data;
           addRelation(relationData);

@@ -18,20 +18,21 @@ export default function Register() {
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
-    name: "",
-    lastName: "",
-    login: "",
+    displayName: "",
+    userName: "",
+    email: "",
     password: "",
     password2: "",
   });
 
   const [formErrors, setFormErrors] = useState({
-    name: "",
-    lastName: "",
-    login: "",
+    displayName: "",
+    userName: "",
+    email: "",
     password: "",
     password2: "",
     privacyPolicy: "",
+    error: "",
   });
 
   useEffect(() => {
@@ -50,15 +51,21 @@ export default function Register() {
 
   const validateField = (name: string, value: string) => {
     switch (name) {
-      case "name": {
-        return value.trim() === "" ? "Imię jest wymagane" : "";
+      case "displayName": {
+        return value.trim() === "" ? "Imię i nazwisko jest wymagane" : "";
       }
-      case "middleName":
+      case "userName":
+        return value.trim() === "" ? "Nazwa użytkownika jest wymagana" : "";
+      case "email":
+        if (value.trim() === "") {
+          return "Email is required";
+        }
+        const emailRegex = /^[a-zA-Z0-9._-]+@([a-zA-Z0-9.-]+|\d+)$/;
+
+        if (!emailRegex.test(value.trim())) {
+          return "Please enter a valid email address";
+        }
         return "";
-      case "lastName":
-        return value.trim() === "" ? "Nazwisko jest wymagane" : "";
-      case "login":
-        return value.trim() === "" ? "Login jest wymagany" : "";
       case "password":
         return value.trim() === "" ? "Hasło jest wymagane" : "";
       case "password2": {
@@ -100,18 +107,31 @@ export default function Register() {
 
     try {
       const response = await axios.post(
-        `https://localhost:7033/api/Familytrees//persons`,
+        `https://localhost:7033/api/Account/register`,
         {
           ...formData,
         }
       );
+      const { token, displayName, userName } = response.data;
 
-      navigate("/treeviewedition");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("API error:", error.response?.data);
+      localStorage.setItem("token", token);
+      localStorage.setItem("displayName", displayName);
+      localStorage.setItem("userName", userName);
+      navigate("/choiceOfActionPage");
+    } catch (error2: any) {
+      if (axios.isAxiosError(error2)) {
+        console.error("API error:", error2.response?.data);
+        setFormErrors((prevState) => ({
+          ...prevState,
+          error: error2.response?.data || "An unknown API error occurred",
+        }));
+        console.log("Error: ", formErrors);
       } else {
-        console.error("Unexpected error:", error);
+        setFormErrors((prevState) => ({
+          ...prevState,
+          error: "Unexpected error occurred. Please try again.",
+        }));
+        console.error("Unexpected error:", error2);
       }
     }
   };
@@ -123,41 +143,42 @@ export default function Register() {
         <img src={logo} className="App-logo" alt="logo"></img>
         <form className="inputRegister">
           <div>
-            <label>Imię:</label>
+            <label>Imię i nazwisko</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="displayName"
+              value={formData.displayName}
               onChange={handleChange}
             />
-            {formErrors.name && (
-              <span className="error">{formErrors.name}</span>
+            {formErrors.displayName && (
+              <span className="error">{formErrors.displayName}</span>
             )}
           </div>
           <div>
-            <label>Nazwisko:</label>
+            <label>Nazwa użytkownika:</label>
             <input
               type="text"
-              name="lastName"
-              value={formData.lastName}
+              name="userName"
+              value={formData.userName}
               onChange={handleChange}
             />
-            {formErrors.name && (
-              <span className="error">{formErrors.lastName}</span>
+            {formErrors.userName && (
+              <span className="error">{formErrors.userName}</span>
             )}
           </div>
           <div>
-            <label>Login:</label>
+            <label>Email:</label>
             <input
               type="text"
-              name="login"
-              value={formData.login}
+              name="email"
+              value={formData.email}
               onChange={handleChange}
             />
-            {formErrors.name && (
-              <span className="error">{formErrors.login}</span>
+            {formErrors.email && (
+              <span className="error">{formErrors.email}</span>
             )}
           </div>
+
           <div>
             <label>Hasło:</label>
             <input
@@ -166,7 +187,7 @@ export default function Register() {
               value={formData.password}
               onChange={handleChange}
             />
-            {formErrors.name && (
+            {formErrors.password && (
               <span className="error">{formErrors.password}</span>
             )}
           </div>
@@ -178,7 +199,7 @@ export default function Register() {
               value={formData.password2}
               onChange={handleChange}
             />
-            {formErrors.name && (
+            {formErrors.password2 && (
               <span className="error">{formErrors.password2}</span>
             )}
           </div>
@@ -192,13 +213,14 @@ export default function Register() {
             />
             AKCEPTUJĘ POLITYKĘ PRYWATNOŚCI
           </p>
+          {formErrors.privacyPolicy && (
+            <span className="error">{formErrors.privacyPolicy}</span>
+          )}
           <Button as={NavLink} to={`/privacyPolicy`} className="link">
             POLITYKA PRYWATNOŚCI
           </Button>
-          {formErrors.name && (
-            <span className="error">{formErrors.privacyPolicy}</span>
-          )}
         </div>
+        {formErrors.error && <span className="error">{formErrors.error}</span>}
 
         <Button className="buttonMenu2" onClick={handleSubmit}>
           ZAŁÓŻ KONTO

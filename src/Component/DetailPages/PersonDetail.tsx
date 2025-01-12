@@ -46,8 +46,21 @@ export default function PersonDetail({
       const fetchPerson = async () => {
         try {
           setImages([]);
+          const token = localStorage.getItem("token");
+
+          if (!token) {
+            console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+            return;
+          }
+
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
           const response = await axios.get<Person>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNodeId}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNodeId}`,
+            config
           );
           const personData = response.data;
 

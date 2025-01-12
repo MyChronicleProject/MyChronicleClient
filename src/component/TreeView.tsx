@@ -65,15 +65,29 @@ export default function TreeView() {
 
         const fetchData = async () => {
           try {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+              console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+              return;
+            }
+
+            const config = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            };
             const relationResponse = await axios.get<Relation[]>(
-              `https://localhost:7033/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`
+              `https://localhost:7033/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`,
+              config
             );
             console.log("Pobrano relacje");
             console.log("RElacje", relationResponse.data);
             setRelation(relationResponse.data);
 
             const treeNameResponse = await axios.get<FamilyTree>(
-              `https://localhost:7033/api/Familytrees/${familyTreeId}`
+              `https://localhost:7033/api/Familytrees/${familyTreeId}`,
+              config
             );
             setTreeName(treeNameResponse.data.name);
           } catch (error) {

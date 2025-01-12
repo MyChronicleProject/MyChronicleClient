@@ -36,9 +36,22 @@ export default function AddRelationForm({
 
   useEffect(() => {
     console.log("W use efekt");
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+      return;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     axios
       .get<Person[]>(
-        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`
+        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`,
+        config
       )
       .then((response) => {
         console.log(response.data);
@@ -52,8 +65,21 @@ export default function AddRelationForm({
       console.log("MamId: ", selectedEdgeId);
       const fetchRelation = async () => {
         try {
+          const token = localStorage.getItem("token");
+
+          if (!token) {
+            console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+            return;
+          }
+
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
           const response = await axios.get<Relation>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdgeId.personId_1}/relations/${selectedEdgeId.id}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdgeId.personId_1}/relations/${selectedEdgeId.id}`,
+            config
           );
           const relationData = response.data;
 

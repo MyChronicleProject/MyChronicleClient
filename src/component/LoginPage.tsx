@@ -1,17 +1,59 @@
 import logo from "../logo.png";
 import { Button } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "../Styles/buttonMenu.css";
 import "../Styles/inputFieldsMenu.css";
 import AppBar from "./AppBars/AppBar";
 import BottomBar from "./AppBars/BottomBar";
+import axios from "axios";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    login: "",
+    email: "",
     password: "",
   });
+  const [formErrors, setFormErrors] = useState({
+    error: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `https://localhost:7033/api/Account/login`,
+        {
+          ...formData,
+        }
+      );
+      const { token, displayName, userName } = response.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("displayName", displayName);
+      localStorage.setItem("userName", userName);
+      navigate("/choiceOfActionPage");
+    } catch (error) {
+      setFormErrors({
+        error: "Failed login attempt, please check your details and try again",
+      });
+      if (axios.isAxiosError(error)) {
+        console.error("API error:", error.response?.data);
+      } else {
+        console.error("Unexpected error:", error);
+      }
+    }
+  };
 
   return (
     <div>
@@ -19,17 +61,29 @@ export default function LoginPage() {
       <div className="App2">
         <img src={logo} className="App-logo" alt="logo"></img>
         <form>
-          <label>Login:</label>
+          <label>Email:</label>
           <div className="inputRegister">
-            <input type="text" name="login" value={formData.login} />
+            <input
+              type="text"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
           </div>
           <label>Hasło:</label>
           <div className="inputRegister">
-            <input type="text" name="password" value={formData.password} />
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
           </div>
         </form>
-
-        <Button as={NavLink} to={`/choiceOfActionPage`} className="buttonMenu">
+        {formErrors.error && (
+          <span className="error-message">{formErrors.error}</span>
+        )}
+        <Button onClick={handleSubmit} className="buttonMenu">
           ZALOGUJ SIĘ
         </Button>
       </div>

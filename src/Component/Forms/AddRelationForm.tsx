@@ -64,9 +64,22 @@ export default function AddRelationForm({
   useEffect(() => {
     console.log("W use efekt");
     resetForm();
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+      return;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     axios
       .get<Person[]>(
-        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`
+        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`,
+        config
       )
       .then((response) => {
         console.log(response.data);
@@ -85,7 +98,8 @@ export default function AddRelationForm({
       const fetchRelation = async () => {
         try {
           const response = await axios.get<Relation>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
+            config
           );
           const relationData = response.data;
 
@@ -164,8 +178,21 @@ export default function AddRelationForm({
   };
 
   const ifTheSame = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+      return;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     const response = await axios.get<Relation>(
-      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`
+      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
+      config
     );
     const relationData = response.data;
     if (formData.personId_1 != relationData.personId_1) {
@@ -223,6 +250,18 @@ export default function AddRelationForm({
           setTheSameError("Nie zmieniono żadnej wartości");
           return;
         }
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+          return;
+        }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
         const response = await axios.put(
           `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
           {
@@ -233,10 +272,23 @@ export default function AddRelationForm({
               ? formData.endDate.split("T")[0]
               : undefined,
             relationType: getRelationTypeNumber(formData.relationType),
-          }
+          },
+          config
         );
       } else {
         if (selectedPersonInTree) {
+          const token = localStorage.getItem("token");
+
+          if (!token) {
+            console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+            return;
+          }
+
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
           const response = await axios.post(
             `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedPersonInTree[1]}/relations`,
             {
@@ -246,7 +298,8 @@ export default function AddRelationForm({
                 ? formData.endDate.split("T")[0]
                 : undefined,
               relationType: getRelationTypeNumber(formData.relationType),
-            }
+            },
+            config
           );
           if (response.status === 200 && response.data) {
             const addedRelationId = response.data;

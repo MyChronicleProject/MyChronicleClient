@@ -108,8 +108,21 @@ export default function AddPersonForm({
 
       const fetchPerson = async () => {
         try {
+          const token = localStorage.getItem("token");
+
+          if (!token) {
+            console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+            return;
+          }
+
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
           const response = await axios.get<Person>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
+            config
           );
           const personData = response.data;
 
@@ -197,8 +210,21 @@ export default function AddPersonForm({
   };
 
   const ifTheSame = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+      return;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     const response = await axios.get<Person>(
-      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`
+      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
+      config
     );
     const personData = response.data;
     if (formData.name != personData.name) {
@@ -296,6 +322,18 @@ export default function AddPersonForm({
           photo: "",
         };
         if (!theSame) {
+          const token = localStorage.getItem("token");
+
+          if (!token) {
+            console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+            return;
+          }
+
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
           const response = await axios.put(
             `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
             {
@@ -307,7 +345,8 @@ export default function AddPersonForm({
                 : null,
               gender: getGenderNumber(formData.gender),
               familyTreeId: familyTreeId,
-            }
+            },
+            config
           );
           if (response.status === 200 || response.status === 201) {
             updatedPerson = {
@@ -318,7 +357,17 @@ export default function AddPersonForm({
             };
           }
         }
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+          return;
+        }
 
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
         if (profilePictureToSend) {
           const responseFoto = await axios.post(
             `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files`,
@@ -333,7 +382,8 @@ export default function AddPersonForm({
               headers: {
                 "Content-Type": "application/json",
               },
-            }
+            },
+            config
           );
           if (responseFoto.status === 200 || responseFoto.status === 201) {
             const newFile: File = {
@@ -367,6 +417,18 @@ export default function AddPersonForm({
         personEdited(updatedPerson);
         setProfilePictureToSend(null);
       } else {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+          return;
+        }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
         const response = await axios.post(
           `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`,
           {
@@ -379,7 +441,8 @@ export default function AddPersonForm({
               : null,
             gender: getGenderNumber(formData.gender),
             familyTreeId: familyTreeId,
-          }
+          },
+          config
         );
         console.log("Dodano osobe:          ", profilePictureToSend);
         if (response.status === 200 && response.data) {
@@ -405,7 +468,8 @@ export default function AddPersonForm({
                 headers: {
                   "Content-Type": "application/json",
                 },
-              }
+              },
+              config
             );
             if (
               profilePictureToSend &&
@@ -538,9 +602,22 @@ export default function AddPersonForm({
   };
 
   const handleDeleteFile = (fileToDelete: File) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+      return;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     axios
       .delete(
-        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${fileToDelete.personId}/files/${fileToDelete.id}`
+        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${fileToDelete.personId}/files/${fileToDelete.id}`,
+        config
       )
       .then(() => {
         setFiles((prevFiles) =>
@@ -555,6 +632,19 @@ export default function AddPersonForm({
   const handleAddFile = async () => {
     if (fileToSend) {
       try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+          return;
+        }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
         const responseFoto = await axios.post(
           `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files`,
           {
@@ -564,11 +654,7 @@ export default function AddPersonForm({
             fileExtension: getFileExtensionNumber(fileToSend.fileExtension),
             personId: selectedNode,
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+          config
         );
 
         if (responseFoto.status === 200 || responseFoto.status === 201) {
