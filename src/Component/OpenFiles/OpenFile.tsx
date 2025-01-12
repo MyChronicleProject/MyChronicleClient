@@ -38,6 +38,8 @@ const OpenFile: React.FC<AudioPlayerProps> = ({ file }) => {
             src={`data:image/jpeg;base64,${file.content}`}
             alt={file.name}
             style={{
+              minWidth: "100vh",
+              minHeight: "100vh",
               maxWidth: "100%",
               maxHeight: "150px",
               objectFit: "contain",

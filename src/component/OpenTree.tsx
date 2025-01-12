@@ -9,6 +9,8 @@ import BottomBar from "./AppBars/BottomBar";
 import "../Styles/buttonMenu.css";
 import "../Styles/inputFieldsMenu.css";
 import "../Styles/openTreeStyle.css";
+import "../Styles/openFileStyle.css";
+
 
 export default function OpenTree() {
   const navigate = useNavigate();
@@ -260,26 +262,30 @@ export default function OpenTree() {
             Dodaj nowe drzewo
           </Button>
           {addTreeForm && (
-            <form className="overlay">
-              <Button onClick={handleExit} className="exitButton">
-                x
-              </Button>
-              <div className="inputBasic">
-                <label>Nazwa:</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-                {formErrors.name && (
-                  <div className="error-message">{formErrors.name}</div>
-                )}
-              </div>
-              <Button onClick={handleCreateTree} className="buttonMenu2">
-                Stwórz nowe drzewo
-              </Button>
-            </form>
+
+            <>
+              <div className="overlayBackground" ></div>
+              <form className="overlay">
+                <Button onClick={handleExit} className="exitButton">
+                  x
+                </Button>
+                <div className="inputBasic">
+                  <label>Nazwa:</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+                  {formErrors.name && (
+                    <div className="error-message">{formErrors.name}</div>
+                  )}
+                </div>
+                <Button onClick={handleCreateTree} className="buttonMenu2">
+                  Stwórz nowe drzewo
+                </Button>
+              </form>
+            </>
           )}
         </div>
       </div>

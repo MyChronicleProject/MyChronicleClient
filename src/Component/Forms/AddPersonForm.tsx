@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import "../../Styles/addPersonFormStyle.css";
 import "../../Styles/buttonMenu.css";
 import "../../Styles/inputFieldsMenu.css";
+import "../../Styles/openFileStyle.css";
 import { File, getFileTypeName } from "../../Models/File";
 import {
   FileDTO,
@@ -596,7 +597,7 @@ export default function AddPersonForm({
   if (error) return <div>Error: {error}</div>;
 
   const handleOpenFile = (file: File) => {
-    console.log("Open fiel ", file);
+    console.log("Open file ", file);
 
     setFileToOpen(file);
   };
@@ -682,6 +683,11 @@ export default function AddPersonForm({
       }
       setProfilePictureToSend(null);
     }
+  };
+
+
+  const handleExitFile = async () => {
+    setFileToOpen(null);
   };
 
   return (
@@ -845,11 +851,17 @@ export default function AddPersonForm({
               ))}
             </ul>
           )}
-          {fileToOpen && (
-            <div>
-              <OpenFile file={fileToOpen} />
-            </div>
-          )}
+       {fileToOpen && (
+  <>
+    <div className="overlayBackground" onClick={handleExitFile}></div>
+    <div className="openFileStyle">
+      <Button onClick={handleExitFile} className="exitButton">
+        x
+      </Button>
+      <OpenFile file={fileToOpen} />
+    </div>
+  </>
+)}
         </div>
       )}
     </div>
