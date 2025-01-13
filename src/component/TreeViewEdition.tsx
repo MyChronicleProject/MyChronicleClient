@@ -30,6 +30,13 @@ export default function TreeViewEdition() {
     [null]
   );
 
+  useEffect(() => {
+    const attribution = document.querySelector(".react-flow__attribution");
+    if (attribution) {
+      attribution.remove();
+    }
+  }, []);
+
   const handleNodeClick = (node: any) => {
     setSelectedNode(node);
     setVisibleRelation(false);

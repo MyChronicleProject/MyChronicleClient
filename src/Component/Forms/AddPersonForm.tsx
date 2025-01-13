@@ -560,6 +560,14 @@ export default function AddPersonForm({
     }
   };
 
+  const handleChangeTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     console.log(file);
@@ -686,7 +694,6 @@ export default function AddPersonForm({
     }
   };
 
-
   const handleExitFile = async () => {
     setFileToOpen(null);
   };
@@ -812,11 +819,13 @@ export default function AddPersonForm({
         </div>
         <div className="inputForm">
           <label>Notatka:</label>
-          <input
-            type="text"
+          <textarea
             name="note"
             value={formData.note}
-            onChange={handleChange}
+            onChange={handleChangeTextArea}
+            rows={6}
+            cols={35}
+            className="note-textarea"
           />
           {formErrors.note && (
             <div className="error-message">{formErrors.note}</div>
@@ -827,11 +836,9 @@ export default function AddPersonForm({
           {buttonSubmitName}{" "}
         </button>
       </form>
-
-
       {formName === "Edycja osoby" && (
         <div className="FileForm-upload-container">
-          <h3 className="FileForm-header" >Pliki:</h3>
+          <h3 className="FileForm-header">Pliki:</h3>
           <p className="FileForm-header">Dodaj plik:</p>
           <input
             type="file"
@@ -839,32 +846,40 @@ export default function AddPersonForm({
             className="FileForm-input"
             onChange={handleFileChange}
           />
-          <button onClick={() => handleAddFile()} className="FileForm-btn">Dodaj</button>
+          <button onClick={() => handleAddFile()} className="FileForm-btn">
+            Dodaj
+          </button>
           {files.length === 0 ? (
             <p>No files uploaded yet.</p>
           ) : (
             <ul className="FileForm-list">
               {files.map((file, index) => (
-                <li key={index} >
-                  <div className="FileForm-item">
-                    {file.name}
-                  </div>
+                <li key={index}>
+                  <div className="FileForm-item">{file.name}</div>
                   <div>
-                    <button onClick={() => handleOpenFile(file)} className="FileForm-item-btn">Open</button>
-                    <button onClick={() => handleDeleteFile(file)} className="FileForm-item-btn FileForm-item-btn-delete">Delete</button>
+                    <button
+                      onClick={() => handleOpenFile(file)}
+                      className="FileForm-item-btn"
+                    >
+                      Open
+                    </button>
+                    <button
+                      onClick={() => handleDeleteFile(file)}
+                      className="FileForm-item-btn FileForm-item-btn-delete"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </li>
               ))}
             </ul>
           )}
 
-
           {fileToOpen && (
             <>
               <div className="overlayBackground" onClick={handleExitFile}></div>
               {fileToOpen?.fileType === FileType.Document ? (
                 <>
-
                   <div className="openFileStyle2">
                     <Button onClick={handleExitFile} className="exitButton">
                       x
@@ -879,13 +894,12 @@ export default function AddPersonForm({
                   </Button>
                   <OpenFile file={fileToOpen} />
                 </div>
-              )
-
-              }
+              )}
             </>
           )}
         </div>
-      )};
+      )}
+      ;
     </div>
-  )
+  );
 }

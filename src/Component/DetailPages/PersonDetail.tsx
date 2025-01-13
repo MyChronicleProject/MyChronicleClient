@@ -17,7 +17,6 @@ import FileSlider from "../Slider/FileSlider";
 import AudioSlider from "../Slider/AudioSlider";
 import ImageSlider from "../Slider/ImageSlider";
 
-
 export default function PersonDetail({
   selectedNodeId,
 }: {
@@ -42,7 +41,6 @@ export default function PersonDetail({
     note: "",
   });
   const [fileToOpen, setFileToOpen] = useState<File | null>(null);
-
 
   useEffect(() => {
     if (selectedNodeId) {
@@ -191,7 +189,12 @@ export default function PersonDetail({
         </div>
         <div className="inputForm">
           <label>Płeć:</label>
-          <select name="gender" value={formData.gender} disabled>
+          <select
+            name="gender"
+            value={formData.gender}
+            disabled
+            className="non-editable"
+          >
             {Object.values(Gender).map((gender) => (
               <option key={gender} value={gender}>
                 {gender}
@@ -210,7 +213,14 @@ export default function PersonDetail({
         </div>
         <div className="inputForm">
           <label>Notatka:</label>
-          <input type="text" name="note" value={formData.note} readOnly />
+          <textarea
+            name="note"
+            value={formData.note}
+            readOnly
+            rows={6}
+            cols={35}
+            className="note-textarea"
+          />
         </div>
       </form>
 
@@ -220,8 +230,6 @@ export default function PersonDetail({
       <div>
         <AudioSlider files={audios} />
       </div>
-
-
     </div>
   );
 }

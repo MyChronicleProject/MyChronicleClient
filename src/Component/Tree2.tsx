@@ -850,9 +850,9 @@ export default function Tree({
       <Button onClick={() => saveTreeToFile()} className="buttonMenuOver">
         Save
       </Button>
-      <Button onClick={downloadPDF} className="buttonMenuOver2">
+      {/* <Button onClick={downloadPDF} className="buttonMenuOver2">
         Download PDF
-      </Button>
+      </Button> */}
     </div>
   );
 }

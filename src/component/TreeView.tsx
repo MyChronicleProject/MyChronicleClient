@@ -10,6 +10,7 @@ import PersonDetail from "./DetailPages/PersonDetail";
 import RelationDetail from "./DetailPages/RelationDetail";
 import axios from "axios";
 import html2canvas from "html2canvas";
+import "../Styles/hideElementOnTree.css";
 import jsPDF from "jspdf";
 import {
   Relation,
@@ -41,6 +42,13 @@ export default function TreeView() {
   const [visibleRelation2, setVisibleRelation2] = useState<boolean>(false);
   const pdfRef = useRef<HTMLDivElement | null>(null);
   const [treeName, setTreeName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const attribution = document.querySelector(".react-flow__attribution");
+    if (attribution) {
+      attribution.remove();
+    }
+  }, []);
 
   useEffect(() => {
     console.log("TreeData: ", handleTreeData);
@@ -182,6 +190,16 @@ export default function TreeView() {
       console.error("pdfRef is not assigned to any element.");
       return;
     }
+
+    const minimap = input.querySelector(".react-flow__minimap");
+    const controls = input.querySelector(".react-flow__controls");
+    const background = input.querySelector(".react-flow__background");
+
+    // Dodaj klasę `hidden`, aby je ukryć
+    minimap?.classList.add("hidden");
+    controls?.classList.add("hidden");
+    background?.classList.add("hidden");
+
     html2canvas(input).then((canvas: any) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("l", "mm", "a4", true);
@@ -202,6 +220,9 @@ export default function TreeView() {
       );
       pdf.save(`${treeName}.pdf`);
     });
+    minimap?.classList.remove("hidden");
+    controls?.classList.remove("hidden");
+    background?.classList.remove("hidden");
   };
 
   const convertTextToLabel = (text: string): JSX.Element => {
@@ -220,50 +241,52 @@ export default function TreeView() {
   return (
     <div>
       <AppBar />
-      <div className="App4">
-        <div className="left-panel" style={{ height: "100vh" }} ref={pdfRef}>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodeClick={handleNodeClick}
-            onEdgeClick={handleEdgeClick}
-            nodeTypes={nodeTypes}
-            fitView
-          >
-            <MiniMap />
-            <Controls />
-            <Background />
-          </ReactFlow>
+      <div>
+        <div className="App4">
+          <div className="left-panel" style={{ height: "100vh" }} ref={pdfRef}>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onNodeClick={handleNodeClick}
+              onEdgeClick={handleEdgeClick}
+              nodeTypes={nodeTypes}
+              fitView
+            >
+              <MiniMap />
+              <Controls />
+              <Background />
+            </ReactFlow>
+          </div>
+
+          {visiblePerson && (
+            <div className="person-panel">
+              <PersonDetail
+                selectedNodeId={selectedNode ? selectedNode.id : null}
+              />
+            </div>
+          )}
+
+          {visibleRelation && (
+            <div className="relation-panel">
+              {visibleRelation && (
+                <RelationDetail
+                  selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}
+                />
+              )}
+              {visibleRelation2 && (
+                <RelationDetail
+                  selectedEdgeId={selectedEdge[1] ? selectedEdge[1] : null}
+                />
+              )}
+            </div>
+          )}
         </div>
-
-        {visiblePerson && (
-          <div className="person-panel">
-            <PersonDetail
-              selectedNodeId={selectedNode ? selectedNode.id : null}
-            />
-          </div>
-        )}
-
-        {visibleRelation && (
-          <div className="relation-panel">
-            {visibleRelation && (
-              <RelationDetail
-                selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}
-              />
-            )}
-            {visibleRelation2 && (
-              <RelationDetail
-                selectedEdgeId={selectedEdge[1] ? selectedEdge[1] : null}
-              />
-            )}
-          </div>
-        )}
+        <button onClick={downloadPDF}>Download PDF</button>
+        <Button onClick={downloadPDF} className="buttonMenuOver2">
+          Download PDF
+        </Button>
+        <BottomBar />
       </div>
-      {/* <button onClick={downloadPDF}>Download PDF</button> */}
-      {/* <Button onClick={downloadPDF} className="buttonMenuOver">
-        Download PDF
-      </Button> */}
-      <BottomBar />
     </div>
   );
 }

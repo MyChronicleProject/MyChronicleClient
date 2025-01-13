@@ -60,7 +60,7 @@ export default function AddRelationForm({
       .catch(() => {
         setError("Error fetching persons");
       })
-      .finally(() => { });
+      .finally(() => {});
     if (selectedEdgeId) {
       console.log("MamId: ", selectedEdgeId);
       const fetchRelation = async () => {
@@ -120,7 +120,12 @@ export default function AddRelationForm({
         <h1 className="FileForm-header"> Szczegóły </h1>
         <div className="inputForm">
           <label>Wybierz osobę:</label>
-          <select name="personId_1" value={formData.personId_1} disabled>
+          <select
+            name="personId_1"
+            value={formData.personId_1}
+            disabled
+            className="non-editable"
+          >
             {personList.map((person) => (
               <option key={person.id} value={person.id}>
                 {person.name} {person.lastName}
@@ -130,7 +135,12 @@ export default function AddRelationForm({
         </div>
         <div className="inputForm">
           <label>Osoba 1:</label>
-          <select name="personId_2" value={formData.personId_2} disabled>
+          <select
+            name="personId_2"
+            value={formData.personId_2}
+            disabled
+            className="non-editable"
+          >
             {personList.map((person) => (
               <option key={person.id} value={person.id}>
                 {person.name} {person.lastName}
@@ -158,7 +168,12 @@ export default function AddRelationForm({
         </div>
         <div className="inputForm">
           <label>Relacja:</label>
-          <select name="relationType" value={formData.relationType} disabled>
+          <select
+            name="relationType"
+            value={formData.relationType}
+            disabled
+            className="non-editable"
+          >
             {Object.values(RelationType).map((relationType) => (
               <option key={relationType} value={relationType}>
                 {relationType}
