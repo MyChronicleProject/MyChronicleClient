@@ -16,7 +16,7 @@ export default function OpenTree() {
   const [trees, setTrees] = useState<FamilyTree[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [addTreeForm, setAddTreeForm] = useState<boolean>(true);
+  const [addTreeForm, setAddTreeForm] = useState<boolean>(false);
   const [fileContent, setFileContent] = useState<any>(null);
   const [treeData, setTreeData] = useState<any>();
   const [formData, setFormData] = useState({
@@ -81,7 +81,7 @@ export default function OpenTree() {
 
   useEffect(() => {
     setLoading(true);
-    setAddTreeForm(false);
+    //setAddTreeForm(false);
     const token = localStorage.getItem("token");
 
     if (!token) {

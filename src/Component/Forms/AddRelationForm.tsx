@@ -327,7 +327,7 @@ export default function AddRelationForm({
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h1> {formName} </h1>
+        <h1 className="FileForm-header"> {formName} </h1>
         {theSameError && <div className="error-message">{theSameError}</div>}
         <div className="inputForm">
           <label>Wybierz osobę:</label>

@@ -16,7 +16,7 @@ const ImageSlider: React.FC<{ images: File[] }> = ({ images }) => {
   };
 
   return (
-    <div style={{ maxWidth: "200px", margin: "20px auto", height: "200px" }}>
+    <div style={{ maxWidth: "200px", margin: "20px auto", maxHeight: "200px" }}>
       {images.length === 1 ? (
         <div
           style={{

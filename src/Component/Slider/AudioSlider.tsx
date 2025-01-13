@@ -26,7 +26,7 @@ const AudioSlider: React.FC<{ files: File[] }> = ({ files }) => {
   return (
     <div style={{ width: "200px", margin: "20px auto", height: "auto" }}>
       {files.length > 0 && (
-        <h2 style={{ textAlign: "center" }}>Pliki dzwiękowe</h2>
+        <h2 className="FileForm-header">Pliki dzwiękowe</h2>
       )}
       <div style={{ marginBottom: "20px" }}>
         <Slider {...settings}>
@@ -41,10 +41,11 @@ const AudioSlider: React.FC<{ files: File[] }> = ({ files }) => {
                 padding: "10px 0",
                 width: "100%",
                 cursor: "pointer",
+
               }}
             >
               <div style={{ textAlign: "center", width: "100%" }}>
-                <h3 style={{ margin: "0", fontSize: "12px" }}>{file.name}</h3>
+                <h3 style={{ margin: "0", fontSize: "12px", color: "black" }}>{file.name}</h3>
               </div>
             </div>
           ))}
