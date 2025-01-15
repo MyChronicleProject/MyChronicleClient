@@ -350,7 +350,7 @@ export default function Tree({
       type: "placeholder",
       parentId: parentNode.id,
       data: { label: "+" },
-      position: { x: parentNode.position.x, y: parentNode.position.y + 40 },
+      position: { x: parentNode.position.x, y: parentNode.position.y },
     };
   };
 

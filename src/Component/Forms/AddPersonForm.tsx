@@ -899,7 +899,7 @@ export default function AddPersonForm({
           )}
         </div>
       )}
-      ;
+
     </div>
   );
 }
