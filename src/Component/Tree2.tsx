@@ -730,39 +730,6 @@ export default function Tree({
           }
         } else {
           alert(`Nie można dodać osoby z taką relacją`);
-          const handleDeleteFile = (fileToDelete: File) => {
-            const token = localStorage.getItem("token");
-
-            if (!token) {
-              console.error("Brak tokena. Użytkownik nie jest zalogowany.");
-              return;
-            }
-            const config = {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            };
-            axios
-              .delete(
-                `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[0].id}`,
-                config
-              )
-              .catch(() => {
-                setError("Error deleting peron");
-              });
-            axios
-              .delete(
-                `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
-                config
-              )
-              .catch(() => {
-                setError("Error deleting peron");
-              });
-          };
-        }
-      } else {
-        alert(`Nie można dodać osoby z taką relacją`);
-        const handleDeleteFile = (fileToDelete: File) => {
           const token = localStorage.getItem("token");
 
           if (!token) {
@@ -790,7 +757,37 @@ export default function Tree({
             .catch(() => {
               setError("Error deleting peron");
             });
+        }
+      } else {
+        alert(`Nie można dodać osoby z taką relacją`);
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+          return;
+        }
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         };
+        axios
+          .delete(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[0].id}`,
+            config
+          )
+          .catch(() => {
+            setError("Error deleting peron");
+          });
+        axios
+          .delete(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+            config
+          )
+          .catch(() => {
+            setError("Error deleting peron");
+          });
       }
     } else if (handleAddedRelation.relationType === "Parent") {
       const sourceNodeMarriage = edges.find(
@@ -851,39 +848,7 @@ export default function Tree({
           }
         } else {
           alert(`Nie można dodać osoby z taką relacją`);
-          const handleDeleteFile = (fileToDelete: File) => {
-            const token = localStorage.getItem("token");
 
-            if (!token) {
-              console.error("Brak tokena. Użytkownik nie jest zalogowany.");
-              return;
-            }
-            const config = {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            };
-            axios
-              .delete(
-                `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[0].id}`,
-                config
-              )
-              .catch(() => {
-                setError("Error deleting peron");
-              });
-            axios
-              .delete(
-                `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
-                config
-              )
-              .catch(() => {
-                setError("Error deleting peron");
-              });
-          };
-        }
-      } else {
-        alert(`Nie można dodać osoby z taką relacją`);
-        const handleDeleteFile = (fileToDelete: File) => {
           const token = localStorage.getItem("token");
 
           if (!token) {
@@ -911,7 +876,36 @@ export default function Tree({
             .catch(() => {
               setError("Error deleting peron");
             });
+        }
+      } else {
+        alert(`Nie można dodać osoby z taką relacją`);
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+          return;
+        }
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         };
+        axios
+          .delete(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[0].id}`,
+            config
+          )
+          .catch(() => {
+            setError("Error deleting peron");
+          });
+        axios
+          .delete(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+            config
+          )
+          .catch(() => {
+            setError("Error deleting relation");
+          });
       }
     }
   }
