@@ -335,6 +335,7 @@ export default function AddRelationForm({
             name="personId_1"
             value={formData.personId_1}
             onChange={handleChange}
+            disabled={true}
           >
             {personList.map((person) => (
               <option key={person.id} value={person.id}>
@@ -349,6 +350,7 @@ export default function AddRelationForm({
             name="personId_2"
             value={formData.personId_2}
             onChange={handleChange}
+            disabled={true}
           >
             {personList.map((person) => (
               <option key={person.id} value={person.id}>
@@ -387,6 +389,7 @@ export default function AddRelationForm({
             name="relationType"
             value={formData.relationType}
             onChange={handleChange}
+            disabled={!!selectedEdge}
           >
             {Object.values(RelationType).map((relationType) => (
               <option key={relationType} value={relationType}>
