@@ -25,10 +25,13 @@ const PlaceholderNode = ({ data }: any) => {
     <div
       style={{
         padding: "5px",
+        width: "15px",
+        height: "flex",
         border: "1px dashed #999",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "transparent",
         textAlign: "center",
         pointerEvents: "none",
+        borderRadius: "8px", // Add this line for rounded corners
       }}
     >
       {data.label}
@@ -350,7 +353,11 @@ export default function Tree({
       type: "placeholder",
       parentId: parentNode.id,
       data: { label: "+" },
-      position: { x: parentNode.position.x, y: parentNode.position.y },
+      position: "fixed",
+      style: {
+        top: "152px",
+        left: "1px",
+      }
     };
   };
 
