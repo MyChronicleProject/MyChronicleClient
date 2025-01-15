@@ -27,7 +27,9 @@ const PlaceholderNode = ({ data }: any) => {
         padding: "5px",
         width: "15px",
         height: "flex",
-        border: "1px dashed #999",
+        border: "2px solid #9D8772",
+        borderLeft: "none",
+        borderBottom: "none",
         backgroundColor: "transparent",
         textAlign: "center",
         pointerEvents: "none",
@@ -356,7 +358,7 @@ export default function Tree({
       position: "fixed",
       style: {
         top: "152px",
-        left: "1px",
+        left: "0px",
       }
     };
   };
