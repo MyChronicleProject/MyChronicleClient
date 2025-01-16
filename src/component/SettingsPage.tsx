@@ -167,8 +167,7 @@ export default function SettingsPage() {
                 setChangePassForm(true);
                 clearForm();
               }}
-              className="buttonMenu3"
-            >
+              className="setting-header"            >
               ZMIEŃ HASŁO
             </Button>
           </p>

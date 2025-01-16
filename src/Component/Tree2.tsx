@@ -665,7 +665,7 @@ export default function Tree({
         id: `${handleAddedPersonWithRelation[1].personId_1}*${handleAddedPersonWithRelation[1].personId_2}`,
         type: "customSpouse",
         data: {
-          name: `Malzenstwo`,
+          name: `Małżenstwo`,
           date: `${handleAddedPersonWithRelation[1].startDate}`,
         },
         position: {

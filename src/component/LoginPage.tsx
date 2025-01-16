@@ -48,7 +48,7 @@ export default function LoginPage() {
       localStorage.setItem("token", token);
       localStorage.setItem("displayName", displayName);
       localStorage.setItem("userName", userName);
-      navigate("/choiceOfActionPage");
+      navigate("/openTree");
     } catch (error) {
       setFormErrors({
         error: "Failed login attempt, please check your details and try again",
@@ -87,11 +87,17 @@ export default function LoginPage() {
           </div>
         </form>
         {formErrors.error && (
-          <span className="error-message">{formErrors.error}</span>
+          <span className="error">{formErrors.error}</span>
         )}
         <Button onClick={handleSubmit} className="buttonMenu">
           ZALOGUJ SIĘ
         </Button>
+        <p>
+          NIE MASZ KONTA?
+          <Button as={NavLink} to={`/register`} className="link">
+            ZAREJESTRUJ SIĘ
+          </Button>
+        </p>
       </div>
       <BottomBar />
     </div>

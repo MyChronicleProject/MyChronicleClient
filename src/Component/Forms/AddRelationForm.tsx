@@ -328,7 +328,7 @@ export default function AddRelationForm({
     <div>
       <form onSubmit={handleSubmit}>
         <h1 className="FileForm-header"> {formName} </h1>
-        {theSameError && <div className="error-message">{theSameError}</div>}
+        {theSameError && <div className="error">{theSameError}</div>}
         <div className="inputForm">
           <label>Wybierz osobę:</label>
           <select
@@ -366,7 +366,7 @@ export default function AddRelationForm({
             onChange={handleChange}
           />
           {formErrors.startDate && (
-            <div className="error-message">{formErrors.startDate}</div>
+            <div className="error">{formErrors.startDate}</div>
           )}
         </div>
         <div className="inputForm">
@@ -378,7 +378,7 @@ export default function AddRelationForm({
             onChange={handleChange}
           />
           {formErrors.endDate && (
-            <div className="error-message">{formErrors.endDate}</div>
+            <div className="error">{formErrors.endDate}</div>
           )}
         </div>
         <div className="inputForm">

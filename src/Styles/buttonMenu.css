@@ -80,6 +80,7 @@
   /* Remove underline */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   /* Hover effects */
+  margin-bottom: 10px;
 }
 
 .buttonMenu2:hover {

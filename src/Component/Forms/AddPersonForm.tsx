@@ -702,7 +702,7 @@ export default function AddPersonForm({
     <div>
       <form onSubmit={handleSubmit}>
         <h1 className="FileForm-header"> {formName} </h1>
-        {theSameError && <div className="error-message">{theSameError}</div>}
+        {theSameError && <div className="error">{theSameError}</div>}
         <p className="FileForm-header">Dodaj zdjęcie profilowe</p>
         <input
           type="file"
@@ -720,7 +720,7 @@ export default function AddPersonForm({
             onChange={handleChange}
           />
           {formErrors.name && (
-            <div className="error-message">{formErrors.name}</div>
+            <div className="error">{formErrors.name}</div>
           )}
         </div>
         <div className="inputForm">
@@ -732,7 +732,7 @@ export default function AddPersonForm({
             onChange={handleChange}
           />
           {formErrors.middleName && (
-            <div className="error-message">{formErrors.middleName}</div>
+            <div className="error">{formErrors.middleName}</div>
           )}
         </div>
         <div className="inputForm">
@@ -744,7 +744,7 @@ export default function AddPersonForm({
             onChange={handleChange}
           />
           {formErrors.lastName && (
-            <div className="error-message">{formErrors.lastName}</div>
+            <div className="error">{formErrors.lastName}</div>
           )}
         </div>
         <div className="inputForm">
@@ -756,7 +756,7 @@ export default function AddPersonForm({
             onChange={handleChange}
           />
           {formErrors.birthDate && (
-            <div className="error-message">{formErrors.birthDate}</div>
+            <div className="error">{formErrors.birthDate}</div>
           )}
         </div>
         <div className="inputForm">
@@ -768,7 +768,7 @@ export default function AddPersonForm({
             onChange={handleChange}
           />
           {formErrors.deathDate && (
-            <div className="error-message">{formErrors.deathDate}</div>
+            <div className="error">{formErrors.deathDate}</div>
           )}
         </div>
         <div className="inputForm">
@@ -780,7 +780,7 @@ export default function AddPersonForm({
             onChange={handleChange}
           />
           {formErrors.birthPlace && (
-            <div className="error-message">{formErrors.birthPlace}</div>
+            <div className="error">{formErrors.birthPlace}</div>
           )}
         </div>
         <div className="inputForm">
@@ -792,7 +792,7 @@ export default function AddPersonForm({
             onChange={handleChange}
           />
           {formErrors.deathPlace && (
-            <div className="error-message">{formErrors.deathPlace}</div>
+            <div className="error">{formErrors.deathPlace}</div>
           )}
         </div>
         <div className="inputForm">
@@ -814,7 +814,7 @@ export default function AddPersonForm({
             onChange={handleChange}
           />
           {formErrors.occupation && (
-            <div className="error-message">{formErrors.occupation}</div>
+            <div className="error">{formErrors.occupation}</div>
           )}
         </div>
         <div className="inputForm">
@@ -828,7 +828,7 @@ export default function AddPersonForm({
             className="note-textarea"
           />
           {formErrors.note && (
-            <div className="error-message">{formErrors.note}</div>
+            <div className="error">{formErrors.note}</div>
           )}
         </div>
         <button type="submit" className="buttonMenu2">

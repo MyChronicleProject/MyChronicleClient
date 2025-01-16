@@ -117,7 +117,7 @@ export default function Register() {
       localStorage.setItem("token", token);
       localStorage.setItem("displayName", displayName);
       localStorage.setItem("userName", userName);
-      navigate("/choiceOfActionPage");
+      navigate("/openTree");
     } catch (error2: any) {
       if (axios.isAxiosError(error2)) {
         console.error("API error:", error2.response?.data);
@@ -213,13 +213,13 @@ export default function Register() {
             />
             AKCEPTUJĘ POLITYKĘ PRYWATNOŚCI
           </p>
-          {formErrors.privacyPolicy && (
-            <span className="error">{formErrors.privacyPolicy}</span>
-          )}
+
           <Button as={NavLink} to={`/privacyPolicy`} className="link">
             POLITYKA PRYWATNOŚCI
           </Button>
-        </div>
+        </div> {formErrors.privacyPolicy && (
+          <span className="error">{formErrors.privacyPolicy}</span>
+        )}
         {formErrors.error && <span className="error">{formErrors.error}</span>}
 
         <Button className="buttonMenu2" onClick={handleSubmit}>
