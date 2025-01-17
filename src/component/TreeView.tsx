@@ -21,6 +21,8 @@ import { useParams } from "react-router-dom";
 import { FamilyTree } from "../Models/FamilyTree";
 import CustomNode from "./CustomNode";
 import CustomNodeSpouse from "./CustomNodeSpouse";
+import "../Styles/buttonMenu.css";
+
 
 const nodeTypes = {
   custom: CustomNode,
@@ -281,12 +283,12 @@ export default function TreeView() {
             </div>
           )}
         </div>
-        <button onClick={downloadPDF}>Download PDF</button>
-        <Button onClick={downloadPDF} className="buttonMenuOver2">
-          Download PDF
-        </Button>
+
         <BottomBar />
       </div>
+      <Button onClick={downloadPDF} className="buttonMenuOver2">
+        Download PDF
+      </Button>
     </div>
   );
 }
