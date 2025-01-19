@@ -19,6 +19,7 @@ import "../Styles/buttonMenu.css";
 import { Button } from "semantic-ui-react";
 import CustomNode from "./CustomNode";
 import CustomNodeSpouse from "./CustomNodeSpouse";
+const generateEdgeId = () => crypto.randomUUID();
 
 const PlaceholderNode = ({ data }: any) => {
   return (
@@ -33,16 +34,39 @@ const PlaceholderNode = ({ data }: any) => {
         backgroundColor: "transparent",
         textAlign: "center",
         pointerEvents: "none",
-        borderRadius: "8px", // Add this line for rounded corners
+        borderRadius: "8px",
       }}
     >
       {data.label}
     </div>
   );
 };
+
+const DeleteNode = ({ data }: any) => {
+  return (
+    <div
+      style={{
+        padding: "5px",
+        width: "15px",
+        height: "flex",
+        border: "2px solid #9D8772",
+        borderRight: "none",
+        borderBottom: "none",
+        backgroundColor: "transparent",
+        textAlign: "center",
+        pointerEvents: "none",
+        borderRadius: "8px",
+      }}
+    >
+      {data.label}
+    </div>
+  );
+};
+
 const nodeTypes = {
   placeholder: PlaceholderNode,
   custom: CustomNode,
+  delete: DeleteNode,
   customSpouse: CustomNodeSpouse,
 };
 
@@ -83,7 +107,6 @@ export default function Tree({
   const [edges, setEdges] = useState<any[]>([]);
   const [downloadRelation, setDownloadRelation] = useState(false);
   const pdfRef = useRef<HTMLDivElement | null>(null);
-  const placeholderIdMap = useRef(new Map<string, string>());
   const [updateKey, setUpdateKey] = useState(0);
   const { state } = useLocation();
 
@@ -233,7 +256,7 @@ export default function Tree({
   };
 
   const handleNodeDragStop = (event: any, node: any) => {
-    if (node.type !== "placeholder") {
+    if (node.type !== "placeholder" && node.type !== "delete") {
       setNodes((prevNodes) =>
         prevNodes.map((n) =>
           n.id === node.id ? { ...n, position: node.position } : n
@@ -243,7 +266,7 @@ export default function Tree({
   };
 
   const handleNodeDrag = (event: any, node: any) => {
-    if (node.type !== "placeholder") {
+    if (node.type !== "placeholder" && node.type !== "delete") {
       setNodes((prevNodes) =>
         prevNodes.map((n) =>
           n.id === node.id ? { ...n, position: node.position } : n
@@ -255,25 +278,104 @@ export default function Tree({
   const handleNodeClick = (event: React.MouseEvent, node: any) => {
     console.log("Kliknięto węzeł o ID:", node.id);
     if (node.type === "custom") {
-      if (node.id.includes("*")) {
-        onNodeClick(null);
-        const [id1, id2] = node.id.split("*");
+      console.log("ClickedRelation-node: ", node);
+      onNodeClick(node);
+    } else if (node.type === "customSpouse") {
+      onNodeClick(null);
+      const [id1, id2] = node.id.split("*");
 
-        const clickedRelation = relation.find(
-          (rel) =>
-            (rel.personId_1 === id1 && rel.personId_2 === id2) ||
-            (rel.personId_1 === id2 && rel.personId_2 === id1)
-        );
-        console.log("ClickedRelation: ", clickedRelation);
-        onEdgeClick([clickedRelation, null]);
-      } else {
-        console.log("ClickedRelation-node: ", node);
-        onNodeClick(node);
-      }
+      const clickedRelation = relation.find(
+        (rel) =>
+          (rel.personId_1 === id1 && rel.personId_2 === id2) ||
+          (rel.personId_1 === id2 && rel.personId_2 === id1)
+      );
+      console.log("ClickedRelation: ", clickedRelation);
+      onEdgeClick([clickedRelation, null]);
+    } else if (node.type === "delete") {
+      console.log("DeletePeople: ", node.id.split("_")[0]);
+      deletePerson(node.id.split("_")[0]);
     } else {
       setAddRelationToExistsPerson(false);
       selectedPersonInTree(node.id.split("_")[0]);
       onNodeClick(null);
+    }
+  };
+
+  const deletePerson = async (nodeId: any) => {
+    const edgesToDelete = edges.filter(
+      (edge) =>
+        (edge.source === nodeId && !edge.target.includes("*")) ||
+        (edge.target === nodeId && !edge.source.includes("*"))
+    );
+
+    if (edgesToDelete.length === 1 || edges.length === 0) {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      try {
+        // Jeżeli są relacje do usunięcia, usuwamy je najpierw
+        if (edgesToDelete.length > 0) {
+          await Promise.all(
+            edgesToDelete.map((edge) =>
+              axios.delete(
+                `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${nodeId}/relations/${edge.id}`,
+                config
+              )
+            )
+          );
+        }
+
+        const response = await axios.get(
+          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${nodeId}`,
+          config
+        );
+
+        if (response.data.files && response.data.files.length > 0) {
+          await Promise.all(
+            response.data.files.map((file: any) => {
+              return axios.delete(
+                `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${file.personId}/files/${file.id}`,
+                config
+              );
+            })
+          );
+        }
+        await axios.delete(
+          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${nodeId}`,
+          config
+        );
+
+        const updatedEdges = edges.filter(
+          (edge) => !edgesToDelete.includes(edge)
+        );
+        setEdges(updatedEdges);
+
+        const updatedNodes = nodes.filter(
+          (node) =>
+            node.id !== nodeId &&
+            node.id !== `${nodeId}_placeholder` &&
+            node.id !== `${nodeId}_delete`
+        );
+        console.log(updatedNodes);
+        setNodes(updatedNodes);
+      } catch (error) {
+        setError("Błąd podczas usuwania osoby lub plików");
+        console.error("Error during deletion:", error);
+      }
+    } else {
+      alert(
+        `Nie można usunąć osoby, gdy zawiera więcej niż jedną relację lub zawiera relacje małżeńskie`
+      );
     }
   };
 
@@ -291,6 +393,8 @@ export default function Tree({
       onEdgeClick([clickedRelation, null]);
     } else if (edge.source.includes("*")) {
       const [id1, id2] = edge.source.split("*");
+      console.log("Cliknieto relacje: ", edge);
+      console.log("dostepne relacja:", relation);
       console.log(id1, id2);
       const clickedRelation1 = relation.find(
         (rel) =>
@@ -341,6 +445,7 @@ export default function Tree({
           ...prevNodes,
           newNode,
           addPlaceholderNode(newNode),
+          addDeleteNode(newNode),
         ];
         return updatedNodes;
       });
@@ -359,7 +464,23 @@ export default function Tree({
       style: {
         top: "152px",
         left: "0px",
-      }
+      },
+    };
+  };
+
+  const addDeleteNode = (parentNode: any) => {
+    console.log("AddedPaceholder for: ", parentNode);
+
+    return {
+      id: `${parentNode.id}_delete`,
+      type: "delete",
+      parentId: parentNode.id,
+      data: { label: "-" },
+      position: "fixed",
+      style: {
+        top: "152px",
+        left: "107px",
+      },
     };
   };
 
@@ -372,6 +493,7 @@ export default function Tree({
   };
 
   const onConnect = (params: any) => {
+    console.log("dostepne relacje: ", relation);
     console.log("Dodaje krawedza: ", params.target, " : ", params.source);
     const relationExists = relation.some(
       (relation) =>
@@ -616,7 +738,7 @@ export default function Tree({
         id: handleAddedPersonWithRelation[1].id,
         source: relatedNode.id,
         target: handleAddedPersonWithRelation[0].id,
-        animated: true,
+        animated: false,
       });
       console.log("Edges: ", edges);
     } else if (
@@ -640,7 +762,7 @@ export default function Tree({
         id: handleAddedPersonWithRelation[1].id,
         target: relatedNode.id,
         source: handleAddedPersonWithRelation[0].id,
-        animated: true,
+        animated: false,
       });
       console.log("Edges: ", edges);
     } else if (
@@ -675,17 +797,17 @@ export default function Tree({
       });
 
       addEdges({
-        id: relationId,
+        id: generateEdgeId(),
         source: relatedNode.id,
         target: `${handleAddedPersonWithRelation[1].personId_1}*${handleAddedPersonWithRelation[1].personId_2}`,
-        animated: true,
+        animated: false,
       });
 
       addEdges({
-        id: relationId,
+        id: generateEdgeId(),
         source: handleAddedPersonWithRelation[0].id,
         target: `${handleAddedPersonWithRelation[1].personId_1}*${handleAddedPersonWithRelation[1].personId_2}`,
-        animated: true,
+        animated: false,
       });
     }
   }
@@ -707,7 +829,7 @@ export default function Tree({
         } else {
           secondParent = targetParts[0];
         }
-        console.log("MAriage: ", sourceNodeMarriage);
+        console.log("Mariage: ", sourceNodeMarriage);
         console.log("Second PArent: ", secondParent);
         if (secondParent) {
           const edgeWithSecondParentExists = edges.find(
@@ -727,18 +849,18 @@ export default function Tree({
               id: handleAddedRelation.id,
               source: sourceNodeMarriage.target,
               target: handleAddedRelation.personId_2,
-              animated: true,
+              animated: false,
             });
           } else {
             addEdges({
               id: handleAddedRelation.id,
               source: handleAddedRelation.personId_1,
               target: handleAddedRelation.personId_2,
-              animated: true,
+              animated: false,
             });
           }
         } else {
-          alert(`Nie można dodać osoby z taką relacją`);
+          alert(`Nie można dodać takiej relacji`);
           const token = localStorage.getItem("token");
 
           if (!token) {
@@ -752,23 +874,21 @@ export default function Tree({
           };
           axios
             .delete(
-              `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[0].id}`,
-              config
-            )
-            .catch(() => {
-              setError("Error deleting peron");
-            });
-          axios
-            .delete(
               `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
               config
             )
+            .then(() => {
+              const updatedRelation = relation.filter(
+                (rel) => rel.id !== handleAddedPersonWithRelation[1].id
+              );
+              setRelation(updatedRelation);
+            })
             .catch(() => {
               setError("Error deleting peron");
             });
         }
       } else {
-        alert(`Nie można dodać osoby z taką relacją`);
+        alert(`Nie można dodać takiej relacji`);
 
         const token = localStorage.getItem("token");
 
@@ -781,19 +901,18 @@ export default function Tree({
             Authorization: `Bearer ${token}`,
           },
         };
-        axios
-          .delete(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[0].id}`,
-            config
-          )
-          .catch(() => {
-            setError("Error deleting peron");
-          });
+
         axios
           .delete(
             `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
             config
           )
+          .then(() => {
+            const updatedRelation = relation.filter(
+              (rel) => rel.id !== handleAddedPersonWithRelation[1].id
+            );
+            setRelation(updatedRelation);
+          })
           .catch(() => {
             setError("Error deleting peron");
           });
@@ -832,7 +951,7 @@ export default function Tree({
               id: handleAddedRelation.id,
               source: sourceNodeMarriage.target,
               target: handleAddedRelation.personId_1,
-              animated: true,
+              animated: false,
             });
           } else {
             const mariageExists = edges.find(
@@ -852,7 +971,7 @@ export default function Tree({
               id: handleAddedRelation.id,
               source: handleAddedRelation.personId_2,
               target: handleAddedRelation.personId_1,
-              animated: true,
+              animated: false,
             });
           }
         } else {
@@ -871,17 +990,15 @@ export default function Tree({
           };
           axios
             .delete(
-              `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[0].id}`,
-              config
-            )
-            .catch(() => {
-              setError("Error deleting peron");
-            });
-          axios
-            .delete(
               `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
               config
             )
+            .then(() => {
+              const updatedRelation = relation.filter(
+                (rel) => rel.id !== handleAddedPersonWithRelation[1].id
+              );
+              setRelation(updatedRelation);
+            })
             .catch(() => {
               setError("Error deleting peron");
             });
@@ -901,20 +1018,126 @@ export default function Tree({
         };
         axios
           .delete(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[0].id}`,
-            config
-          )
-          .catch(() => {
-            setError("Error deleting peron");
-          });
-        axios
-          .delete(
             `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
             config
           )
+          .then(() => {
+            const updatedRelation = relation.filter(
+              (rel) => rel.id !== handleAddedPersonWithRelation[1].id
+            );
+            setRelation(updatedRelation);
+          })
           .catch(() => {
             setError("Error deleting relation");
           });
+      }
+    } else {
+      console.log("Dodaje relacje spouse");
+
+      const sourceParentPerson1 = edges.filter(
+        (edge) => edge.target === handleAddedRelation.personId_1
+      );
+      const sourceParentPerson2 = edges.filter(
+        (edge) => edge.target === handleAddedRelation.personId_2
+      );
+
+      const hasCommonSource = sourceParentPerson1.some((item1) =>
+        sourceParentPerson2.some((item2) => item1.source === item2.source)
+      );
+      console.log(hasCommonSource);
+      if (hasCommonSource) {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+          return;
+        }
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        axios
+          .delete(
+            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`,
+            config
+          )
+          .then(() => {
+            const updatedRelation = relation.filter(
+              (rel) => rel.id !== handleAddedPersonWithRelation[1].id
+            );
+            setRelation(updatedRelation);
+          })
+          .catch(() => {
+            setError("Error deleting peron");
+          });
+        alert(
+          "Nie można dodać małżeństwa, gdy osoby mają takich samych rodziców"
+        );
+      } else {
+        const nodePerson1 = nodes.find(
+          (node) => node.id === handleAddedRelation.personId_1
+        );
+        const nodePerson2 = nodes.find(
+          (node) => node.id === handleAddedRelation.personId_2
+        );
+        if (nodePerson1 && nodePerson2) {
+          addNode({
+            id: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
+            type: "customSpouse",
+            data: {
+              name: `Małżenstwo`,
+              date: `${handleAddedRelation.startDate}`,
+            },
+            position: {
+              x: (nodePerson1.position.x + nodePerson2.position.x) / 2,
+              y: nodePerson2.position.y + 50,
+            },
+          });
+
+          addEdges({
+            id: generateEdgeId(),
+            source: handleAddedRelation.personId_1,
+            target: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
+            animated: false,
+          });
+
+          addEdges({
+            id: generateEdgeId(),
+            source: handleAddedRelation.personId_2,
+            target: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
+            animated: false,
+          });
+
+          const childPerson1 = edges.filter(
+            (edge) => edge.source === handleAddedRelation.personId_1
+          );
+
+          console.log("ChildPErson1: ", childPerson1);
+          const childPerson2 = edges.filter(
+            (edge) => edge.source === handleAddedRelation.personId_2
+          );
+          console.log("ChildPErson2: ", childPerson2);
+
+          const commonChild1 = childPerson1.filter((item1) =>
+            childPerson2.some((item2) => item1.target === item2.target)
+          );
+          const commonChild2 = childPerson2.filter((item1) =>
+            childPerson1.some((item2) => item1.target === item2.target)
+          );
+          const commonChild = [...commonChild1, ...commonChild2];
+          console.log("CommonChild: ", commonChild);
+          setEdges((prevEdges) =>
+            prevEdges.map((edge) =>
+              commonChild.some((child) => child.id === edge.id)
+                ? {
+                    ...edge,
+                    source: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
+                  }
+                : edge
+            )
+          );
+        }
       }
     }
   }
@@ -966,7 +1189,9 @@ export default function Tree({
           onConnect={onConnect}
           nodeTypes={nodeTypes}
           onNodeDrag={handleNodeDrag}
-          nodesDraggable={nodes.some((node) => node.type !== "placeholder")}
+          nodesDraggable={nodes.some(
+            (node) => node.type !== "placeholder" && node.type !== "delete"
+          )}
           fitView
         >
           <MiniMap />

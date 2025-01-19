@@ -24,6 +24,7 @@ export default function PersonDetail({
 }) {
   const [error, setError] = useState<string | null>(null);
   const { familyTreeId } = useParams<{ familyTreeId: string }>();
+  const [ProfileImage, setProfileImage] = useState<File[]>([]);
   const [images, setImages] = useState<File[]>([]);
   const [documents, setDocuments] = useState<File[]>([]);
   const [files, setFiles] = useState<File[]>([]);
@@ -98,6 +99,10 @@ export default function PersonDetail({
     const imageFiles = files.filter(
       (file) => getFileTypeName(parseInt(file.fileType)) === FileType.Image
     );
+    const profileImageFiles = files.filter(
+      (file) =>
+        getFileTypeName(parseInt(file.fileType)) === FileType.ProfileImage
+    );
     const documentsFiles = files.filter(
       (file) => getFileTypeName(parseInt(file.fileType)) === FileType.Document
     );
@@ -105,6 +110,8 @@ export default function PersonDetail({
       (file) => getFileTypeName(parseInt(file.fileType)) === FileType.Audio
     );
     setImages(imageFiles);
+    console.log("Zdjęcia: ", images);
+    setProfileImage(profileImageFiles);
     console.log("Zdjęcia: ", images);
     setDocuments(documentsFiles);
     console.log("Dokumenty: ", documents);
@@ -123,7 +130,11 @@ export default function PersonDetail({
         <div>
           {images ? (
             <div>
-              {images.length > 0 ? <ImageSlider images={images} /> : <p></p>}
+              {ProfileImage.length > 0 ? (
+                <ImageSlider images={ProfileImage} />
+              ) : (
+                <p></p>
+              )}
             </div>
           ) : (
             <p>Image not found or loading...</p>
@@ -223,7 +234,15 @@ export default function PersonDetail({
           />
         </div>
       </form>
-
+      <div>
+        {images ? (
+          <div>
+            {images.length > 0 ? <ImageSlider images={images} /> : <p></p>}
+          </div>
+        ) : (
+          <p>Image not found or loading...</p>
+        )}
+      </div>
       <div>
         <FileSlider files={documents} />
       </div>

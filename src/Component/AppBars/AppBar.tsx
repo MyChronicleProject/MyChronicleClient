@@ -19,7 +19,7 @@ export default function AppBar() {
         <Button as={NavLink} to="/settingsPage" className="username-button">
           {userName}
         </Button>
-        <div className="user-icon" />
+        <div className="user-icon">{userName.charAt(0).toUpperCase()}</div>
       </div>
     </div>
   );

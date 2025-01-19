@@ -21,7 +21,7 @@ export default function TreeViewEdition() {
   >(null);
   const [addedRelation, setAddedRelation] = useState<any>([null]);
   const [editedPerson, setEditedPerson] = useState<any>(null);
-  const [addedPersonTemp, setAddedPersonTemp] = useState<any>([null]);
+  const [addedPersonTemp, setAddedPersonTemp] = useState<any>(null);
   const [startView, setStartView] = useState<boolean>(false);
   const [visibleRelation, setVisibleRelation] = useState<boolean>(false);
   const [visiblePerson, setVisiblePerson] = useState<boolean>(false);
@@ -41,15 +41,12 @@ export default function TreeViewEdition() {
     setSelectedNode(node);
     setVisibleRelation(false);
     setVisibleRelation2(false);
-    if (true) {
-      //node) {
-      setVisiblePerson(true);
-    } else {
-      setVisiblePerson(false);
-    }
+
+    setVisiblePerson(true);
   };
 
   const handleAddRelation = (ids: any) => {
+    setSelectedEdge([]);
     setSelectedPersonInTree(ids);
     setVisibleRelation(true);
   };

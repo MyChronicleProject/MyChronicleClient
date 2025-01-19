@@ -36,11 +36,24 @@
 }
 
 .user-icon {
+  /* width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: #c6aa96; */
+
   width: 30px;
   height: 30px;
-  border-radius: 50%;
-  background-color: #c6aa96; /* Beige circle */
-  margin-left: 10px;
+  border-radius: 50%; /* Zapewnia kształt kółka */
+  background-color: #c6aa96; /* Beżowe tło */
+  margin-left: 10px; /* Odstęp od lewego elementu */
+  display: flex; /* Dla centrowania tekstu */
+  justify-content: center; /* Centrowanie poziome */
+  align-items: center; /* Centrowanie pionowe */
+  color: #fff; /* Biały kolor tekstu */
+  text-decoration: none; /* Usunięcie podkreślenia */
+  border: none; /* Usunięcie ramki */
+  cursor: pointer; /* Wskaźnik dla przycisku */
+  font-size: 14px; /* Rozmiar tekstu */
 }
 .contact-text {
   color: #8c736b; /* Sets the text color to light green */

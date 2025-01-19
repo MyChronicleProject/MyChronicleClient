@@ -16,6 +16,7 @@ import { File, getFileTypeName } from "../../Models/File";
 import {
   FileDTO,
   FileExtension,
+  getFileExtensionName,
   FileType,
   getFileExtensionNumber,
   getFileTypeNumber,
@@ -34,6 +35,7 @@ export default function AddPersonForm({
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [files, setFiles] = useState<File[]>([]);
+  const [profileFile, setProfileFile] = useState<File | null>(null);
   const [theSameError, setTheSameError] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [formName, setFormName] = useState<string>("");
@@ -148,11 +150,21 @@ export default function AddPersonForm({
           const transformedFiles = personData.files.map((file) => ({
             ...file,
             fileType: getFileTypeName(parseInt(file.fileType)) as FileType,
-            fileExtension: getFileTypeName(
+            fileExtension: getFileExtensionName(
               parseInt(file.fileExtension)
             ) as FileExtension,
           }));
-          setFiles(transformedFiles);
+
+          const fileToSet = transformedFiles.filter(
+            (file) => file.fileType !== FileType.ProfileImage
+          );
+
+          const profileFileToSet = transformedFiles.find(
+            (file) => file.fileType === FileType.ProfileImage
+          );
+
+          setFiles(fileToSet);
+          setProfileFile(profileFileToSet || null);
         } catch (err) {
           setError("Failed to fetch person data");
         } finally {
@@ -406,10 +418,50 @@ export default function AddPersonForm({
                 ifPhotoUpdated: true,
               };
             }
-            setFiles((prevFiles) => [...prevFiles, newFile]);
-            alert(
-              `File ${profilePictureToSend.name} uploaded and added to the list successfully!`
-            );
+            if (newFile.fileType !== FileType.ProfileImage) {
+              setFiles((prevFiles) => [...prevFiles, newFile]);
+            }
+            alert(`File ${profilePictureToSend.name} uploaded successfully!`);
+            const profileFileLocal: File = {
+              ...profilePictureToSend,
+              id: responseFoto.data,
+              person: [],
+            };
+
+            try {
+              if (profileFile) {
+                console.log("Update picture: ", profileFile);
+                const response = await axios.put(
+                  `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files/${profileFile.id}`,
+                  {
+                    ...profileFile,
+                    name: profileFile.name,
+                    content: profileFile.content,
+                    fileExtension: getFileExtensionNumber(
+                      profileFile.fileExtension
+                    ),
+                    personId: selectedNode,
+                    fileType: getFileTypeNumber(FileType.Image),
+                  },
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      ...config.headers,
+                    },
+                  }
+                );
+
+                console.log("File updated successfully:", response.data);
+              }
+            } catch (error) {
+              console.error("Error updating file:", error);
+              throw error;
+            }
+            if (profileFile) {
+              setFiles((prevFiles) => [...prevFiles, profileFile]);
+            }
+
+            setProfileFile(profileFileLocal);
           } else {
             alert(
               `Failed to upload file ${profilePictureToSend.name}. Server responded with status ${responseFoto.status}`
@@ -541,7 +593,7 @@ export default function AddPersonForm({
         if (reader.result) {
           const base64String = (reader.result as string).split(",")[1];
           const fileExtension = getFileExtension(file);
-          const fileType = getFileType(fileExtension);
+          const fileType = FileType.ProfileImage;
 
           setProfilePictureToSend({
             content: base64String,
@@ -677,10 +729,10 @@ export default function AddPersonForm({
             fileExtension: fileToSend.fileExtension as FileExtension,
             person: [],
           };
-          setFiles((prevFiles) => [...prevFiles, newFile]);
-          alert(
-            `File ${fileToSend.name} uploaded and added to the list successfully!`
-          );
+          if (newFile.fileType !== FileType.ProfileImage) {
+            setFiles((prevFiles) => [...prevFiles, newFile]);
+          }
+          alert(`File ${fileToSend.name} uploaded successfully!`);
         } else {
           alert(
             `Failed to upload file ${fileToSend.name}. Server responded with status ${responseFoto.status}`
@@ -719,9 +771,7 @@ export default function AddPersonForm({
             value={formData.name}
             onChange={handleChange}
           />
-          {formErrors.name && (
-            <div className="error">{formErrors.name}</div>
-          )}
+          {formErrors.name && <div className="error">{formErrors.name}</div>}
         </div>
         <div className="inputForm">
           <label>Drugie imie:</label>
@@ -827,9 +877,7 @@ export default function AddPersonForm({
             cols={35}
             className="note-textarea"
           />
-          {formErrors.note && (
-            <div className="error">{formErrors.note}</div>
-          )}
+          {formErrors.note && <div className="error">{formErrors.note}</div>}
         </div>
         <button type="submit" className="buttonMenu2">
           {" "}
@@ -850,7 +898,7 @@ export default function AddPersonForm({
             Dodaj
           </button>
           {files.length === 0 ? (
-            <p>No files uploaded yet.</p>
+            <p></p>
           ) : (
             <ul className="FileForm-list">
               {files.map((file, index) => (
@@ -899,7 +947,6 @@ export default function AddPersonForm({
           )}
         </div>
       )}
-
     </div>
   );
 }

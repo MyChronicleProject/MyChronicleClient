@@ -4,10 +4,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../Styles/settingsPageStyle.css";
 import AppBar from "./AppBars/AppBar";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SettingsPage() {
   const [changePassForm, setChangePassForm] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string>("NotLoggedIn");
   const [formData, setFormData] = useState({
     password: "",
     newPassword: "",
@@ -40,6 +41,13 @@ export default function SettingsPage() {
   const handleExit = () => {
     setChangePassForm(false);
   };
+
+  useEffect(() => {
+    const userNameStorage = localStorage.getItem("userName");
+    if (userNameStorage) {
+      setUserName(userNameStorage);
+    }
+  }, []);
 
   const handleChangePassForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -160,14 +168,15 @@ export default function SettingsPage() {
       <AppBar />
       <div className="App3">
         <div className="setting-setup">
-          <h1 className="setting-item">USERNAME</h1>
+          <h1 className="setting-item">{userName.toUpperCase()}</h1>
           <p className="setting-item">
             <Button
               onClick={() => {
                 setChangePassForm(true);
                 clearForm();
               }}
-              className="setting-header"            >
+              className="setting-header"
+            >
               ZMIEŃ HASŁO
             </Button>
           </p>
