@@ -1,5 +1,4 @@
 import AddPersonForm from "./Forms/AddPersonForm";
-import Tree from "./Tree";
 import AppBar from "./AppBars/AppBar";
 import BottomBar from "./AppBars/BottomBar";
 import React, { useEffect, useState } from "react";

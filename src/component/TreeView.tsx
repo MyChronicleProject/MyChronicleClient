@@ -1,4 +1,3 @@
-import Tree from "./Tree";
 import AppBar from "./AppBars/AppBar";
 import BottomBar from "./AppBars/BottomBar";
 import ReactFlow, { MiniMap, Controls, Background, addEdge } from "reactflow";

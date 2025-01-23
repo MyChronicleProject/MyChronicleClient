@@ -10,7 +10,6 @@ import AddRelationForm from "../Component/Forms/AddRelationForm";
 import OpenTree from "../Component/OpenTree";
 import TreeView from "../Component/TreeView";
 import TreeViewEdition from "../Component/TreeViewEdition";
-import Tree from "../Component/Tree";
 import RelationList from "../Component/RelationList_forTest";
 
 export const routes: RouteObject[] = [
@@ -36,7 +35,7 @@ export const routes: RouteObject[] = [
         element: <TreeViewEdition />,
       },
       { path: "*", element: <Navigate replace to="/not-found" /> },
-      //{ path: "addRelationForm", element: <AddRelationForm /> },
+
       {
         path: "relationList/:familyTreeId/:personId",
         element: <RelationList />,
