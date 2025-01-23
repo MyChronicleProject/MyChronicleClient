@@ -19,6 +19,7 @@ import "../Styles/buttonMenu.css";
 import { Button } from "semantic-ui-react";
 import CustomNode from "./CustomNode";
 import CustomNodeSpouse from "./CustomNodeSpouse";
+import { FamilyTree } from "../Models/FamilyTree";
 const generateEdgeId = () => crypto.randomUUID();
 
 const PlaceholderNode = ({ data }: any) => {
@@ -58,7 +59,7 @@ const DeleteNode = ({ data }: any) => {
         borderRadius: "8px",
       }}
     >
-      {data.label}
+      {data.label || "No Label"}
     </div>
   );
 };
@@ -109,11 +110,13 @@ export default function Tree({
   const pdfRef = useRef<HTMLDivElement | null>(null);
   const [updateKey, setUpdateKey] = useState(0);
   const { state } = useLocation();
+  const [onlyMoveNodes, setOnlyMoveNodes] = useState<boolean>(true);
 
   const [addRelationToExistPerson, setAddRelationToExistsPerson] =
     useState(false);
   let relationId = 0;
   const handleTreeData = state?.treeData;
+  const [handleTreeName, setHandleTreeName] = useState<string | null>("");
 
   useEffect(() => {
     setUpdateKey((prev) => prev + 1);
@@ -147,6 +150,73 @@ export default function Tree({
     });
   };
 
+  const prepareDataForBase64 = (data: any) => {
+    return data.map((node: any) => ({
+      ...node,
+      data: {
+        ...node.data,
+        label:
+          typeof node.data.label === "object"
+            ? node.data.label.props.children[0]
+            : node.data.label,
+      },
+    }));
+  };
+
+  const saveNewTreeDataToDataBase = () => {
+    if (handleTreeName !== "") {
+      const sanitizedNodes = nodes.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          label:
+            typeof node.data.label === "string"
+              ? node.data.label
+              : convertLabelToText(node.data.label),
+        },
+      }));
+
+      const sanitizedEdges = edges.map((edge) => ({
+        ...edge,
+      }));
+
+      const treeData = {
+        familyTreeId,
+        nodes: sanitizedNodes,
+        edges: sanitizedEdges,
+      };
+      const treeDataString = JSON.stringify(treeData);
+
+      const treeDataBase64 = btoa(unescape(encodeURIComponent(treeDataString)));
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      axios
+        .put(
+          `https://localhost:7033/api/FamilyTrees/${familyTreeId}`,
+          {
+            id: familyTreeId,
+            layout: treeDataBase64,
+            name: handleTreeName,
+          },
+          config
+        )
+        .then((response) => {})
+        .catch(() => {
+          setError("Error fetching trees");
+        });
+    }
+  };
+
   const saveTreeToFile = () => {
     const sanitizedNodes = nodes.map((node) => ({
       ...node,
@@ -172,6 +242,7 @@ export default function Tree({
     const blob = new Blob([JSON.stringify(treeData, null, 2)], {
       type: "application/json",
     });
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -208,19 +279,51 @@ export default function Tree({
   };
 
   useEffect(() => {
-    if (treeData) {
-      const { nodes, edges } = treeData;
+    if (handleTreeData) {
+      setTreeData(handleTreeData);
+    } else {
+      const token = localStorage.getItem("token");
 
-      setNodes(nodes);
-      setEdges(edges);
+      if (!token) {
+        console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      axios
+        .get<FamilyTree>(
+          `https://localhost:7033/api/FamilyTrees/${familyTreeId}`,
+          config
+        )
+        .then((response) => {
+          onStartView(true);
+          console.log("TreeName:       ", response.data.name);
+          setHandleTreeName(response.data.name);
+          const decodedLayout = JSON.parse(
+            decodeURIComponent(escape(window.atob(response.data.layout)))
+          );
+          setTreeData(decodedLayout);
+        })
+        .catch(() => {
+          setError("Error fetching trees");
+        });
     }
-  }, [treeData]);
+  }, [handleTreeData]);
 
   useEffect(() => {
-    console.log("TreeData: ", handleTreeData);
-    if (handleTreeData) {
-      if (handleTreeData.nodes && handleTreeData.edges) {
-        const updatedNodes = handleTreeData.nodes.map((node: any) => ({
+    if (treeData) {
+      if (treeData.nodes && treeData.edges) {
+        if (treeData.nodes.length > 0) {
+          onStartView(false);
+        } else {
+          onStartView(true);
+        }
+
+        const updatedNodes = treeData.nodes.map((node: any) => ({
           ...node,
           data: {
             ...node.data,
@@ -230,17 +333,15 @@ export default function Tree({
                 : node.data.label,
           },
         }));
-
         setNodes(updatedNodes);
-        setEdges(handleTreeData.edges);
-
-        console.log("Wczytano węzły:", updatedNodes);
-        console.log("Wczytano krawędzie:", handleTreeData.edges);
+        setEdges(treeData.edges);
+        setTreeExists(true);
       } else {
+        onStartView(true);
         alert("Plik nie zawiera wymaganych danych: nodes i edges.");
       }
     }
-  }, [handleTreeData]);
+  }, [treeData]);
 
   const convertTextToLabel = (text: string): JSX.Element => {
     const parts = text.split("\\n").map((part, index) => {
@@ -266,6 +367,7 @@ export default function Tree({
   };
 
   const handleNodeDrag = (event: any, node: any) => {
+    setOnlyMoveNodes(true);
     if (node.type !== "placeholder" && node.type !== "delete") {
       setNodes((prevNodes) =>
         prevNodes.map((n) =>
@@ -276,9 +378,7 @@ export default function Tree({
   };
 
   const handleNodeClick = (event: React.MouseEvent, node: any) => {
-    console.log("Kliknięto węzeł o ID:", node.id);
     if (node.type === "custom") {
-      console.log("ClickedRelation-node: ", node);
       onNodeClick(node);
     } else if (node.type === "customSpouse") {
       onNodeClick(null);
@@ -289,10 +389,8 @@ export default function Tree({
           (rel.personId_1 === id1 && rel.personId_2 === id2) ||
           (rel.personId_1 === id2 && rel.personId_2 === id1)
       );
-      console.log("ClickedRelation: ", clickedRelation);
       onEdgeClick([clickedRelation, null]);
     } else if (node.type === "delete") {
-      console.log("DeletePeople: ", node.id.split("_")[0]);
       deletePerson(node.id.split("_")[0]);
     } else {
       setAddRelationToExistsPerson(false);
@@ -323,7 +421,6 @@ export default function Tree({
       };
 
       try {
-        // Jeżeli są relacje do usunięcia, usuwamy je najpierw
         if (edgesToDelete.length > 0) {
           await Promise.all(
             edgesToDelete.map((edge) =>
@@ -366,7 +463,6 @@ export default function Tree({
             node.id !== `${nodeId}_placeholder` &&
             node.id !== `${nodeId}_delete`
         );
-        console.log(updatedNodes);
         setNodes(updatedNodes);
       } catch (error) {
         setError("Błąd podczas usuwania osoby lub plików");
@@ -380,7 +476,6 @@ export default function Tree({
   };
 
   const handleEdgeClick = (event: React.MouseEvent, edge: any) => {
-    console.log("Kliknięto relację o ID:", edge);
     if (edge.target.includes("*")) {
       const [id1, id2] = edge.target.split("*");
 
@@ -389,13 +484,9 @@ export default function Tree({
           (rel.personId_1 === id1 && rel.personId_2 === id2) ||
           (rel.personId_1 === id2 && rel.personId_2 === id1)
       );
-      console.log(clickedRelation);
       onEdgeClick([clickedRelation, null]);
     } else if (edge.source.includes("*")) {
       const [id1, id2] = edge.source.split("*");
-      console.log("Cliknieto relacje: ", edge);
-      console.log("dostepne relacja:", relation);
-      console.log(id1, id2);
       const clickedRelation1 = relation.find(
         (rel) =>
           (rel.personId_1 === id1 && rel.personId_2 === edge.target) ||
@@ -406,7 +497,6 @@ export default function Tree({
           (rel.personId_1 === id2 && rel.personId_2 === edge.target) ||
           (rel.personId_1 === edge.target && rel.personId_2 === id2)
       );
-      console.log(clickedRelation1, clickedRelation2);
       onEdgeClick([clickedRelation1, clickedRelation2]);
     } else {
       const clickedRelation = relation.find(
@@ -433,7 +523,6 @@ export default function Tree({
   };
 
   const addNode = (newNode: any) => {
-    console.log("NOdes:", nodes);
     if (newNode.id.includes("*")) {
       setNodes((prevNodes) => {
         const updatedNodes = [...prevNodes, newNode];
@@ -453,8 +542,6 @@ export default function Tree({
   };
 
   const addPlaceholderNode = (parentNode: any) => {
-    console.log("AddedPaceholder for: ", parentNode);
-
     return {
       id: `${parentNode.id}_placeholder`,
       type: "placeholder",
@@ -469,8 +556,6 @@ export default function Tree({
   };
 
   const addDeleteNode = (parentNode: any) => {
-    console.log("AddedPaceholder for: ", parentNode);
-
     return {
       id: `${parentNode.id}_delete`,
       type: "delete",
@@ -493,8 +578,6 @@ export default function Tree({
   };
 
   const onConnect = (params: any) => {
-    console.log("dostepne relacje: ", relation);
-    console.log("Dodaje krawedza: ", params.target, " : ", params.source);
     const relationExists = relation.some(
       (relation) =>
         (relation.personId_1 === params.target &&
@@ -503,7 +586,6 @@ export default function Tree({
           relation.personId_1 === params.source)
     );
     if (relationExists) {
-      console.log("Relacja istnieje");
     } else {
       if (!params.target.includes("*") && !params.source.includes("*")) {
         setAddRelationToExistsPerson(true);
@@ -534,10 +616,8 @@ export default function Tree({
         );
 
         if (handleTreeData) {
-          console.log("Są dane");
           setTreeExists(true);
         } else {
-          console.log("Nie ma danych");
           setTreeExists(false);
         }
 
@@ -552,9 +632,6 @@ export default function Tree({
           `https://localhost:7033/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`,
           config
         );
-        console.log("Pobrano relacje");
-
-        console.log("downoladrelation: ", downloadRelation);
         setRelation(relationResponse.data);
       } catch (error) {
         setError("Error fetching data");
@@ -567,18 +644,7 @@ export default function Tree({
   }, [familyTreeId]);
 
   useEffect(() => {
-    if (treeExists) {
-      onStartView(false);
-    } else {
-      onStartView(true);
-    }
-  }, [treeExists]);
-
-  useEffect(() => {
     if (handleEditedPerson) {
-      console.log("Before update: ", nodes);
-      console.log("EditedPerson: ", handleEditedPerson);
-
       const nodeToEdit = nodes.find((per) => per.id === handleEditedPerson.id);
 
       if (nodeToEdit) {
@@ -596,7 +662,6 @@ export default function Tree({
             }),
           },
         };
-        console.log("UpdateNode: ", updatedNode);
 
         setNodes((prevNodes) =>
           prevNodes.map((node) =>
@@ -608,7 +673,6 @@ export default function Tree({
   }, [handleEditedPerson]);
 
   useEffect(() => {
-    console.log("In useEffect");
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -622,7 +686,6 @@ export default function Tree({
       },
     };
     if (handlePersonAdded && handlePersonAdded.id) {
-      console.log("W if");
       const fetchPerson = async () => {
         try {
           const response = await axios.get<Person>(
@@ -636,10 +699,6 @@ export default function Tree({
         } finally {
         }
       };
-
-      console.log("Ilosc osob: ");
-
-      console.log("Dodano osobę: ", handlePersonAdded);
       addNode({
         id: handlePersonAdded.id,
         type: "custom",
@@ -654,30 +713,20 @@ export default function Tree({
 
       fetchPerson();
     }
+    onStartView(false);
   }, [handlePersonAdded]);
 
   useEffect(() => {
-    console.log("Nodes: ", nodes);
+    if (!onlyMoveNodes) saveNewTreeDataToDataBase();
+    setOnlyMoveNodes(false);
   }, [nodes]);
 
   useEffect(() => {
-    console.log("Edges:: ", edges);
+    saveNewTreeDataToDataBase();
   }, [edges]);
 
   useEffect(() => {
-    console.log("Relation:: ", relation);
-  }, [relation]);
-
-  useEffect(() => {
-    console.log("Dodawanie osoby z relacja: ");
-    console.log(
-      "Dodawanie osoby z relacja",
-      handleAddedPersonWithRelation[0],
-      handleAddedPersonWithRelation[1]
-    );
-
     if (handleAddedPersonWithRelation[1]) {
-      console.log("W if");
       const fetchRelation = async () => {
         try {
           const token = localStorage.getItem("token");
@@ -740,7 +789,6 @@ export default function Tree({
         target: handleAddedPersonWithRelation[0].id,
         animated: false,
       });
-      console.log("Edges: ", edges);
     } else if (
       handleAddedPersonWithRelation[1].relationType === RelationType.Parent
     ) {
@@ -764,7 +812,6 @@ export default function Tree({
         source: handleAddedPersonWithRelation[0].id,
         animated: false,
       });
-      console.log("Edges: ", edges);
     } else if (
       handleAddedPersonWithRelation[1].relationType === RelationType.Spouse
     ) {
@@ -813,54 +860,78 @@ export default function Tree({
   }
 
   function addRelationToExistPersonFunction() {
-    console.log("Probuje dodac relacje:  ", handleAddedRelation);
-
-    if (handleAddedRelation.relationType === "Child") {
-      const sourceNodeMarriage = edges.find(
-        (edge) =>
-          edge.source === handleAddedRelation.personId_1 &&
-          edge.target.includes("*")
-      );
-      if (sourceNodeMarriage) {
-        const targetParts = sourceNodeMarriage.target.split("*");
-        let secondParent: string | undefined;
-        if (targetParts[0] === handleAddedRelation.personId_1) {
-          secondParent = targetParts[1];
-        } else {
-          secondParent = targetParts[0];
-        }
-        console.log("Mariage: ", sourceNodeMarriage);
-        console.log("Second PArent: ", secondParent);
-        if (secondParent) {
-          const edgeWithSecondParentExists = edges.find(
-            (edge) =>
-              edge.source === secondParent &&
-              edge.target === handleAddedRelation.personId_2
-          );
-
-          if (edgeWithSecondParentExists) {
-            console.log("Dodaje edge ");
-            const updatedEdges = edges.filter(
-              (edge) => edge.id !== edgeWithSecondParentExists.id
-            );
-            setEdges(updatedEdges);
-
-            addEdges({
-              id: handleAddedRelation.id,
-              source: sourceNodeMarriage.target,
-              target: handleAddedRelation.personId_2,
-              animated: false,
-            });
+    if (handleAddedRelation) {
+      if (handleAddedRelation.relationType === "Child") {
+        const sourceNodeMarriage = edges.find(
+          (edge) =>
+            edge.source === handleAddedRelation.personId_1 &&
+            edge.target.includes("*")
+        );
+        if (sourceNodeMarriage) {
+          const targetParts = sourceNodeMarriage.target.split("*");
+          let secondParent: string | undefined;
+          if (targetParts[0] === handleAddedRelation.personId_1) {
+            secondParent = targetParts[1];
           } else {
-            addEdges({
-              id: handleAddedRelation.id,
-              source: handleAddedRelation.personId_1,
-              target: handleAddedRelation.personId_2,
-              animated: false,
-            });
+            secondParent = targetParts[0];
+          }
+          if (secondParent) {
+            const edgeWithSecondParentExists = edges.find(
+              (edge) =>
+                edge.source === secondParent &&
+                edge.target === handleAddedRelation.personId_2
+            );
+
+            if (edgeWithSecondParentExists) {
+              const updatedEdges = edges.filter(
+                (edge) => edge.id !== edgeWithSecondParentExists.id
+              );
+              setEdges(updatedEdges);
+              addEdges({
+                id: handleAddedRelation.id,
+                source: sourceNodeMarriage.target,
+                target: handleAddedRelation.personId_2,
+                animated: false,
+              });
+            } else {
+              addEdges({
+                id: handleAddedRelation.id,
+                source: handleAddedRelation.personId_1,
+                target: handleAddedRelation.personId_2,
+                animated: false,
+              });
+            }
+          } else {
+            alert(`Nie można dodać takiej relacji`);
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+              console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+              return;
+            }
+            const config = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            };
+            axios
+              .delete(
+                `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+                config
+              )
+              .then(() => {
+                const updatedRelation = relation.filter(
+                  (rel) => rel.id !== handleAddedPersonWithRelation[1].id
+                );
+                setRelation(updatedRelation);
+              })
+              .catch(() => {
+                setError("Error deleting peron");
+              });
           }
         } else {
           alert(`Nie można dodać takiej relacji`);
+
           const token = localStorage.getItem("token");
 
           if (!token) {
@@ -872,6 +943,7 @@ export default function Tree({
               Authorization: `Bearer ${token}`,
             },
           };
+
           axios
             .delete(
               `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
@@ -887,96 +959,90 @@ export default function Tree({
               setError("Error deleting peron");
             });
         }
-      } else {
-        alert(`Nie można dodać takiej relacji`);
-
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
-          return;
-        }
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
-        axios
-          .delete(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
-            config
-          )
-          .then(() => {
-            const updatedRelation = relation.filter(
-              (rel) => rel.id !== handleAddedPersonWithRelation[1].id
-            );
-            setRelation(updatedRelation);
-          })
-          .catch(() => {
-            setError("Error deleting peron");
-          });
-      }
-    } else if (handleAddedRelation.relationType === "Parent") {
-      const sourceNodeMarriage = edges.find(
-        (edge) =>
-          edge.source === handleAddedRelation.personId_2 &&
-          edge.target.includes("*")
-      );
-      if (sourceNodeMarriage) {
-        const targetParts = sourceNodeMarriage.target.split("*");
-        let secondParent: string | undefined;
-        if (targetParts[0] === handleAddedRelation.personId_2) {
-          secondParent = targetParts[1];
-        } else {
-          secondParent = targetParts[0];
-        }
-        console.log("MAriage: ", sourceNodeMarriage);
-        console.log("Second PArent: ", secondParent);
-        if (secondParent) {
-          const edgeWithSecondParentExists = edges.find(
-            (edge) =>
-              edge.source === secondParent &&
-              edge.target === handleAddedRelation.personId_1
-          );
-
-          if (edgeWithSecondParentExists) {
-            console.log("Dodaje edge ");
-            const updatedEdges = edges.filter(
-              (edge) => edge.id !== edgeWithSecondParentExists.id
-            );
-            setEdges(updatedEdges);
-
-            addEdges({
-              id: handleAddedRelation.id,
-              source: sourceNodeMarriage.target,
-              target: handleAddedRelation.personId_1,
-              animated: false,
-            });
+      } else if (handleAddedRelation.relationType === "Parent") {
+        const sourceNodeMarriage = edges.find(
+          (edge) =>
+            edge.source === handleAddedRelation.personId_2 &&
+            edge.target.includes("*")
+        );
+        if (sourceNodeMarriage) {
+          const targetParts = sourceNodeMarriage.target.split("*");
+          let secondParent: string | undefined;
+          if (targetParts[0] === handleAddedRelation.personId_2) {
+            secondParent = targetParts[1];
           } else {
-            const mariageExists = edges.find(
+            secondParent = targetParts[0];
+          }
+          if (secondParent) {
+            const edgeWithSecondParentExists = edges.find(
               (edge) =>
-                edge.source === sourceNodeMarriage.target &&
+                edge.source === secondParent &&
                 edge.target === handleAddedRelation.personId_1
             );
 
-            if (mariageExists) {
+            if (edgeWithSecondParentExists) {
               const updatedEdges = edges.filter(
-                (edge) => edge.id !== mariageExists.id
+                (edge) => edge.id !== edgeWithSecondParentExists.id
               );
               setEdges(updatedEdges);
-            }
+              addEdges({
+                id: handleAddedRelation.id,
+                source: sourceNodeMarriage.target,
+                target: handleAddedRelation.personId_1,
+                animated: false,
+              });
+            } else {
+              const mariageExists = edges.find(
+                (edge) =>
+                  edge.source === sourceNodeMarriage.target &&
+                  edge.target === handleAddedRelation.personId_1
+              );
 
-            addEdges({
-              id: handleAddedRelation.id,
-              source: handleAddedRelation.personId_2,
-              target: handleAddedRelation.personId_1,
-              animated: false,
-            });
+              if (mariageExists) {
+                const updatedEdges = edges.filter(
+                  (edge) => edge.id !== mariageExists.id
+                );
+                setEdges(updatedEdges);
+              }
+
+              addEdges({
+                id: handleAddedRelation.id,
+                source: handleAddedRelation.personId_2,
+                target: handleAddedRelation.personId_1,
+                animated: false,
+              });
+            }
+          } else {
+            alert(`Nie można dodać osoby z taką relacją`);
+
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+              console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+              return;
+            }
+            const config = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            };
+            axios
+              .delete(
+                `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+                config
+              )
+              .then(() => {
+                const updatedRelation = relation.filter(
+                  (rel) => rel.id !== handleAddedPersonWithRelation[1].id
+                );
+                setRelation(updatedRelation);
+              })
+              .catch(() => {
+                setError("Error deleting peron");
+              });
           }
         } else {
           alert(`Nie można dodać osoby z taką relacją`);
-
           const token = localStorage.getItem("token");
 
           if (!token) {
@@ -1000,153 +1066,117 @@ export default function Tree({
               setRelation(updatedRelation);
             })
             .catch(() => {
-              setError("Error deleting peron");
+              setError("Error deleting relation");
             });
         }
       } else {
-        alert(`Nie można dodać osoby z taką relacją`);
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
-          return;
-        }
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        axios
-          .delete(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
-            config
-          )
-          .then(() => {
-            const updatedRelation = relation.filter(
-              (rel) => rel.id !== handleAddedPersonWithRelation[1].id
-            );
-            setRelation(updatedRelation);
-          })
-          .catch(() => {
-            setError("Error deleting relation");
-          });
-      }
-    } else {
-      console.log("Dodaje relacje spouse");
-
-      const sourceParentPerson1 = edges.filter(
-        (edge) => edge.target === handleAddedRelation.personId_1
-      );
-      const sourceParentPerson2 = edges.filter(
-        (edge) => edge.target === handleAddedRelation.personId_2
-      );
-
-      const hasCommonSource = sourceParentPerson1.some((item1) =>
-        sourceParentPerson2.some((item2) => item1.source === item2.source)
-      );
-      console.log(hasCommonSource);
-      if (hasCommonSource) {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.error("Brak tokena. Użytkownik nie jest zalogowany.");
-          return;
-        }
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        axios
-          .delete(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`,
-            config
-          )
-          .then(() => {
-            const updatedRelation = relation.filter(
-              (rel) => rel.id !== handleAddedPersonWithRelation[1].id
-            );
-            setRelation(updatedRelation);
-          })
-          .catch(() => {
-            setError("Error deleting peron");
-          });
-        alert(
-          "Nie można dodać małżeństwa, gdy osoby mają takich samych rodziców"
+        const sourceParentPerson1 = edges.filter(
+          (edge) => edge.target === handleAddedRelation.personId_1
         );
-      } else {
-        const nodePerson1 = nodes.find(
-          (node) => node.id === handleAddedRelation.personId_1
+        const sourceParentPerson2 = edges.filter(
+          (edge) => edge.target === handleAddedRelation.personId_2
         );
-        const nodePerson2 = nodes.find(
-          (node) => node.id === handleAddedRelation.personId_2
+
+        const hasCommonSource = sourceParentPerson1.some((item1) =>
+          sourceParentPerson2.some((item2) => item1.source === item2.source)
         );
-        if (nodePerson1 && nodePerson2) {
-          addNode({
-            id: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
-            type: "customSpouse",
-            data: {
-              name: `Małżenstwo`,
-              date: `${handleAddedRelation.startDate}`,
+        if (hasCommonSource) {
+          const token = localStorage.getItem("token");
+
+          if (!token) {
+            console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+            return;
+          }
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
-            position: {
-              x: (nodePerson1.position.x + nodePerson2.position.x) / 2,
-              y: nodePerson2.position.y + 50,
-            },
-          });
-
-          addEdges({
-            id: generateEdgeId(),
-            source: handleAddedRelation.personId_1,
-            target: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
-            animated: false,
-          });
-
-          addEdges({
-            id: generateEdgeId(),
-            source: handleAddedRelation.personId_2,
-            target: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
-            animated: false,
-          });
-
-          const childPerson1 = edges.filter(
-            (edge) => edge.source === handleAddedRelation.personId_1
-          );
-
-          console.log("ChildPErson1: ", childPerson1);
-          const childPerson2 = edges.filter(
-            (edge) => edge.source === handleAddedRelation.personId_2
-          );
-          console.log("ChildPErson2: ", childPerson2);
-
-          const commonChild1 = childPerson1.filter((item1) =>
-            childPerson2.some((item2) => item1.target === item2.target)
-          );
-          const commonChild2 = childPerson2.filter((item1) =>
-            childPerson1.some((item2) => item1.target === item2.target)
-          );
-          const commonChild = [...commonChild1, ...commonChild2];
-          console.log("CommonChild: ", commonChild);
-          setEdges((prevEdges) =>
-            prevEdges.map((edge) =>
-              commonChild.some((child) => child.id === edge.id)
-                ? {
-                    ...edge,
-                    source: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
-                  }
-                : edge
+          };
+          axios
+            .delete(
+              `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`,
+              config
             )
+            .then(() => {
+              const updatedRelation = relation.filter(
+                (rel) => rel.id !== handleAddedPersonWithRelation[1].id
+              );
+              setRelation(updatedRelation);
+            })
+            .catch(() => {
+              setError("Error deleting peron");
+            });
+          alert(
+            "Nie można dodać małżeństwa, gdy osoby mają takich samych rodziców"
           );
+        } else {
+          const nodePerson1 = nodes.find(
+            (node) => node.id === handleAddedRelation.personId_1
+          );
+          const nodePerson2 = nodes.find(
+            (node) => node.id === handleAddedRelation.personId_2
+          );
+          if (nodePerson1 && nodePerson2) {
+            addNode({
+              id: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
+              type: "customSpouse",
+              data: {
+                name: `Małżenstwo`,
+                date: `${handleAddedRelation.startDate}`,
+              },
+              position: {
+                x: (nodePerson1.position.x + nodePerson2.position.x) / 2,
+                y: nodePerson2.position.y + 50,
+              },
+            });
+
+            addEdges({
+              id: generateEdgeId(),
+              source: handleAddedRelation.personId_1,
+              target: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
+              animated: false,
+            });
+
+            addEdges({
+              id: generateEdgeId(),
+              source: handleAddedRelation.personId_2,
+              target: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
+              animated: false,
+            });
+
+            const childPerson1 = edges.filter(
+              (edge) => edge.source === handleAddedRelation.personId_1
+            );
+
+            const childPerson2 = edges.filter(
+              (edge) => edge.source === handleAddedRelation.personId_2
+            );
+
+            const commonChild1 = childPerson1.filter((item1) =>
+              childPerson2.some((item2) => item1.target === item2.target)
+            );
+            const commonChild2 = childPerson2.filter((item1) =>
+              childPerson1.some((item2) => item1.target === item2.target)
+            );
+            const commonChild = [...commonChild1, ...commonChild2];
+            setEdges((prevEdges) =>
+              prevEdges.map((edge) =>
+                commonChild.some((child) => child.id === edge.id)
+                  ? {
+                      ...edge,
+                      source: `${handleAddedRelation.personId_1}*${handleAddedRelation.personId_2}`,
+                    }
+                  : edge
+              )
+            );
+          }
         }
       }
     }
   }
 
   useEffect(() => {
-    console.log("AddedRElation:: ", handleAddedRelation);
-
-    if (handleAddedRelation) {
-      console.log("W if");
+    if (handleAddedRelation && handleAddedRelation !== "[null]") {
       const fetchRelation = async () => {
         try {
           const token = localStorage.getItem("token");
@@ -1199,12 +1229,15 @@ export default function Tree({
           <Background />
         </ReactFlow>
       </div>
-      <Button onClick={() => saveTreeToFile()} className="buttonMenuOver">
-        Save
+      <Button
+        onClick={() => saveNewTreeDataToDataBase()}
+        className="buttonMenuOver"
+      >
+        Zapisz
       </Button>
-      {/* <Button onClick={downloadPDF} className="buttonMenuOver2">
-        Download PDF
-      </Button> */}
+      <Button onClick={() => saveTreeToFile()} className="buttonMenuOver2">
+        Zapisz do pliku
+      </Button>
     </div>
   );
 }

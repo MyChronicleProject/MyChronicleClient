@@ -21,6 +21,7 @@ export default function OpenTree() {
   const [treeData, setTreeData] = useState<any>();
   const [formData, setFormData] = useState({
     name: "",
+    layout: "",
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -51,9 +52,6 @@ export default function OpenTree() {
       console.log("Otwarto plik JSON:", fileContent);
       const familyTreeId = fileContent.familyTreeId;
       console.log("ID drzewa:", familyTreeId);
-      // navigate(`/treeViewEdition/${familyTreeId}`, {
-      //   state: { treeData: fileContent },
-      // });
       navigate(`/treeView/${familyTreeId}`, {
         state: { treeData: fileContent },
       });
@@ -71,9 +69,6 @@ export default function OpenTree() {
       navigate(`/treeViewEdition/${familyTreeId}`, {
         state: { treeData: fileContent },
       });
-      // navigate(`/treeView/${familyTreeId}`, {
-      //   state: { treeData: fileContent },
-      // });
     } else {
       console.error("Nie wybrano pliku lub plik jest niepoprawny.");
     }
@@ -81,9 +76,7 @@ export default function OpenTree() {
 
   useEffect(() => {
     setLoading(true);
-    //setAddTreeForm(false);
     const token = localStorage.getItem("token");
-
     if (!token) {
       console.error("Brak tokena. Użytkownik nie jest zalogowany.");
       return;
@@ -147,7 +140,7 @@ export default function OpenTree() {
         .then((response) => {
           console.log("Tree created", response.data);
           setTrees((prevTrees) => [...prevTrees, response.data]);
-          setFormData({ name: "" });
+          setFormData({ name: "", layout: "" });
 
           axios
             .get<FamilyTree[]>("https://localhost:7033/api/FamilyTrees", config)
@@ -167,12 +160,10 @@ export default function OpenTree() {
 
   const deleteTree = (id: string) => {
     const token = localStorage.getItem("token");
-
     if (!token) {
       console.error("Brak tokena. Użytkownik nie jest zalogowany.");
       return;
     }
-
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,

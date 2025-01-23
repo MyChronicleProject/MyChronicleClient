@@ -19,7 +19,7 @@ export default function TreeViewEdition() {
   const [selectedPersonInTree, setSelectedPersonInTree] = useState<
     string[] | null
   >(null);
-  const [addedRelation, setAddedRelation] = useState<any>([null]);
+  const [addedRelation, setAddedRelation] = useState<any>(null);
   const [editedPerson, setEditedPerson] = useState<any>(null);
   const [addedPersonTemp, setAddedPersonTemp] = useState<any>(null);
   const [startView, setStartView] = useState<boolean>(false);
@@ -41,7 +41,6 @@ export default function TreeViewEdition() {
     setSelectedNode(node);
     setVisibleRelation(false);
     setVisibleRelation2(false);
-
     setVisiblePerson(true);
   };
 
@@ -53,14 +52,13 @@ export default function TreeViewEdition() {
 
   const handleStartView = (start: boolean) => {
     setSelectedNode(null);
-    setStartView(!startView);
+    setStartView(start);
     setVisiblePerson(start);
     setVisibleRelation(false);
     setVisibleRelation2(false);
   };
 
   const handleEdgeClick = (edge: any) => {
-    console.log("Edge: ", edge);
     if (edge[0]) {
       setSelectedEdge(edge);
       setVisibleRelation(true);
@@ -79,11 +77,8 @@ export default function TreeViewEdition() {
 
   const handelPersonAdded = (person: any) => {
     setVisiblePerson(false);
-    console.log("StartView: ", startView);
     if (startView) {
-      console.log("Start view person: ", person);
       setAddedPerson(person);
-      setStartView(false);
     } else {
       setAddedPersonTemp(person);
       setSelectedEdge([]);
@@ -96,11 +91,7 @@ export default function TreeViewEdition() {
 
   const handleRelationAdded = (relation: Relation) => {
     setVisibleRelation(false);
-    console.log("Dodaje relacje nie wiem czy z czlowiekiem czy bez");
-    console.log("Person: ", addedPersonTemp);
     if (addedPersonTemp) {
-      console.log("I'm here");
-      console.log("addedPErsonTemp: ", addedPersonTemp);
       setAddedPersonWithRelation([addedPersonTemp, relation]);
       setAddedPersonTemp(null);
     } else {
