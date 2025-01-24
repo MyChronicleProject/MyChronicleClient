@@ -81,6 +81,7 @@ export default function Tree({
   handleRelationAdded,
   handleAddedRelation,
   handleEditedPerson,
+  handleEditedRelation,
 }: {
   onNodeClick: (node: any) => void;
   onEdgeClick: (edge: any[]) => void;
@@ -91,6 +92,7 @@ export default function Tree({
   handleAddedRelation: any;
   handleRelationAdded: (ids: any[]) => void;
   handleEditedPerson: any;
+  handleEditedRelation: any;
 }) {
   const [nodeHeight, setNodeHeight] = useState(0);
   const [person, setPerson] = useState<Person[]>([]);
@@ -673,6 +675,36 @@ export default function Tree({
   }, [handleEditedPerson]);
 
   useEffect(() => {
+    if (handleEditedRelation) {
+      const nodeToEdit = nodes.find(
+        (nod) =>
+          nod.id ===
+            `${handleEditedRelation.personId_1}*${handleEditedRelation.personId_2}` ||
+          nod.id ===
+            `${handleEditedRelation.personId_1}*${handleEditedRelation.personId_2}`
+      );
+
+      if (nodeToEdit) {
+        const updatedNode = {
+          ...nodeToEdit,
+          data: {
+            ...nodeToEdit.data,
+            ...{
+              date: handleEditedRelation.startDate,
+            },
+          },
+        };
+
+        setNodes((prevNode) =>
+          prevNode.map((node) =>
+            node.id === updatedNode.id ? updatedNode : node
+          )
+        );
+      }
+    }
+  }, [handleEditedRelation]);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -1229,13 +1261,13 @@ export default function Tree({
           <Background />
         </ReactFlow>
       </div>
-      <Button
+      {/* <Button
         onClick={() => saveNewTreeDataToDataBase()}
         className="buttonMenuOver"
       >
         Zapisz
-      </Button>
-      <Button onClick={() => saveTreeToFile()} className="buttonMenuOver2">
+      </Button> */}
+      <Button onClick={() => saveTreeToFile()} className="buttonMenuOver">
         Zapisz do pliku
       </Button>
     </div>

@@ -20,6 +20,7 @@ export default function TreeViewEdition() {
   >(null);
   const [addedRelation, setAddedRelation] = useState<any>(null);
   const [editedPerson, setEditedPerson] = useState<any>(null);
+  const [editedRelation, setEditedRelation] = useState<any>(null);
   const [addedPersonTemp, setAddedPersonTemp] = useState<any>(null);
   const [startView, setStartView] = useState<boolean>(false);
   const [visibleRelation, setVisibleRelation] = useState<boolean>(false);
@@ -102,6 +103,10 @@ export default function TreeViewEdition() {
     setEditedPerson(person);
   };
 
+  const handleRelationEdited = (relation: any) => {
+    setEditedRelation(relation);
+  };
+
   const handleSelectedPersonInTree = (personId: string) => {
     setSelectedPersonInTree([personId]);
   };
@@ -111,6 +116,7 @@ export default function TreeViewEdition() {
   };
   const handleExitRelation = () => {
     setVisibleRelation2(false);
+    setVisibleRelation(false);
   };
 
   return (
@@ -128,6 +134,7 @@ export default function TreeViewEdition() {
             handleRelationAdded={handleAddRelation}
             handleAddedRelation={addedRelation}
             handleEditedPerson={editedPerson}
+            handleEditedRelation={editedRelation}
           />
         </div>
         {visiblePerson && (
@@ -152,6 +159,7 @@ export default function TreeViewEdition() {
                 selectedPersonInTree={selectedPersonInTree}
                 selectedEdge={selectedEdge[0] ? selectedEdge[0] : null}
                 relationAdded={handleRelationAdded}
+                relationEdited={handleRelationEdited}
               />
             )}
             {visibleRelation2 && (
@@ -159,6 +167,7 @@ export default function TreeViewEdition() {
                 selectedPersonInTree={selectedPersonInTree}
                 selectedEdge={selectedEdge[1] ? selectedEdge[1] : null}
                 relationAdded={handleRelationAdded}
+                relationEdited={handleRelationEdited}
               />
             )}
           </div>

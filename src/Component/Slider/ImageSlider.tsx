@@ -48,6 +48,7 @@ const ImageSlider: React.FC<{ images: File[] }> = ({ images }) => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  objectPosition: "center",
                   height: "100%",
                 }}
               >
@@ -60,6 +61,8 @@ const ImageSlider: React.FC<{ images: File[] }> = ({ images }) => {
                     maxHeight: "150px",
                     objectFit: "contain",
                     objectPosition: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 />
               </div>

@@ -79,7 +79,10 @@ export default function TreeView() {
         .then((response) => {
           console.log("Sukces response: ", response);
 
-          const decodedLayout = JSON.parse(atob(response.data.layout));
+          //const decodedLayout = JSON.parse(atob(response.data.layout));........
+          const decodedLayout = JSON.parse(
+            decodeURIComponent(escape(window.atob(response.data.layout)))
+          );
           setTreeData(decodedLayout);
 
           console.log("TREEDATA: ", treeData);
@@ -266,6 +269,14 @@ export default function TreeView() {
     return <>{parts}</>;
   };
 
+  const handleExitPerson = () => {
+    setVisiblePerson(false);
+  };
+  const handleExitRelation = () => {
+    setVisibleRelation2(false);
+    setVisibleRelation(false);
+  };
+
   return (
     <div>
       <AppBar />
@@ -288,6 +299,9 @@ export default function TreeView() {
 
           {visiblePerson && (
             <div className="person-panel">
+              <Button onClick={handleExitPerson} className="exitButton">
+                x
+              </Button>
               <PersonDetail
                 selectedNodeId={selectedNode ? selectedNode.id : null}
               />
@@ -296,6 +310,9 @@ export default function TreeView() {
 
           {visibleRelation && (
             <div className="relation-panel">
+              <Button onClick={handleExitRelation} className="exitButton">
+                x
+              </Button>
               {visibleRelation && (
                 <RelationDetail
                   selectedEdgeId={selectedEdge[0] ? selectedEdge[0] : null}

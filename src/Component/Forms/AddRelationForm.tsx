@@ -13,15 +13,18 @@ import {
 import { Person } from "../../Models/Person";
 import "../../Styles/addRelationFormStyle.css";
 import "../../Styles/buttonMenu.css";
+import { updateDecorator } from "typescript";
 
 export default function AddRelationForm({
   selectedEdge,
   selectedPersonInTree,
   relationAdded,
+  relationEdited,
 }: {
   selectedEdge: any;
   selectedPersonInTree: string[] | null;
   relationAdded: (relation: any) => void;
+  relationEdited: (relation: any) => void;
 }) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -256,7 +259,13 @@ export default function AddRelationForm({
           console.error("Brak tokena. Użytkownik nie jest zalogowany.");
           return;
         }
-
+        let updatedRelation = {
+          startDate: "",
+          endDate: "",
+          id: "",
+          personId_1: "",
+          personId_2: "",
+        };
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -275,6 +284,17 @@ export default function AddRelationForm({
           },
           config
         );
+        if (response.status === 200 || response.status === 201) {
+          updatedRelation = {
+            ...updatedRelation,
+            id: selectedEdge.id,
+            startDate: formData.startDate.split("T")[0],
+            endDate: formData.endDate.split("T")[0],
+            personId_1: selectedEdge.personId_1,
+            personId_2: selectedEdge.personId_2,
+          };
+          relationEdited(updatedRelation);
+        }
       } else {
         if (selectedPersonInTree) {
           const token = localStorage.getItem("token");

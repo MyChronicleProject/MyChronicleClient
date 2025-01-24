@@ -10,6 +10,8 @@ import "../Styles/buttonMenu.css";
 import "../Styles/inputFieldsMenu.css";
 import "../Styles/openTreeStyle.css";
 import "../Styles/openFileStyle.css";
+import { Role } from "../Models/FamilyTreePermision";
+import { getRoleName } from "../Models/FamilyTree";
 
 export default function OpenTree() {
   const navigate = useNavigate();
@@ -30,6 +32,7 @@ export default function OpenTree() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    console.log("Drzewa: ", trees);
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -52,6 +55,32 @@ export default function OpenTree() {
       console.log("Otwarto plik JSON:", fileContent);
       const familyTreeId = fileContent.familyTreeId;
       console.log("ID drzewa:", familyTreeId);
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("Brak tokena. Użytkownik nie jest zalogowany.");
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      axios
+        .post(
+          `https://localhost:7033/api/FamilyTrees/${familyTreeId}/share`,
+          {},
+          config
+        )
+        .then((response) => {
+          console.log("Tree adedd", response.data);
+          setTrees((prevTrees) => [...prevTrees, response.data]);
+          setFormData({ name: "", layout: "" });
+        })
+        .catch((error) => {
+          console.error("Error creating tree:", error);
+        });
       navigate(`/treeView/${familyTreeId}`, {
         state: { treeData: fileContent },
       });
@@ -170,7 +199,8 @@ export default function OpenTree() {
       },
     };
     axios
-      .delete(`https://localhost:7033/api/FamilyTrees/${id}`, config)
+      // .delete(`https://localhost:7033/api/FamilyTrees/${id}`, config)
+      .delete(`https://localhost:7033/api/FamilyTreePermision/${id}`, config)
       .then(() => {
         setTrees((prevTrees) => prevTrees.filter((tree) => tree.id !== id));
         console.log("Tree deleted successfully");
@@ -206,13 +236,13 @@ export default function OpenTree() {
               >
                 OTWÓRZ
               </Button>
-              <Button
+              {/* <Button
                 type="button"
                 className="button open-button"
                 onClick={handleOpenFileWithEditMode}
               >
                 Edit
-              </Button>
+              </Button> */}
             </div>
           </form>
           <h1 className="header">TWOJE PLIKI</h1>
@@ -223,13 +253,16 @@ export default function OpenTree() {
                   <div className="file-details">
                     <h2 className="file-name">{familyTree.name}</h2>
                     <p>
-                      <Button
-                        as={NavLink}
-                        to={`/treeViewEdition/${familyTree.id}`}
-                        className="button open-button"
-                      >
-                        EDYTUJ
-                      </Button>
+                      {getRoleName(parseInt(familyTree.currentUserRole)) ===
+                        Role.Autor && (
+                        <Button
+                          as={NavLink}
+                          to={`/treeViewEdition/${familyTree.id}`}
+                          className="button open-button"
+                        >
+                          EDYTUJ
+                        </Button>
+                      )}
                       <Button
                         as={NavLink}
                         to={`/treeView/${familyTree.id}`}

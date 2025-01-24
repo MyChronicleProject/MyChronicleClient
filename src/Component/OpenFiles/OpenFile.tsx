@@ -58,8 +58,7 @@ const OpenFile: React.FC<AudioPlayerProps> = ({ file }) => {
         return <div>No file available</div>;
     }
   };
-
-  return <div>{renderViewer()}</div>;
+  return <div style={{ width: "100%", height: "100%" }}>{renderViewer()}</div>;
 };
 
 export default OpenFile;
