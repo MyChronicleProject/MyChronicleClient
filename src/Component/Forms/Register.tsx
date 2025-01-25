@@ -139,7 +139,7 @@ export default function Register() {
   return (
     <div>
       <AppBar />
-      <div className="App">
+      <div className="App2">
         <img src={logo} className="App-logo" alt="logo"></img>
         <form className="inputRegister">
           <div>

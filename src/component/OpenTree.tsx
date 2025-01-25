@@ -217,7 +217,7 @@ export default function OpenTree() {
   return (
     <div>
       <AppBar />
-      <div className="App4">
+      <div className="App5">
         <div className="app-container">
           <form className="form-container">
             <h1 className="header">OTWÓRZ Z PLIK JSON</h1>
@@ -255,14 +255,14 @@ export default function OpenTree() {
                     <p>
                       {getRoleName(parseInt(familyTree.currentUserRole)) ===
                         Role.Autor && (
-                        <Button
-                          as={NavLink}
-                          to={`/treeViewEdition/${familyTree.id}`}
-                          className="button open-button"
-                        >
-                          EDYTUJ
-                        </Button>
-                      )}
+                          <Button
+                            as={NavLink}
+                            to={`/treeViewEdition/${familyTree.id}`}
+                            className="button open-button"
+                          >
+                            EDYTUJ
+                          </Button>
+                        )}
                       <Button
                         as={NavLink}
                         to={`/treeView/${familyTree.id}`}

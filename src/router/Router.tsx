@@ -11,6 +11,8 @@ import OpenTree from "../Component/OpenTree";
 import TreeView from "../Component/TreeView";
 import TreeViewEdition from "../Component/TreeViewEdition";
 import RelationList from "../Component/RelationList_forTest";
+import NotFound from "../Component/NotFound";
+
 
 export const routes: RouteObject[] = [
   {
@@ -34,7 +36,7 @@ export const routes: RouteObject[] = [
         path: "treeViewEdition/:familyTreeId/:id",
         element: <TreeViewEdition />,
       },
-      { path: "*", element: <Navigate replace to="/not-found" /> },
+      { path: "*", element: <NotFound /> },
 
       {
         path: "relationList/:familyTreeId/:personId",
