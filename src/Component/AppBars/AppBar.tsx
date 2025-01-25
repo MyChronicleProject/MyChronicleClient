@@ -2,6 +2,9 @@ import { Button, Container, Menu } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import "../../Styles/appBarStyle.css";
+import { position } from "html2canvas/dist/types/css/property-descriptors/position";
+import logo from "../../logo.png";
+
 
 export default function AppBar() {
   const [userName, setUserName] = useState<string>("NotLoggedIn");
@@ -15,7 +18,25 @@ export default function AppBar() {
 
   return (
     <div className="appbar">
+
+      <Menu.Item as={NavLink} to={localStorage.getItem('token') ? '/openTree' : '/login'}>
+
+        <Button
+          style={{
+            borderRadius: '12px',
+            padding: '10px 20px',
+            fontFamily: 'Times New Roman, sans-serif', // Use camelCase for font-family
+            fontWeight: 500,
+            fontSize: 20,
+
+          }}
+        >
+          MyChronicle
+        </Button>
+
+      </Menu.Item>
       <div className="appbar-container">
+
         <Button as={NavLink} to="/settingsPage" className="username-button">
           {userName}
         </Button>

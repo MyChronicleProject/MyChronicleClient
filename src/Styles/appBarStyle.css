@@ -1,5 +1,6 @@
 .appbar {
-  background-color: #f4f4f4; /* Light gray */
+  background-color: #f4f4f4;
+  /* Light gray */
   border-bottom: 1px solid #d1d1d1;
   height: 5%;
   display: flex;
@@ -31,8 +32,10 @@
 }
 
 .username-button:hover {
-  text-decoration: underline; /* Underline on hover */
-  color: #d08b56; /* Slightly lighter brown on hover */
+  text-decoration: underline;
+  /* Underline on hover */
+  color: #d08b56;
+  /* Slightly lighter brown on hover */
 }
 
 .user-icon {
@@ -43,20 +46,33 @@
 
   width: 30px;
   height: 30px;
-  border-radius: 50%; /* Zapewnia kształt kółka */
-  background-color: #c6aa96; /* Beżowe tło */
-  margin-left: 10px; /* Odstęp od lewego elementu */
-  display: flex; /* Dla centrowania tekstu */
-  justify-content: center; /* Centrowanie poziome */
-  align-items: center; /* Centrowanie pionowe */
-  color: #fff; /* Biały kolor tekstu */
-  text-decoration: none; /* Usunięcie podkreślenia */
-  border: none; /* Usunięcie ramki */
-  cursor: pointer; /* Wskaźnik dla przycisku */
-  font-size: 14px; /* Rozmiar tekstu */
+  border-radius: 50%;
+  /* Zapewnia kształt kółka */
+  background-color: #c6aa96;
+  /* Beżowe tło */
+  margin-left: 10px;
+  /* Odstęp od lewego elementu */
+  display: flex;
+  /* Dla centrowania tekstu */
+  justify-content: center;
+  /* Centrowanie poziome */
+  align-items: center;
+  /* Centrowanie pionowe */
+  color: #fff;
+  /* Biały kolor tekstu */
+  text-decoration: none;
+  /* Usunięcie podkreślenia */
+  border: none;
+  /* Usunięcie ramki */
+  cursor: pointer;
+  /* Wskaźnik dla przycisku */
+  font-size: 14px;
+  /* Rozmiar tekstu */
 }
+
 .contact-text {
-  color: #8c736b; /* Sets the text color to light green */
+  color: #8c736b;
+  /* Sets the text color to light green */
 }
 
 .appBarBottom {
