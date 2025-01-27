@@ -115,15 +115,26 @@ export default function SettingsPage() {
       case "password":
         return value.trim() === "" ? "Stare hasło jest wymagane" : "";
 
-      case "newPassword":
-        return value.trim() === "" ? "Nowe hasło jest wymagane" : "";
 
-      case "newPassword2":
-        if (value.trim() === "")
-          return "Powtórzenie nowego hasła jest wymagane";
-        if (value !== formData.newPassword)
-          return "Nowe hasła muszą być identyczne";
+      case "newPassword": {
+        if (value.trim() === "") {
+          return "Hasło jest wymagane";
+        }
+        const passwordRegex = /(?=.\d)(?=[a-z])(?=[A-Z]).{4,15}$/;
+        if (!passwordRegex.test(value.trim())) {
+          return "Za słabe hasło";
+        }
         return "";
+      }
+      case "newPassword2": {
+        if (value.trim() === "") return "Hasło jest wymagane";
+        else if (value.trim() !== formData.newPassword.trim())
+          return "Hasła musza być takie same";
+        else return "";
+      }
+
+
+
 
       default:
         return "";

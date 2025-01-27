@@ -15,12 +15,12 @@ export default function PrivacyPolicy() {
             1.1. Niniejsza polityka prywatności określa zasady przetwarzania i
             ochrony danych osobowych użytkowników korzystających z serwisu
             internetowego tworzącego drzewa genealogiczne, dostępnego pod
-            adresem <span>[adres strony]</span>.
+            adresem <span>[http://localhost:3000/login]</span>.
           </p>
           <p>
             1.2. Administrator danych osobowych, odpowiedzialny za zapewnienie
             zgodności z przepisami o ochronie danych osobowych, to{" "}
-            <span>[Nazwa firmy, dane kontaktowe, adres]</span>.
+            <span>[MyChronicleIndustries]</span>.
           </p>
         </section>
 
