@@ -69,7 +69,7 @@ export default function OpenTree() {
       };
       axios
         .post(
-          `https://localhost:7033/api/FamilyTrees/${familyTreeId}/share`,
+          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/FamilyTrees/${familyTreeId}/share`,
           {},
           config
         )
@@ -117,7 +117,7 @@ export default function OpenTree() {
       },
     };
     axios
-      .get<FamilyTree[]>("https://localhost:7033/api/FamilyTrees", config)
+      .get<FamilyTree[]>("https://localhost:${process.env.CLIENT_PORT || 7033}/api/FamilyTrees", config)
       .then((response) => {
         setTrees(response.data);
       })
@@ -165,14 +165,14 @@ export default function OpenTree() {
         },
       };
       axios
-        .post("https://localhost:7033/api/FamilyTrees", formData, config)
+        .post("https://localhost:${process.env.CLIENT_PORT || 7033}/api/FamilyTrees", formData, config)
         .then((response) => {
           console.log("Tree created", response.data);
           setTrees((prevTrees) => [...prevTrees, response.data]);
           setFormData({ name: "", layout: "" });
 
           axios
-            .get<FamilyTree[]>("https://localhost:7033/api/FamilyTrees", config)
+            .get<FamilyTree[]>("https://localhost:${process.env.CLIENT_PORT || 7033}/api/FamilyTrees", config)
             .then((response) => {
               setTrees(response.data);
             })
@@ -199,8 +199,8 @@ export default function OpenTree() {
       },
     };
     axios
-      // .delete(`https://localhost:7033/api/FamilyTrees/${id}`, config)
-      .delete(`https://localhost:7033/api/FamilyTreePermision/${id}`, config)
+      // .delete(`https://localhost:${process.env.CLIENT_PORT || 7033}/api/FamilyTrees/${id}`, config)
+      .delete(`https://localhost:${process.env.CLIENT_PORT || 7033}/api/FamilyTreePermision/${id}`, config)
       .then(() => {
         setTrees((prevTrees) => prevTrees.filter((tree) => tree.id !== id));
         console.log("Tree deleted successfully");

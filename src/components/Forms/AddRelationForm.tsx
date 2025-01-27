@@ -79,7 +79,7 @@ export default function AddRelationForm({
     };
     axios
       .get<Person[]>(
-        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`,
+        `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons`,
         config
       )
       .then((response) => {
@@ -99,7 +99,7 @@ export default function AddRelationForm({
       const fetchRelation = async () => {
         try {
           const response = await axios.get<Relation>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
+            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
             config
           );
           const relationData = response.data;
@@ -192,7 +192,7 @@ export default function AddRelationForm({
       },
     };
     const response = await axios.get<Relation>(
-      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
+      `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
       config
     );
     const relationData = response.data;
@@ -270,7 +270,7 @@ export default function AddRelationForm({
           },
         };
         const response = await axios.put(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
+          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedEdge.personId_1}/relations/${selectedEdge.id}`,
           {
             ...formData,
             id: selectedEdge.id,
@@ -308,7 +308,7 @@ export default function AddRelationForm({
             },
           };
           const response = await axios.post(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedPersonInTree[1]}/relations`,
+            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedPersonInTree[1]}/relations`,
             {
               ...formData,
               startDate: formData.startDate.split("T")[0],

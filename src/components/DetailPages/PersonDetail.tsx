@@ -55,7 +55,7 @@ export default function PersonDetail({
             },
           };
           const response = await axios.get<Person>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNodeId}`,
+            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedNodeId}`,
             config
           );
           const personData = response.data;

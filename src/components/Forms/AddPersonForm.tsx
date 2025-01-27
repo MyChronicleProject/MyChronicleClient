@@ -123,7 +123,7 @@ export default function AddPersonForm({
             },
           };
           const response = await axios.get<Person>(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
+            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
             config
           );
           const personData = response.data;
@@ -235,7 +235,7 @@ export default function AddPersonForm({
       },
     };
     const response = await axios.get<Person>(
-      `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
+      `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
       config
     );
     const personData = response.data;
@@ -347,7 +347,7 @@ export default function AddPersonForm({
             },
           };
           const response = await axios.put(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
+            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedNode}`,
             {
               ...formData,
               id: selectedNode,
@@ -382,7 +382,7 @@ export default function AddPersonForm({
         };
         if (profilePictureToSend) {
           const responseFoto = await axios.post(
-            `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files`,
+            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files`,
             {
               name: profilePictureToSend.name,
               fileType: getFileTypeNumber(profilePictureToSend.fileType),
@@ -430,7 +430,7 @@ export default function AddPersonForm({
               if (profileFile) {
                 console.log("Update picture: ", profileFile);
                 const response = await axios.put(
-                  `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files/${profileFile.id}`,
+                  `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files/${profileFile.id}`,
                   {
                     ...profileFile,
                     name: profileFile.name,
@@ -482,7 +482,7 @@ export default function AddPersonForm({
           },
         };
         const response = await axios.post(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons`,
+          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons`,
           {
             ...formData,
             birthDate: formData.birthDate
@@ -508,7 +508,7 @@ export default function AddPersonForm({
           console.log("File:          ", profilePictureToSend);
           if (profilePictureToSend) {
             const responseFoto = await axios.post(
-              `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${updatedFormData.id}/files`,
+              `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${updatedFormData.id}/files`,
               {
                 name: profilePictureToSend.name,
                 fileType: getFileTypeNumber(profilePictureToSend.fileType),
@@ -676,7 +676,7 @@ export default function AddPersonForm({
     };
     axios
       .delete(
-        `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${fileToDelete.personId}/files/${fileToDelete.id}`,
+        `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${fileToDelete.personId}/files/${fileToDelete.id}`,
         config
       )
       .then(() => {
@@ -706,7 +706,7 @@ export default function AddPersonForm({
           },
         };
         const responseFoto = await axios.post(
-          `https://localhost:7033/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files`,
+          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedNode}/files`,
           {
             name: fileToSend.name,
             fileType: getFileTypeNumber(fileToSend.fileType),

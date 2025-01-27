@@ -114,7 +114,7 @@ export default function Register() {
 
     try {
       const response = await axios.post(
-        `https://localhost:7033/api/Account/register`,
+        `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Account/register`,
         {
           ...formData,
         }
