@@ -56,22 +56,31 @@ export default function Register() {
         return value.trim() === "" ? "Nazwa użytkownika jest wymagana" : "";
       case "email":
         if (value.trim() === "") {
-          return "Email is required";
+          return "E-mail jest wymagany";
         }
         const emailRegex = /^[a-zA-Z0-9._-]+@([a-zA-Z0-9.-]+|\d+)$/;
 
         if (!emailRegex.test(value.trim())) {
-          return "Please enter a valid email address";
+          return "Wpisz prawidłowy adres e-mail";
         }
         return "";
-      case "password":
-        return value.trim() === "" ? "Hasło jest wymagane" : "";
+      case "password": {
+        if (value.trim() === "") {
+          return "Hasło jest wymagane";
+        }
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,15}$/;
+        if (!passwordRegex.test(value.trim())) {
+          return "Za słabe hasło";
+        }
+        return "";
+      }
       case "password2": {
         if (value.trim() === "") return "Hasło jest wymagane";
         else if (value.trim() !== formData.password.trim())
-          return "Hasła muszą być takie same";
+          return "Hasła muszą być te same";
         else return "";
       }
+
       default:
         return "";
     }
