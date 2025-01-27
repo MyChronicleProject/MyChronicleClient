@@ -1,0 +1,12 @@
+.relation-panel {
+  z-index: 9; /* Wyższy niż backdrop */
+  background: #b29f8e; /* Zielone tło */
+  position: absolute;
+  top: 0; /* Odstęp od górnego appbar */
+  bottom: 0; /* Odstęp od dolnego appbar */
+  right: 0;
+  width: 300px; /* Szerokość bocznego panelu */
+  color: white; /* Kolor tekstu */
+  padding: 30px; /* Odstęp wewnętrzny */
+  overflow-y: auto; /* Przewijanie, jeśli zawartość jest za duża */
+}

@@ -1,0 +1,54 @@
+.openFileStyle {
+  position: fixed;
+  /* Fixed to the viewport */
+  top: 50%;
+  /* Center vertically */
+  left: 50%;
+  /* Center horizontally */
+  transform: translate(-50%, -50%);
+  max-width: 75%;
+  max-height: 90%;
+  background-color: transparent;
+  color: #000;
+  margin: 0;
+  padding: 30px;
+  z-index: 1000;
+  /* Ensures it appears above other elements */
+}
+
+.openFileStyle2 {
+  position: fixed;
+  /* Fixed to the viewport */
+  top: 50%;
+  /* Center vertically */
+  left: 50%;
+  /* Center horizontally */
+  transform: translate(-50%, -50%);
+  /* Perfect centering */
+
+  max-width: 75%;
+  max-height: 90%;
+  background-color: transparent;
+  color: #000;
+  margin: 0;
+  padding: 30px;
+  /* border-radius: 10px; */
+  /* border: 1px solid #ddd; */
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0,1);
+    
+    transition: transform 0.2s ease, box-shadow 0.2s ease; */
+  z-index: 1000;
+  /* Ensures it appears above other elements */
+}
+
+.overlayBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent black */
+  z-index: 999;
+  /* Below the centered content */
+}

@@ -1,0 +1,83 @@
+/* Container for the custom node */
+.custom-node {
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #B3B8BC;
+    border: 2px solid #9D8772; /* Light stone color (similar to border-stone-400) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+  }
+  .custom-node:focus {
+    border: 4px solid #ea0707; /* Darker gray (similar to border-gray-600) */
+}
+  /* Flex container for image and name/surname */
+  .custom-node-header {
+    display: block;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  /* Profile image container */
+  .custom-node-photo {
+    width: 90px;
+    height: 90px;
+    background-color: #f3f4f6; /* Light gray background */
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  /* Text container for name and surname */
+  /* .custom-node-info {
+    flex-grow: 1;
+  } */
+
+  /* Text container for name and surname */
+  .custom-node-info {
+    flex-grow: 1;
+    word-wrap: break-word; /* Allow words to wrap */
+    max-width: 100%; /* Ensures the name fits within the node */
+    overflow: hidden;
+}
+
+  
+  .custom-node-name {
+    font-size: 1.125rem; /* text-lg equivalent */
+    font-weight: bold;
+    word-break: break-word; 
+  }
+  
+  .custom-node-surname {
+    color: #6b7280;
+    word-break: break-word;  /* text-gray-500 equivalent */
+  }
+  
+  /* Handles */
+  .handle {
+    width: 20px;
+    height: 10px; /* Equivalent to 16px padding of the handle */
+    border-radius: 2px;
+    background-color: #9D8772; /* Teal color */
+  }
+  
+  /* Positioning for the target handle (top) */
+  .handle-target {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* Positioning for the source handle (bottom) */
+  .handle-source {
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  

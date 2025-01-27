@@ -1,0 +1,130 @@
+/* General form styling */
+.FileForm {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: transparent;
+  /* Soft brown background */
+  color: #000;
+  /* Black text */
+  margin: 0;
+  padding: 0px;
+  /* overflow: hidden; */
+  /* Removes scrollbar */
+}
+
+/* File section header */
+.FileForm-header {
+  color: #000;
+  font-family: "Georgia", serif;
+
+  margin-bottom: 10px;
+}
+
+/* File input styling */
+.FileForm-input {
+  background-color: #f4f4f4;
+  border: 1px solid #000;
+  padding: 8px 12px;
+  border-radius: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+/* Add button styling */
+.FileForm-btn {
+  background-color: transparent;
+  border: 1px solid #000;
+  padding: 6px 12px;
+  border-radius: 15px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.FileForm-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* File list styling */
+.FileForm-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.FileForm-item {
+  background-color: transparent;
+  border-top: 1px solid #000;
+  padding: 8px 12px;
+
+  border-radius: 0px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+  color: #000;
+  word-break: break-word;
+}
+
+/* Open and Delete buttons in file list */
+.FileForm-item-btn {
+  background-color: transparent;
+  border: 1px solid #000;
+  margin-left: 8px;
+  padding: 4px 10px;
+  font-size: 0.9em;
+  border-radius: 15px;
+}
+
+.FileForm-item-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the file upload form container */
+.FileForm-upload-container {
+  background-color: transparent;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  color: #000;
+}
+
+/* Styling for the file upload section */
+.FileForm-upload-container p {
+  margin: 10px 0;
+  color: #000;
+}
+
+/* Styling the Add button to match the form */
+.FileForm-upload-btn {
+  background-color: transparent;
+  border: 1px solid #000;
+  color: #000;
+  border-radius: 20px;
+}
+
+.FileForm-upload-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.non-editable {
+  pointer-events: none; /* Uniemożliwia interakcję */
+  background-color: transparent !important; /* Usuwa domyślne wyszarzenie */
+  color: #000 !important; /* Wymusza kolor czarny tekstu */
+  opacity: 1 !important; /* Przywraca pełną widoczność */
+  border: none; /* Usuwa ramkę */
+  appearance: none; /* Usuwa domyślny styl select */
+}
+
+.note-textarea {
+  background-color: inherit; /* Dziedziczy kolor tła od rodzica */
+  color: #000; /* Dziedziczy kolor tekstu od rodzica */
+  border: none; /* Usuwa ramkę */
+  resize: none; /* Wyłącza możliwość zmiany rozmiaru */
+  padding: 10px; /* Dodaje odstęp wewnętrzny */
+  font-size: inherit; /* Dziedziczy rozmiar czcionki */
+  border: 1px solid #000; /* Delikatna ramka */
+  border-radius: 4px; /* Zaokrąglone rogi */
+}
