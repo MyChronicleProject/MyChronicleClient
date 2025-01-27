@@ -4,8 +4,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "../Styles/buttonMenu.css";
 import "../Styles/inputFieldsMenu.css";
-import AppBar from "./AppBars/AppBar";
-import BottomBar from "./AppBars/BottomBar";
+import AppBar from "../components/AppBars/AppBar";
+import BottomBar from "../components/AppBars/BottomBar";
 import axios from "axios";
 
 export default function LoginPage() {

@@ -2,10 +2,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useState, useEffect } from "react";
-import { File, FileExtension } from "../../Models/File";
+import { File, FileExtension } from "../../models/File";
 import PdfViewer from "../OpenFiles/pdfViewer";
 import DocxViewer from "../OpenFiles/DocxViewer";
-import { getFileExtensionName } from "../../Models/File";
+import { getFileExtensionName } from "../../models/File";
 import { Button } from "semantic-ui-react";
 
 const FileSlider: React.FC<{ files: File[] }> = ({ files }) => {

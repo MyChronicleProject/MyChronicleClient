@@ -2,7 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { File } from "../../Models/File";
+import { File } from "../../models/File";
 
 const ImageSlider: React.FC<{ images: File[] }> = ({ images }) => {
   const settings = {

@@ -1,11 +1,10 @@
-import AddPersonForm from "./Forms/AddPersonForm";
-import AppBar from "./AppBars/AppBar";
-import BottomBar from "./AppBars/BottomBar";
+import AddPersonForm from "../components/Forms/AddPersonForm";
+import AppBar from "../components/AppBars/AppBar";
+import BottomBar from "../components/AppBars/BottomBar";
 import React, { useEffect, useState } from "react";
-import AddRelationForm from "./Forms/AddRelationForm";
-import Tree2 from "./Tree2";
-import { Person } from "../Models/Person";
-import { Relation } from "../Models/Relation";
+import AddRelationForm from "../components/Forms/AddRelationForm";
+import Tree2 from "../components/Tree2";
+import { Relation } from "../models/Relation";
 import "../Styles/addPersonFormStyle.css";
 import "../Styles/addRelationFormStyle.css";
 

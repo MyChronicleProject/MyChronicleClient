@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Relation } from "../Models/Relation";
-import { Button } from "semantic-ui-react";
+import { Relation } from "../models/Relation";
 import { NavLink } from "react-router-dom";
 import { useParams } from "react-router-dom";
 

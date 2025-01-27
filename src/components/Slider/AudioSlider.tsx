@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import AudioPlayer from "../OpenFiles/AudioPlayer";
-import { File } from "../../Models/File";
+import { File } from "../../models/File";
 
 const AudioSlider: React.FC<{ files: File[] }> = ({ files }) => {
   const [selectedAudio, setSelectedAudio] = useState<string | null>(null);

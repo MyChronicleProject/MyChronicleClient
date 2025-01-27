@@ -1,6 +1,6 @@
 import "../Styles/privacyPolicy.css";
-import AppBar from "./AppBars/AppBar";
-import BottomBar from "./AppBars/BottomBar";
+import AppBar from "../components/AppBars/AppBar";
+import BottomBar from "../components/AppBars/BottomBar";
 
 export default function PrivacyPolicy() {
   return (

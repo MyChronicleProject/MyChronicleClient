@@ -3,8 +3,8 @@ import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import React, { useState } from "react";
 import "../Styles/buttonMenu.css";
-import AppBar from "./AppBars/AppBar";
-import BottomBar from "./AppBars/BottomBar";
+import AppBar from "../components/AppBars/AppBar";
+import BottomBar from "../components/AppBars/BottomBar";
 
 export default function ChoiceOfActionPage() {
   const [userName, setUserName] = useState<string>("NotLoggedIn");

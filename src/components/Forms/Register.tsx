@@ -7,9 +7,7 @@ import { NavLink } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import "../../Styles/buttonMenu.css";
 import "../../Styles/inputFieldsMenu.css";
-import { useParams } from "react-router-dom";
 import axios from "axios";
-import PrivacyPolicy from ".././PrivacyPolicy";
 
 export default function Register() {
   const navigate = useNavigate();

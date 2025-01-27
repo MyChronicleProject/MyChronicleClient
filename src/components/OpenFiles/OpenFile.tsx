@@ -1,5 +1,5 @@
 import React from "react";
-import { File, getFileTypeName } from "../../Models/File";
+import { File, getFileTypeName } from "../../models/File";
 
 import {
   FileDTO,
@@ -8,7 +8,7 @@ import {
   getFileExtensionNumber,
   getFileExtensionName,
   getFileTypeNumber,
-} from "../../Models/File";
+} from "../../models/File";
 
 import DocxViewer from "./DocxViewer";
 import AudioPlayer from "./AudioPlayer";

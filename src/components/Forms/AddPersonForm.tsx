@@ -1,18 +1,16 @@
-import logo from "../logo.svg";
 import { Button } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { Gender } from "../../Models/Person";
+import { Gender } from "../../models/Person";
 import axios from "axios";
-import { Person, getGenderNumber, getGenderName } from "../../Models/Person";
+import { Person, getGenderNumber, getGenderName } from "../../models/Person";
 import { useNavigate } from "react-router-dom";
 import "../../Styles/addPersonFormStyle.css";
 import "../../Styles/buttonMenu.css";
 import "../../Styles/inputFieldsMenu.css";
 import "../../Styles/openFileStyle.css";
 import "../../Styles/filesFormStyle.css";
-import { File, getFileTypeName } from "../../Models/File";
+import { File, getFileTypeName } from "../../models/File";
 import {
   FileDTO,
   FileExtension,
@@ -20,7 +18,7 @@ import {
   FileType,
   getFileExtensionNumber,
   getFileTypeNumber,
-} from "../../Models/File";
+} from "../../models/File";
 import OpenFile from "../OpenFiles/OpenFile";
 
 export default function AddPersonForm({

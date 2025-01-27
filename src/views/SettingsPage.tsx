@@ -2,7 +2,7 @@ import logo from "../logo.svg";
 import { Button, Container } from "semantic-ui-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../Styles/settingsPageStyle.css";
-import AppBar from "./AppBars/AppBar";
+import AppBar from "../components/AppBars/AppBar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 

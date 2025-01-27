@@ -1,12 +1,12 @@
-import AppBar from "./AppBars/AppBar";
-import BottomBar from "./AppBars/BottomBar";
+import AppBar from "../components/AppBars/AppBar";
+import BottomBar from "../components/AppBars/BottomBar";
 import ReactFlow, { MiniMap, Controls, Background, addEdge } from "reactflow";
 import { Button } from "semantic-ui-react";
 import "reactflow/dist/style.css";
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import PersonDetail from "./DetailPages/PersonDetail";
-import RelationDetail from "./DetailPages/RelationDetail";
+import PersonDetail from "../components/DetailPages/PersonDetail";
+import RelationDetail from "../components/DetailPages/RelationDetail";
 import axios from "axios";
 import html2canvas from "html2canvas";
 import "../Styles/hideElementOnTree.css";
@@ -15,11 +15,11 @@ import {
   Relation,
   getRelationTypeNumber,
   RelationType,
-} from "../Models/Relation";
+} from "../models/Relation";
 import { useParams } from "react-router-dom";
-import { FamilyTree } from "../Models/FamilyTree";
-import CustomNode from "./CustomNode";
-import CustomNodeSpouse from "./CustomNodeSpouse";
+import { FamilyTree } from "../models/FamilyTree";
+import CustomNode from "../components/CustomNode";
+import CustomNodeSpouse from "../components/CustomNodeSpouse";
 import "../Styles/buttonMenu.css";
 
 const nodeTypes = {

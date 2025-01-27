@@ -1,25 +1,21 @@
-import ReactFlow, { MiniMap, Controls, Background, addEdge } from "reactflow";
+import ReactFlow, { MiniMap, Controls, Background } from "reactflow";
 import "reactflow/dist/style.css";
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Person } from "../Models/Person";
+import { Person } from "../models/Person";
 import {
   Relation,
-  getRelationTypeNumber,
   RelationType,
-} from "../Models/Relation";
+} from "../models/Relation";
 import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { v4 as uuidv4 } from "uuid";
 import { useLocation } from "react-router-dom";
-import ReactDOM from "react-dom/client";
-import useZoomPanHelper from "react-flow-renderer";
 import "../Styles/buttonMenu.css";
 import { Button } from "semantic-ui-react";
 import CustomNode from "./CustomNode";
 import CustomNodeSpouse from "./CustomNodeSpouse";
-import { FamilyTree } from "../Models/FamilyTree";
+import { FamilyTree } from "../models/FamilyTree";
 const generateEdgeId = () => crypto.randomUUID();
 
 const PlaceholderNode = ({ data }: any) => {

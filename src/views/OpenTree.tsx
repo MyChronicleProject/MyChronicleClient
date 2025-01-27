@@ -1,17 +1,17 @@
 import { Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import { FamilyTree } from "../Models/FamilyTree";
+import { FamilyTree } from "../models/FamilyTree";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import AppBar from "./AppBars/AppBar";
-import BottomBar from "./AppBars/BottomBar";
+import AppBar from "../components/AppBars/AppBar";
+import BottomBar from "../components/AppBars/BottomBar";
 import "../Styles/buttonMenu.css";
 import "../Styles/inputFieldsMenu.css";
 import "../Styles/openTreeStyle.css";
 import "../Styles/openFileStyle.css";
-import { Role } from "../Models/FamilyTreePermision";
-import { getRoleName } from "../Models/FamilyTree";
+import { Role } from "../models/FamilyTreePermision";
+import { getRoleName } from "../models/FamilyTree";
 
 export default function OpenTree() {
   const navigate = useNavigate();

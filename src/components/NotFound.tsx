@@ -1,11 +1,6 @@
 import logo from "../logo.png";
-import { Button, Container } from "semantic-ui-react";
-import { NavLink, useNavigate } from "react-router-dom";
 import "../Styles/settingsPageStyle.css";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import AppBar from "./AppBars/AppBar";
-import { color } from "html2canvas/dist/types/css/types/color";
 
 
 export default function NotFound() {

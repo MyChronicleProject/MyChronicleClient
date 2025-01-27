@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Outlet } from "react-router-dom";
-import AppBar from "./Component/AppBars/AppBar";
+import AppBar from "./components/AppBars/AppBar";
 
 function App() {
   const appStyles: React.CSSProperties = {

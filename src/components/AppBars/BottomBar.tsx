@@ -1,6 +1,5 @@
 import { Button, Container, Menu } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import React, { useState } from "react";
 import "../../Styles/appBarStyle.css";
 
 export default function BottomBar() {
