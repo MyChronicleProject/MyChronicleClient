@@ -1,6 +1,6 @@
-import ReactFlow, { MiniMap, Controls, Background } from "reactflow";
+import ReactFlow, { MiniMap, Controls, Background, applyNodeChanges, applyEdgeChanges } from "reactflow";
 import "reactflow/dist/style.css";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { Person } from "../models/Person";
 import {
@@ -450,11 +450,6 @@ export default function Tree({
           config
         );
 
-        const updatedEdges = edges.filter(
-          (edge) => !edgesToDelete.includes(edge)
-        );
-        setEdges(updatedEdges);
-
         const updatedNodes = nodes.filter(
           (node) =>
             node.id !== nodeId &&
@@ -462,6 +457,11 @@ export default function Tree({
             node.id !== `${nodeId}_delete`
         );
         setNodes(updatedNodes);
+
+        const updatedEdges = edges.filter(
+          (edge) => !edgesToDelete.includes(edge)
+        );
+        setEdges(updatedEdges);
       } catch (error) {
         setError("Błąd podczas usuwania osoby lub plików");
         console.error("Error during deletion:", error);
@@ -1235,6 +1235,16 @@ export default function Tree({
     addRelationToExistPersonFunction();
   }, [handleAddedRelation]);
 
+  const onNodesChange = useCallback(
+    (changes: any) => setNodes((nds) => applyNodeChanges(changes, nds)),
+    []
+  );
+  
+  const onEdgesChange = useCallback(
+    (changes: any) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+    []
+  );
+
   return (
     <div>
       <div style={{ height: "100vh" }} ref={pdfRef}>
@@ -1251,6 +1261,8 @@ export default function Tree({
             (node) => node.type !== "placeholder" && node.type !== "delete"
           )}
           fitView
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
         >
           <MiniMap />
           <Controls />
