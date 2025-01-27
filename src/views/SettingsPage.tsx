@@ -83,7 +83,7 @@ export default function SettingsPage() {
         },
       };
       const response = await axios.put(
-        `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Account/changepassword`,
+        `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Account/changepassword`,
         {
           ...formData,
         },
@@ -161,7 +161,7 @@ export default function SettingsPage() {
       },
     };
     axios
-      .delete(`https://localhost:${process.env.CLIENT_PORT || 7033}/api/account/deleteaccount`, config)
+      .delete(`http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/account/deleteaccount`, config)
       .then(() => {
         console.log("AccountDeleted");
         localStorage.removeItem("token");

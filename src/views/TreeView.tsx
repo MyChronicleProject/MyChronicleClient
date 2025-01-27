@@ -73,7 +73,7 @@ export default function TreeView() {
       };
       axios
         .get<FamilyTree>(
-          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/FamilyTrees/${familyTreeId}`,
+          `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/FamilyTrees/${familyTreeId}`,
           config
         )
         .then((response) => {
@@ -130,13 +130,13 @@ export default function TreeView() {
               },
             };
             const relationResponse = await axios.get<Relation[]>(
-              `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`,
+              `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`,
               config
             );
             setRelation(relationResponse.data);
 
             const treeNameResponse = await axios.get<FamilyTree>(
-              `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}`,
+              `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}`,
               config
             );
             setTreeName(treeNameResponse.data.name);

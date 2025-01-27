@@ -38,7 +38,7 @@ export default function LoginPage() {
     }
     try {
       const response = await axios.post(
-        `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Account/login`,
+        `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Account/login`,
         {
           ...formData,
         }

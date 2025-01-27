@@ -17,7 +17,7 @@ export default function RelationList() {
     console.log("TreeID: ", familyTreeId);
     axios
       .get<Relation[]>(
-        `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${personId}/relations`
+        `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${personId}/relations`
       )
       .then((response) => {
         console.log(response.data);

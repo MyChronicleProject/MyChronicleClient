@@ -44,7 +44,7 @@ export default function AddRelationForm({
     };
     axios
       .get<Person[]>(
-        `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons`,
+        `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons`,
         config
       )
       .then((response) => {
@@ -72,7 +72,7 @@ export default function AddRelationForm({
             },
           };
           const response = await axios.get<Relation>(
-            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedEdgeId.personId_1}/relations/${selectedEdgeId.id}`,
+            `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${selectedEdgeId.personId_1}/relations/${selectedEdgeId.id}`,
             config
           );
           const relationData = response.data;

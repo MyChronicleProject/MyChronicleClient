@@ -200,7 +200,7 @@ export default function Tree({
       };
       axios
         .put(
-          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/FamilyTrees/${familyTreeId}`,
+          `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/FamilyTrees/${familyTreeId}`,
           {
             id: familyTreeId,
             layout: treeDataBase64,
@@ -294,7 +294,7 @@ export default function Tree({
       };
       axios
         .get<FamilyTree>(
-          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/FamilyTrees/${familyTreeId}`,
+          `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/FamilyTrees/${familyTreeId}`,
           config
         )
         .then((response) => {
@@ -423,7 +423,7 @@ export default function Tree({
           await Promise.all(
             edgesToDelete.map((edge) =>
               axios.delete(
-                `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${nodeId}/relations/${edge.id}`,
+                `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${nodeId}/relations/${edge.id}`,
                 config
               )
             )
@@ -431,7 +431,7 @@ export default function Tree({
         }
 
         const response = await axios.get(
-          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${nodeId}`,
+          `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${nodeId}`,
           config
         );
 
@@ -439,14 +439,14 @@ export default function Tree({
           await Promise.all(
             response.data.files.map((file: any) => {
               return axios.delete(
-                `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${file.personId}/files/${file.id}`,
+                `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${file.personId}/files/${file.id}`,
                 config
               );
             })
           );
         }
         await axios.delete(
-          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${nodeId}`,
+          `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${nodeId}`,
           config
         );
 
@@ -609,7 +609,7 @@ export default function Tree({
           },
         };
         const tree = await axios.get<Person[]>(
-          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons`,
+          `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons`,
           config
         );
 
@@ -620,14 +620,14 @@ export default function Tree({
         }
 
         const personResponse = await axios.get<Person[]>(
-          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons`,
+          `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons`,
           config
         );
 
         setPerson(personResponse.data);
 
         const relationResponse = await axios.get<Relation[]>(
-          `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`,
+          `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/relationsControllerForOneTree`,
           config
         );
         setRelation(relationResponse.data);
@@ -717,7 +717,7 @@ export default function Tree({
       const fetchPerson = async () => {
         try {
           const response = await axios.get<Person>(
-            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handlePersonAdded.id}`,
+            `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handlePersonAdded.id}`,
             config
           );
           const personData = response.data;
@@ -770,7 +770,7 @@ export default function Tree({
             },
           };
           const response = await axios.get<Relation>(
-            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+            `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
             config
           );
           const relationData = response.data;
@@ -944,7 +944,7 @@ export default function Tree({
             };
             axios
               .delete(
-                `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+                `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
                 config
               )
               .then(() => {
@@ -974,7 +974,7 @@ export default function Tree({
 
           axios
             .delete(
-              `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+              `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
               config
             )
             .then(() => {
@@ -1056,7 +1056,7 @@ export default function Tree({
             };
             axios
               .delete(
-                `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+                `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
                 config
               )
               .then(() => {
@@ -1084,7 +1084,7 @@ export default function Tree({
           };
           axios
             .delete(
-              `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
+              `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedPersonWithRelation[1].personId_1}/relations/${handleAddedPersonWithRelation[1].id}`,
               config
             )
             .then(() => {
@@ -1122,7 +1122,7 @@ export default function Tree({
           };
           axios
             .delete(
-              `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`,
+              `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`,
               config
             )
             .then(() => {
@@ -1220,7 +1220,7 @@ export default function Tree({
             },
           };
           const response = await axios.get<Relation>(
-            `https://localhost:${process.env.CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`,
+            `http://localhost:${process.env.REACT_APP_CLIENT_PORT || 7033}/api/Familytrees/${familyTreeId}/persons/${handleAddedRelation.personId_1}/relations/${handleAddedRelation.id}`,
             config
           );
           const relationData = response.data;
